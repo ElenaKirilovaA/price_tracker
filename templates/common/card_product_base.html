@@ -1,0 +1,61 @@
+{% load static %}
+{% load currency_symbols %}
+{% load no_value %}
+{% block body %}
+
+<div class="card" id="{{ product.id }}">
+
+    <!-- TITLE -->
+    <h2>{{ product }}</h2>
+
+    <!-- STATUS -->
+    {% if product.is_tracking %}
+        <p><strong>Status:</strong> <span style="color:#2ec4b6;">Tracking active</span></p>
+    {% else %}
+        <p><strong>Status:</strong> <span style="color:#999;">Not tracking</span></p>
+    {% endif %}
+
+    <hr>
+
+    <!-- META -->
+    <p>
+        <strong>Category:</strong> {{ product.category }}<br>
+        <strong>Added:</strong> {{ product.created_at|date:"d M Y" }}
+    </p>
+
+    <!-- DESCRIPTION -->
+    <p>
+        <strong>Description:</strong><br>
+        {{ product.description|no_value_filler|truncatechars:70 }}
+    </p>
+
+    <!-- TAGS -->
+    <p>
+        <strong>Tags:</strong>
+        {% if product.tag.all %}
+            {% for tag in product.tag.all %}
+                <span>#{{ tag.title }}</span>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% else %}
+            <span>No tags</span>
+        {% endif %}
+    </p>
+
+    <hr>
+
+    <!-- ACTIONS -->
+    <a href="{{ product.url }}" target="_blank" rel="noopener noreferrer" class="hvr">🔗 View product</a>
+
+    <br>
+
+   <hr>
+
+<div class="actions">
+
+    <a href="{% url 'product:edit' product.slug %}" class="btn">Edit</a>
+    <a href="{% url 'alert:check' product.id %}" class="btn">Simulate</a>
+    <a href="{% url 'product:delete' product.slug %}" class="btn btn-danger">Delete</a>
+
+</div>
+</div>
+{% endblock %}

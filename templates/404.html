@@ -1,0 +1,16 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block body %}
+
+     <div class="icon-price-body"><img src="{% static 'img/trackydeal-logo.svg' %}" alt="logo"></div>
+</div>
+
+<div class="delete-wrapper">
+    <h2>Oops! Page Not Found (404)</h2>
+    <p>We couldn't find the page you were looking for.</p>
+    <p>It might have been moved, deleted, or the URL is incorrect.</p>
+
+    <a href="{% url 'alert:home-page' %}" class="btn">Go back to Home</a>
+</div>
+
+{% endblock %}

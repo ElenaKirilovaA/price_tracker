@@ -1,0 +1,40 @@
+{% extends 'common/base.html' %}
+{% block body %}
+{% load currency_symbols %}
+
+<!-- HERO -->
+<section class="header-content">
+    <!-- LEFT SIDE -->
+    <div id="pre-circle">
+        <h1>Never overpay again</h1>
+        <p>
+            Track product prices automatically and get notified the moment
+            they drop. Simple, smart and stress-free.
+        </p>
+        <br>
+        <a href="{% url 'alert:create' %}" class="btn">Start Tracking a Price</a>
+        <br><br>
+        <a href="{% url 'alert:alert_list' %}" class="hvr">Active tracks: {{ counter }}</a>
+        &nbsp;•&nbsp;
+        <a href="{% url 'alert:history_list' %}" class="hvr">Successful tracks: {{ counter_archive }}</a>
+    </div>
+
+    <!-- RIGHT SIDE / CIRCLE -->
+    <div id="circle">
+        <h1>Together users saved</h1>
+        <h2>{{ saved_money }} €</h2>
+        <small>Real money saved by real users</small>
+    </div>
+
+</section>
+
+<!-- INTRO -->
+<h2>Find your best deal today</h2>
+<p> These are some of the most successful price drops tracked by our users.</p>
+
+<!-- SUCCESSFUL TRACKS -->
+{% include 'common/card_archive_base.html' %}
+
+<a href="{% url 'alert:history_list' %}" class="hvr"> View all successful tracks → </a>
+
+{% endblock %}

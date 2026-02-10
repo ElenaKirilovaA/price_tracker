@@ -1,0 +1,49 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% load no_value %}
+
+{% block body %}
+<section class="header-content">
+    <div id="pre-circle">
+        <h1>Category Catalog</h1>
+        <p>
+            Browse all categories, see total products and discover where users save the most.
+        </p>
+
+        <div class="star-category">
+            <span class="badge-star">
+                <span class="material-icons star-icon">star</span>
+                <strong>{{ star_category.title }} - {{ star_category.deals_count }} deals</strong>
+            </span>
+        </div>
+    </div>
+</section>
+
+<section class="card-container">
+    {% for category in catalog %}
+        <div class="card">
+            <h2>{{ category.title }}</h2>
+
+            {% if category.card_image %}
+                <img src="{{ category.card_image.url }}" alt="{{ category.title }}" width="65" height="65">
+            {% else %}
+                <img src="{% static 'img/alt_picture.png' %}" class="card-icon" alt="No image">
+            {% endif %}
+
+            <p>{{ category.description|no_value_filler:'No available description.'|truncatechars:56|truncatewords:9 }}</p>
+            <p>Total products: {{ category.product_count }}</p>
+            <a href="{% url 'catalog:info' category.id %}" class="hvr">View Category</a>
+            <hr>
+            <a href="{% url 'catalog:edit' category.id %}" class="btn"> Edit</a>
+            <a href="{% url 'catalog:delete' category.id %}" class="btn btn-danger">Delete</a>
+
+        </div>
+    {% empty %}
+        <p>No categories available.</p>
+    {% endfor %}
+</section>
+
+{% endblock %}
+
+

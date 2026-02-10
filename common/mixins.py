@@ -1,0 +1,36 @@
+from django.core.validators import MinLengthValidator
+from django.db import models
+
+
+class BaseInfoTitle(models.Model):
+    class Meta:
+        abstract = True
+
+    title = models.CharField(
+        unique=True,
+        max_length=100,
+        validators=[
+            MinLengthValidator(2)
+        ],
+    )
+
+
+class BaseInfoDescription(models.Model):
+    class Meta:
+        abstract = True
+
+    description = models.TextField(
+            blank=True,
+            null=True
+        )
+
+
+class CreatedAtMixin(models.Model):
+    class Meta:
+        abstract = True
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+

@@ -1,0 +1,57 @@
+{% extends 'common/base.html' %}
+{% load currency_symbols %}
+{% block body %}
+<section class="header-content">
+
+    <div id="pre-circle">
+
+        <div class="card">
+            <h2>Track #{{ alert.id }}</h2>
+            <h3>{{ alert.product_title }}</h3>
+               <hr>
+            <p>
+                <span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #2ec4b6;">attach_money</span>
+                Started: {% price_with_currency alert.started_price alert.product_currency %}
+            </p>
+
+            <p>
+                <span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #8bc34a;">trending_down</span>
+                Target: {% price_with_currency alert.target alert.product_currency %}
+            </p>
+
+            <p>
+                <span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #ff6b6b;">price_check</span>
+                Triggered: {% price_with_currency alert.triggered_price alert.product_currency %}
+            </p>
+            <p>Category: {{ alert.category_title }}</p>
+
+            <p>
+                <span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #0f2a44;">check_circle</span>
+                Checks: {{ alert.counter_checks }}
+            </p>
+            <hr>
+            <p>
+                <span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #2ec4b6;">savings</span>
+                Saved: {% price_with_currency alert.saved_money alert.product_currency %}
+            </p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Time view</h3>
+        <p> <span class="material-icons" style="vertical-align: middle;">event</span>Start: {{ alert.alert_created_at }}</p>
+        <p> <span class="material-icons" style="vertical-align: middle;">event</span>End: {{ alert.alert_finished_at }}</p>
+        <hr>
+        <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #1f4e79;">timer</span>Duration: {{ alert.active_duration }} days</p>
+    </div>
+
+    <div id="circle">
+        <h1>Saved</h1>
+        <h2>{% price_with_currency alert.saved_money_eur alert.product_currency %}</h2>
+        <small>Real money saved</small>
+    </div>
+
+</section>
+    <a href="#" class="btn btn-secondary" onclick="history.back(); return false;">Go back</a>
+
+{% endblock %}

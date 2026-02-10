@@ -1,0 +1,44 @@
+{% extends 'common/base.html' %}
+{% load currency_symbols %}
+{% block body %}
+
+<section class="header-content">
+    <div id="pre-circle">
+        <h1>{{ category.title }}</h1>
+        <p>All current products in this category</p>
+
+        {% if last_deal is not None %}
+            <p>
+                Last successful deal:
+                <strong>
+                    {% if last_deal == 0 %}
+                        today
+                    {% elif last_deal == 1 %}
+                        {{ last_deal }} day ago
+                    {% else %}
+                        {{ last_deal }} days ago
+                    {% endif %}
+                </strong>
+            </p>
+            <a href="{% url 'alert:create' %}" class="btn">Start tracking a product</a>
+        {% else %}
+            <p>No successful deals yet. Start tracking products to unlock savings.</p>
+            <a href="{% url 'alert:create' %}" class="btn">Start your first track</a>
+        {% endif %}
+    </div>
+
+</section>
+<section class="card-container">
+
+    {% for product in products %}
+        {% include 'common/card_product_base.html' %}
+    {% empty %}
+        {% include 'common/card_product_empty.html' %}
+    {% endfor %}
+
+</section>
+
+    <a href="#" class="btn btn-secondary" onclick="history.back(); return false;">
+    ← Go back
+</a>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'common/base.html' %}
+
+{% block body %}
+    <h2>Add your tags.</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.management_form }}
+
+        {%  for f in  form %}
+            <div class="form-tag-fields">
+                {{ f }}
+            </div>
+        {% endfor %}
+        <button class="btn primary">Add all</button>
+        <a href="#" class="btn btn-secondary" onclick="history.back(); return false;">Go back</a>
+
+    </form>
+
+{% endblock %}

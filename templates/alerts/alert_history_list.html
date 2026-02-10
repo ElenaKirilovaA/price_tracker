@@ -1,0 +1,37 @@
+
+
+{% extends 'common/base.html' %}
+{% block body %}
+
+<!-- PAGE HEADER -->
+<section class="header-content">
+
+    <div id="pre-circle">
+        <h1>Successful price tracks</h1>
+        <p>
+            These are the alerts that paid off.
+            Real price drops, real savings.
+        </p>
+
+        <a href="{% url 'alert:create' %}" class="btn">
+            Start a new track
+        </a>
+    </div>
+
+
+</section>
+
+<!-- LIST -->
+<h2>Your successful tracks</h2>
+    <p>
+        Below you can find all completed price tracks with details about
+        savings, duration and number of checks.
+    </p>
+
+{% include 'common/card_archive_base.html' %}
+
+<a href="#" class="btn btn-secondary" onclick="history.back(); return false;">
+    ← Go back
+</a>
+
+{% endblock %}

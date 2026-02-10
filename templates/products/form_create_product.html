@@ -1,0 +1,54 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block body %}
+    <section class="header-content">
+
+    <div id="pre-circle">
+        <h1>Add a Product</h1>
+        <p>
+            Add the product you wish to track.
+            Fill in the details below and start saving.
+        </p>
+    </div>
+    <div class="icon-price-body"><img src="{% static 'img/trackydeal-logo.svg' %}" alt="logo"></div>
+
+</section>
+
+     <form method="post" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+        {% for field in form %}
+            {% if field.name == "tag" %}
+            <div class="form-group tag-field">
+                <label>
+                    {{ field.label }}
+                        {{ field }}
+                    <span class="tag-actions">
+                        <a href="{% url 'catalog:tag_create' %}">
+                            <span class="material-icons">add</span>
+                        </a>
+
+                        <a href="{% url 'catalog:display' %}" id="edit-tag-link">
+                            <span class="material-icons">edit</span>
+                        </a>
+                    </span>
+                </label>
+
+
+            </div>
+        {% else %}
+            <p>
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </p>
+
+        {% endif %}
+    {% endfor %}
+<button type="submit" class="btn">Done</button>
+         </form>
+{% endblock %}
+
+

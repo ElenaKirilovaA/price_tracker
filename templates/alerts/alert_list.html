@@ -1,0 +1,35 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% load currency_symbols %}
+{% block body %}
+        <div class="icon-price-body"><img src="{% static 'img/trackydeal-logo.svg' %}" alt="logo"></div>
+
+<section class="card-container">
+
+        {% for alert in alerts %}
+            <div class="card">
+
+                <h2>{{ alert.product }}</h2>
+                <hr>
+                <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #8bc34a;">trending_down</span>
+                    Target: {% price_with_currency alert.target_price alert.product.currency %}</p>
+                <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #1f4e79;">timer</span>
+                    Tracking from:{{ alert.created_at|date:'d-M-y' }}</p>
+                <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #2ec4b6;">attach_money</span>
+                    Started: {% price_with_currency alert.started_price alert.product.currency %}</p>
+                <a href="{% url 'product:single_product' alert.product.slug %}" rel="noopener noreferrer" class="hvr">🔗 Product's tracking detail </a>
+                <hr>
+                <a href="{% url 'alert:edit' alert.id %}" class="btn"> Edit</a>
+                <a href="{% url 'alert:delete' alert.id %}" class="btn btn-danger">Delete</a>
+
+            </div>
+        {% empty %}
+            <div class="card">
+                    <h3>No current tracks.</h3>
+                     <p>Add a product and start tracking price drops.</p>
+                    <a href="{% url 'product:create' %}" class="btn">Add product</a>
+            </div>
+        {% endfor %}
+    </section>
+
+{% endblock %}

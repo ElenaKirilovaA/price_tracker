@@ -1,0 +1,63 @@
+{% extends "common/base.html" %}
+
+{% block content %}
+<h1>Tags</h1>
+<form method="post" action="{% url 'catalog:delete_tag' %}">
+    {% csrf_token %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" id="select-all">
+                </th>
+                <th>Tag</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for tag in tags %}
+                <tr>
+                    <td>
+                        <input type="checkbox"
+                               name="selected_tags"
+                               value="{{ tag.id }}">
+                    </td>
+
+                    <td>{{ tag.title }}</td>
+
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">No tags</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Delete selected tags?');">
+        Delete selected
+    </button>
+ <a href="#" class="btn btn-secondary" onclick="history.back(); return false;">Go back</a>
+    <br>
+
+</form>
+
+    <script>
+    const checkBoxAllEl = document.getElementById('select-all')
+
+    checkBoxAllEl.addEventListener('change', handleCheckBox)
+
+    function handleCheckBox(){
+        const checkBoxSingleEl = document.querySelectorAll('input[name="selected_tags"]')
+
+        checkBoxSingleEl.forEach(el => {
+            el.checked = this.checked;
+        })
+    }
+    </script>
+
+{% endblock %}
+
+

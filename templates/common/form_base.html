@@ -1,0 +1,22 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block body %}
+    <div class="icon-price-body"><img src="{% static 'img/trackydeal-logo.svg' %}" alt="logo"></div>
+        <form method="post" enctype="multipart/form-data">
+
+
+                {% if dangerzone %}
+                    <p class="warning-text">This action cannot be undone.</p>
+                {% endif %}
+
+            {% csrf_token %}
+            {{ form }}
+
+            {% if dangerzone %}
+                <button type="submit" class="btn btn-danger">Yes, delete</button>
+                <a href="#" class="btn btn-secondary" onclick="history.back(); return false;">Go back</a>
+            {% else %}
+                <button type="submit" class="btn">Done</button>
+            {% endif %}
+        </form>
+{% endblock %}

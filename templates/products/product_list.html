@@ -1,0 +1,42 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% load no_value %}
+
+{% block body %}
+
+<section class="header-content">
+
+    <div id="pre-circle">
+        <h1>Your products</h1>
+        <p>
+            Manage your tracked products, categories and alerts.
+        </p>
+         <a href="{% url 'alert:create' %}" class="btn">
+            Start a new track
+        </a>
+    </div>
+
+</section>
+
+<section class="card-container">
+
+{% for product in products %}
+
+
+
+{% include 'common/card_product_base.html' %}
+{% empty %}
+<div class="card">
+    <h3>No products yet</h3>
+    <p>
+        Add a product and start tracking price drops.
+    </p>
+    <a href="{% url 'product:create' %}" class="btn">
+        Add product
+    </a>
+</div>
+{% endfor %}
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/error_messages.css' %}">
+<link rel="icon" href="{% static 'img/favicon.ico' %}">
+
+    <title>{% block title %}{{ page_title }}{% endblock %}</title>
+</head>
+<body>
+
+<header>
+    {% include 'common/navigation.html' %}
+</header>
+    <main>
+
+    <body>
+    {# error message block #}
+        {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+              <div class="message {{ message.tags }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+    {# end error message block#}
+
+        {% block content %}
+        {% endblock %}
+
+    </body>
+
+        {% block body %}
+        {% endblock %}
+
+    </main>
+
+    {%  include 'common/footer.html' %}
+
+</body>
+</html>
+
