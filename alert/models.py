@@ -181,17 +181,6 @@ class ArchiveAlert(models.Model):
         return (self.alert_finished_at.date() - self.alert_created_at.date()).days + 1
 
 
-    def save(self, *args, **kwargs):
-
-        if not self.started_price_eur:
-            self.started_price_eur = convert_to_eur(self.started_price, self.product_currency)
-
-        if not self.triggered_price_eur:
-            self.triggered_price_eur = convert_to_eur(self.triggered_price, self.product_currency)
-
-        super().save(*args, **kwargs)
-
-
     class Meta:
         ordering = ['-alert_finished_at']
 

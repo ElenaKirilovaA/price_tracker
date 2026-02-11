@@ -3,6 +3,7 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 
 from alert.models import ArchiveAlert, Alert
+from common.currency import convert_to_eur
 
 
 def calculate_simulation_checks(alert: Alert) -> None:
@@ -33,6 +34,8 @@ def archive_alert(alert: Alert) -> None:
         started_price = alert.started_price,
         target = alert.target_price,
         product_currency = product.currency,
+        started_price_eur = convert_to_eur(alert.started_price, product.currency),
+        triggered_price_eur = convert_to_eur(alert.triggered_price, product.currency),
         triggered_price = alert.triggered_price,
         alert_created_at = alert.created_at,
         counter_checks = alert.counter_checks,
