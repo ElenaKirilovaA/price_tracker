@@ -1,4 +1,4 @@
-from django.db import transaction
+
 from django.core.mail import EmailMessage
 from django.conf import settings
 
@@ -19,8 +19,6 @@ def send_mail(alert: Alert) -> None:
         to=[alert.email],
     ).send()
 
-
-@transaction.atomic
 def archive_alert(alert: Alert) -> None:
 
     if alert.started_price is None or alert.triggered_price is None:

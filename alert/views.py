@@ -100,7 +100,7 @@ def alert_delete(request:HttpRequest, alert_id: int) -> HttpResponse:
 
 
 def display_archived_alert(request:HttpRequest) -> HttpResponse:
-    alerts = ArchiveAlert.objects.top_alerts()
+    alerts = ArchiveAlert.objects.get_archives_by_saved_money()
 
     context = {
         'page_title': 'All tracks',
