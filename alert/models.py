@@ -60,7 +60,7 @@ class Alert(CreatedAtMixin):
 
 
     @property
-    def price_is_dropped(self) -> float or None:
+    def price_is_dropped(self) -> bool:
         return self.product.current_price <= self.target_price
 
 
@@ -175,13 +175,13 @@ class ArchiveAlert(models.Model):
 
 
     @property
-    def active_duration(self) -> int:
-        return (self.alert_finished_at.date() - self.alert_created_at.date()).days + 1
+    def saved_money_eur(self) -> float:
+        return self.started_price_eur - self.triggered_price_eur
 
 
     @property
-    def saved_money_eur(self) -> float:
-        return self.started_price_eur - self.triggered_price_eur
+    def active_duration(self) -> int:
+        return (self.alert_finished_at.date() - self.alert_created_at.date()).days + 1
 
 
     def save(self, *args, **kwargs):
