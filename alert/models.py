@@ -91,15 +91,12 @@ class Alert(CreatedAtMixin):
 
 
     class Meta:
-
-        # No two alerts for same product with the same target price.
         constraints = [
             models.UniqueConstraint(
                 fields=['product', 'target_price'],
                 name='product_target_price_constraint'
             )
         ]
-
 
 
 class ArchiveAlert(models.Model):
