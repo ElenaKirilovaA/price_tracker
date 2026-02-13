@@ -6,10 +6,17 @@ from alert.models import Alert
 class AlertBasicForm(forms.ModelForm):
     class Meta:
         model = Alert
-        exclude = ['started_price', 'triggered_price', 'is_active', 'counter_checks']
-        # widgets = {
-        #     'target_price': forms.DateInput(attrs={'type': 'date'}),
-        # }
+        fields = ['target_price', 'email', 'product']
+        error_messages = {
+            'email': {
+                'required': 'Please enter your email address.',
+                'invalid': 'Please enter a valid email address.',
+            },
+            'product': {
+                'required': 'Please select a product.',
+            }
+        }
+
 
         labels = {
             'target_price': 'Your target',
