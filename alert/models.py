@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MinLengthValidator
 from django.db import models
@@ -48,9 +50,7 @@ class Alert(CreatedAtMixin):
     is_active = models.BooleanField(
         default=True,
     )
-    counter_checks = models.PositiveSmallIntegerField(
-        default=0,
-    )
+
     product = models.ForeignKey(
         to=Product,
         on_delete=models.CASCADE,
@@ -167,12 +167,12 @@ class ArchiveAlert(models.Model):
 
 
     @property
-    def saved_money(self) -> str:
+    def saved_money(self) -> Decimal:
         return self.started_price - self.triggered_price
 
 
     @property
-    def saved_money_eur(self) -> float:
+    def saved_money_eur(self) -> Decimal:
         return self.started_price_eur - self.triggered_price_eur
 
 
@@ -184,3 +184,36 @@ class ArchiveAlert(models.Model):
     class Meta:
         ordering = ['-alert_finished_at']
 
+
+
+class PriceTimeline(models.Model):  # every time add new row in db
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+    )
+    checked_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+    alert = models.ForeignKey(
+        to=Alert,
+        on_delete=models.CASCADE,
+        related_name='price_timelines'
+    )
+
+    class Meta:
+        ordering = ['checked_at']
+
+
+class PriceTimelineArchived(models.Model):
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+    )
+    checked_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+    history_alert = models.ForeignKey(
+        to=ArchiveAlert,
+        on_delete=models.CASCADE,
+        related_name='history_alerts'
+    )

@@ -1,11 +1,11 @@
 from django.contrib import messages
+from django.db.models import F
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from alert.forms import AlertCreateForm, AlertEditForm
 from alert.models import Alert, ArchiveAlert
-from alert.service import manage_simulation_tracking, calculate_simulation_checks
-
+from alert.service import manage_simulation_tracking, set_timeline_checks
 
 
 # Create your views here.
@@ -44,7 +44,8 @@ def check_alerts(request: HttpRequest, product_id:int) -> HttpResponse:
     alerts = Alert.objects.filter(product_id=product_id, is_active=True)
 
     for alert in alerts:
-        calculate_simulation_checks(alert)
+
+        set_timeline_checks(alert)
 
         if alert.price_is_dropped:
             manage_simulation_tracking(alert)
