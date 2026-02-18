@@ -2,9 +2,8 @@
 {% block body %}
 {% load currency_symbols %}
 
-<!-- HERO -->
 <section class="header-content">
-    <!-- LEFT SIDE -->
+
     <div id="pre-circle">
         <h1>Never overpay again</h1>
         <p>
@@ -19,7 +18,7 @@
         <a href="{% url 'alert:history_list' %}" class="hvr">Successful tracks: {{ counter_archive }}</a>
     </div>
 
-    <!-- RIGHT SIDE / CIRCLE -->
+
     <div id="circle">
         <h1>Together users saved</h1>
         <h2>{{ saved_money }} €</h2>
@@ -28,11 +27,11 @@
 
 </section>
 
-<!-- INTRO -->
-<h2>Find your best deal today</h2>
-<p> These are some of the most successful price drops tracked by our users.</p>
 
-<!-- SUCCESSFUL TRACKS -->
+<h2>Find your best deal today</h2>
+<p> These are the most successful price drops tracked by our users.</p>
+
+
 {% include 'common/card_archive_base.html' %}
 
 <a href="{% url 'alert:history_list' %}" class="hvr"> View all successful tracks → </a>
