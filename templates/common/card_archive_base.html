@@ -12,7 +12,15 @@
             <hr>
             <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #2ec4b6;">savings</span><strong> Saved:</strong>{% price_with_currency alert.saved_money alert.product_currency %}</p>
             <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #8bc34a;">trending_down</span> {% price_with_currency alert.started_price alert.product_currency %} → {% price_with_currency alert.triggered_price alert.product_currency %}</p>
-            <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #1f4e79;">timer</span> Duration: {{ alert.active_duration }} days</p>
+            <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #1f4e79;">timer</span> Duration:
+                {% if alert.active_duration == 0 %}
+                    less than a day
+                {% elif alert.active_duration == 1 %}
+                    {{ alert.active_duration }} day
+                {% else %}
+                    {{ alert.active_duration }} days
+                {% endif %}
+            </p>
 
             <hr>
             <a href="{% url 'alert:info_archive' alert.id %}" rel="noopener noreferrer" class="hvr">🔗 View track </a>
