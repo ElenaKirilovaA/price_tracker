@@ -151,7 +151,7 @@ def category_info(request:HttpRequest, category_id: int) -> HttpResponse:
 
 
     context = {
-        'page_title': f'Info for {len(products)}',
+        'page_title': f'Category {category.title} - {len(products)} products',
         'category': category,
         'last_deal': last_deal,
         'products': products,

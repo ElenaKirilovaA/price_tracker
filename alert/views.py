@@ -11,7 +11,7 @@ from alert.service import manage_simulation_tracking, calculate_simulation_check
 # Create your views here.
 def home(request: HttpRequest) -> HttpResponse:
     active_tracks_count =  Alert.objects.get_active_alerts().count()
-    top_alerts = ArchiveAlert.objects.top_alerts()
+    top_alerts = ArchiveAlert.objects.get_archives_by_saved_money()
     saved_money = sum(alert.saved_money_eur for alert in top_alerts)
 
     context = {

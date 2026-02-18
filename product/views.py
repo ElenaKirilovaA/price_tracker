@@ -1,5 +1,8 @@
 from django.http import HttpRequest,HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.base import kwarg_re
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from product.forms import ProductCreateForm, ProductEditForm, ProductDeleteForm
 from product.models import Product
@@ -7,80 +10,65 @@ from product.models import Product
 
 # Create your views here.
 
-def product_list(request: HttpRequest) -> HttpResponse:
 
-    products = Product.objects.prefetch_related('tag', 'alerts').order_by('-created_at')
+class ProductList(ListView):
+    model = Product
+    template_name = 'products/product_list.html'
+    ordering = '-created_at'
 
-    context = {
-        'page_title': 'Product List',
-        'products': products,
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['page_title'] = 'Product List'
 
-    }
-
-    return render(request, 'products/product_list.html', context)
-
-
-def add_product(request: HttpRequest) -> HttpResponse:
-    form = ProductCreateForm(request.POST or None)
-
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-
-        return redirect('product:product_list')
-
-    context = {
-        'page_title': 'Add product',
-        'form': form,
-
-    }
-
-    return render(request, 'products/form_create_product.html', context)
+        return context
 
 
-def edit_product(request: HttpRequest, slug: str) -> HttpResponse:
-    product = get_object_or_404(Product, slug=slug)
-    form = ProductEditForm(request.POST or None, instance=product)
+class AddProduct(CreateView):
+    model = Product
+    form_class = ProductCreateForm
+    success_url = reverse_lazy('product:product_list')
+    template_name = 'products/form_create_product.html'
 
-    if request.method == 'POST' and form.is_valid():
-        form.save()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['page_title'] = 'Add new product'
 
-        return redirect('product:product_list')
-
-    context = {
-        'page_title': 'Add product',
-        'form': form,
-    }
-
-    return render(request, 'common/form_base.html', context)
+        return context
 
 
-def delete_product(request: HttpRequest, slug: str) -> HttpResponse:
-    product = get_object_or_404(Product, slug=slug)
-    form = ProductDeleteForm(request.POST or None, instance=product)
+class EditProduct(UpdateView):
+    model = Product
+    form_class = ProductEditForm
+    template_name = 'common/form_base.html'
+    success_url = reverse_lazy('product:product_list')
 
-    if request.method == 'POST':
-        product.delete()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['page_title'] = f'Edit product {self.object.title}'
 
-        return redirect('product:product_list')
-
-    context = {
-        'page_title': 'Add product',
-        'form': form,
-        'product': product,
-    }
-
-    return render(request, 'common/form_delete_category.html', context)
+        return context
 
 
-def single_product(request:HttpRequest, slug=str) -> HttpResponse:
-    product = get_object_or_404(Product, slug=slug)
+class DeleteProduct(DeleteView):
+    model = Product
+    form_class = ProductDeleteForm
+    template_name = 'common/form_delete_category.html'
+    success_url = reverse_lazy('product:product_list')
 
-    context = {
-       ' page_title': f'{product.title}',
-        'product': product,
-    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['form'] = ProductDeleteForm(instance=self.object)
+        context['page_title'] = f'Delete {self.object.title}'
 
-    return render(request, 'products/product_detail_page.html', context)
+        return context
 
 
+class SingleProduct(DetailView):
+    model = Product
+    template_name = 'products/product_detail_page.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['page_title'] = f'{self.object.title}'
+
+        return context
