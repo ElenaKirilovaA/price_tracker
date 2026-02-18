@@ -44,14 +44,13 @@ def check_alerts(request: HttpRequest, product_id:int) -> HttpResponse:
     alerts = Alert.objects.filter(product_id=product_id, is_active=True)
 
     for alert in alerts:
-
         set_timeline_checks(alert)
 
         if alert.price_is_dropped:
             manage_simulation_tracking(alert)
             messages.success(request, 'Your turn. Check your email')
 
-    return redirect(request.META.get('HTTP_REFERER') + f'#{product_id}')
+    return redirect('product:product_list')
 
 
 def display_active_alert(request:HttpRequest) -> HttpResponse:
@@ -113,10 +112,12 @@ def display_archived_alert(request:HttpRequest) -> HttpResponse:
 
 def archive_alert_info(request: HttpRequest, archived_id: int) -> HttpResponse:
     alert = get_object_or_404(ArchiveAlert, id=archived_id)
+    timeline = alert.history_alerts.all()
 
     context = {
         'page_title': f'Display {alert.id}',
         'alert': alert,
+        'timeline': timeline,
     }
 
     return render(request, 'alerts/info_single_archive.html', context)

@@ -39,8 +39,9 @@
 
     <div class="card">
         <h3>Time view</h3>
-        <p> <span class="material-icons" style="vertical-align: middle;">event</span>Start: {{ alert.alert_created_at }}</p>
-        <p> <span class="material-icons" style="vertical-align: middle;">event</span>End: {{ alert.alert_finished_at }}</p>
+            {% for t in timeline %}
+                <p> <span class="material-icons" style="vertical-align: middle;">event</span>{{ t.checked_at }} - {{ t.price }}</p>
+            {% endfor %}
         <hr>
         <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #1f4e79;">timer</span>Duration: {{ alert.active_duration }} days</p>
     </div>

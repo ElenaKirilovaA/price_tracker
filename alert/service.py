@@ -9,8 +9,8 @@ from common.currency import convert_to_eur
 
 
 def set_timeline_checks(alert: Alert) -> None:
-    alert.product.counter_checks += 1
-    alert.product.save()
+    alert.counter_checks += 1
+    alert.save()
 
     PriceTimeline.objects.create(
         alert=alert,
@@ -35,7 +35,6 @@ def archive_alert(alert: Alert) -> None:
 
     product = alert.product
     category = alert.product.category
-    price_timelines = alert.price_timelines.all()  # TODO or list()?
 
     archive = ArchiveAlert.objects.create(
         product_title=product.title,
@@ -46,11 +45,12 @@ def archive_alert(alert: Alert) -> None:
         triggered_price_eur = convert_to_eur(alert.triggered_price, product.currency),
         triggered_price = alert.triggered_price,
         alert_created_at = alert.created_at,
-        counter_checks = product.counter_checks,
+        counter_checks = alert.counter_checks,
         category_title= category.title,
         category= category,
     )
 
+    price_timelines = alert.price_timelines.all()  # TODO or list()?
     timeline_to_archive = [PriceTimelineArchived(
             history_alert=archive,
             price=timeline.price,

@@ -50,7 +50,9 @@ class Alert(CreatedAtMixin):
     is_active = models.BooleanField(
         default=True,
     )
-
+    counter_checks = models.PositiveSmallIntegerField(
+        default=0
+    )
     product = models.ForeignKey(
         to=Product,
         on_delete=models.CASCADE,
@@ -209,9 +211,7 @@ class PriceTimelineArchived(models.Model):
         max_digits=10,
         decimal_places=2,
     )
-    checked_at = models.DateTimeField(
-        auto_now_add=True,
-    )
+    checked_at = models.DateTimeField()
     history_alert = models.ForeignKey(
         to=ArchiveAlert,
         on_delete=models.CASCADE,
