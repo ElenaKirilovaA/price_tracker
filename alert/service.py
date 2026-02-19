@@ -18,7 +18,6 @@ def set_timeline_checks(alert: Alert) -> None:
     )
 
 
-
 def send_mail(alert: Alert) -> None:
     EmailMessage(
         subject=f'Price dropped for {alert.product.title}!',
