@@ -22,22 +22,21 @@
         {% for field in form %}
             {% if field.name == "tag" %}
             <div class="form-group tag-field">
-                <label>
+                <label id="tag-field">
                     {{ field.label }}
-                        {{ field }}
+                         {{ field }}
                     <span class="tag-actions">
-                        <a href="{% url 'catalog:tag_create' %}">
+                        <a id="tag-add" href="{% url 'catalog:tag_create' %}" data-help="{{ field.help_text }}">
                             <span class="material-icons">add</span>
                         </a>
-
-                        <a href="{% url 'catalog:display' %}" id="edit-tag-link">
-                            <span class="material-icons">edit</span>
+                        <a id="tag-delete" href="{% url 'catalog:display' %}">
+                            <span class="material-icons delete-icon">delete</span>
                         </a>
+                        <div id="help-container"></div>
                     </span>
                 </label>
-
-
             </div>
+
         {% else %}
             <p>
                 {{ field.label_tag }}
@@ -49,6 +48,41 @@
     {% endfor %}
 <button type="submit" class="btn">Done</button>
          </form>
+
+<script>
+    const aTagFieldEl = document.getElementById('tag-add');
+    const helpTextEl = aTagFieldEl.dataset.help;
+    const divHelpEl = document.getElementById('help-container');
+
+    const aDeleteEl = document.getElementById('tag-delete')
+
+    aTagFieldEl.addEventListener('mouseenter', handleHover);
+    aTagFieldEl.addEventListener('mouseleave', handleLeave);
+
+    aDeleteEl.addEventListener('mouseenter', handleHoverDelete)
+    aDeleteEl.addEventListener('mouseleave', handleLeave)
+
+    function handleHover(){
+        const smallHelpTextEl = document.createElement('small');
+        smallHelpTextEl.classList.add('form-help');
+        smallHelpTextEl.textContent = helpTextEl;
+
+        divHelpEl.appendChild(smallHelpTextEl)
+    }
+
+    function handleLeave(){
+        divHelpEl.innerHTML = '';
+    }
+
+    function handleHoverDelete(){
+        const smallHelpTextEl = document.createElement('small');
+        smallHelpTextEl.classList.add('form-help');
+        smallHelpTextEl.textContent = 'delete tag/s';
+
+        divHelpEl.appendChild(smallHelpTextEl)
+    }
+
+</script>
 {% endblock %}
 
 

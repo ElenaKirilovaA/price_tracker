@@ -17,7 +17,8 @@ class CategoryBasicForm(forms.ModelForm):
         error_messages = {
             'title': {
                 'required': 'Category title is required.',
-                'max_length': 'Category title cannot be less than 2 characters.',
+                'min_length': 'Category title cannot be less than 2 characters.',
+                'max_length': 'Category title cannot exceed 100 characters',
             }
         }
 

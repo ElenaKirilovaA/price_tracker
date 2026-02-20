@@ -43,6 +43,7 @@ class Product(BaseInfoTitle, BaseInfoDescription, CreatedAtMixin):
         to=Tag,
         related_name='products',
         blank=True,
+        help_text='choose a tag or create your own',
     )
 
 
