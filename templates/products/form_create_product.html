@@ -14,13 +14,13 @@
     <div class="icon-price-body"><img src="{% static 'img/trackydeal-logo.svg' %}" alt="logo"></div>
 
 </section>
-
      <form method="post" enctype="multipart/form-data">
 
             {% csrf_token %}
 
         {% for field in form %}
             {% if field.name == "tag" %}
+
             <div class="form-group tag-field">
                 <label id="tag-field">
                     {{ field.label }}
@@ -37,17 +37,16 @@
                 </label>
             </div>
 
-        {% else %}
-            <p>
-                {{ field.label_tag }}
-                {{ field }}
-                {{ field.errors }}
-            </p>
-
-        {% endif %}
-    {% endfor %}
-<button type="submit" class="btn">Done</button>
-         </form>
+            {% else %}
+                <p>
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors }}
+                </p>
+            {% endif %}
+        {% endfor %}
+            <button type="submit" class="btn">Done</button>
+     </form>
 
 <script>
     const aTagFieldEl = document.getElementById('tag-add');

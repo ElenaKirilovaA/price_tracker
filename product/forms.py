@@ -13,9 +13,9 @@ class ProductBasicForm(forms.ModelForm):
         }
         error_messages = {
             'title': {
-                'required': 'Category title is required.',
-                'min_length': 'Category title cannot be less than 2 characters.',
-                'max_length': 'Category title cannot exceed 100 characters',
+                'required': 'Product title is required.',
+                'min_length': 'Product title cannot be less than 2 characters.',
+                'max_length': 'Product title cannot exceed 100 characters',
             }
         }
         widgets = {

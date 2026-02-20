@@ -51,16 +51,8 @@ class EditProduct(UpdateView):
 
 class DeleteProduct(DeleteView):
     model = Product
-    form_class = ProductDeleteForm
     template_name = 'common/form_delete_category.html'
     success_url = reverse_lazy('product:product_list')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['form'] = ProductDeleteForm(instance=self.object)
-        context['page_title'] = f'Delete {self.object.title}'
-
-        return context
 
 
 class SingleProduct(DetailView):
