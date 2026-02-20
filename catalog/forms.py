@@ -8,7 +8,18 @@ class CategoryBasicForm(forms.ModelForm):
     class Meta:
         model = Category
         exclude = ['created_at']
-
+        labels = {
+            'title': 'Category name:'
+        }
+        help_texts = {
+            'description': 'Provide a brief description of the destination.',
+        }
+        error_messages = {
+            'title': {
+                'required': 'Category title is required.',
+                'max_length': 'Category title cannot be less than 2 characters.',
+            }
+        }
 
 class CategoryCreateForm(CategoryBasicForm):
     pass

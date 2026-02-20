@@ -9,9 +9,6 @@ from common.currency import convert_to_eur
 
 
 def set_timeline_checks(alert: Alert) -> None:
-    alert.counter_checks += 1
-    alert.save()
-
     PriceTimeline.objects.create(
         alert=alert,
         price=alert.product.current_price
@@ -44,7 +41,6 @@ def archive_alert(alert: Alert) -> None:
         triggered_price_eur = convert_to_eur(alert.triggered_price, product.currency),
         triggered_price = alert.triggered_price,
         alert_created_at = alert.created_at,
-        counter_checks = alert.counter_checks,
         category_title= category.title,
         category= category,
     )

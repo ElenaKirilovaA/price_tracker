@@ -50,9 +50,6 @@ class Alert(CreatedAtMixin):
     is_active = models.BooleanField(
         default=True,
     )
-    counter_checks = models.PositiveSmallIntegerField(
-        default=0
-    )
     product = models.ForeignKey(
         to=Product,
         on_delete=models.CASCADE,
@@ -144,9 +141,6 @@ class ArchiveAlert(models.Model):
         editable=False,
         null=True,
     )
-    counter_checks = models.PositiveSmallIntegerField(
-        default=0,
-    )
     category_title = models.CharField(
         max_length=100,
         validators=[
@@ -180,7 +174,7 @@ class ArchiveAlert(models.Model):
 
     @property
     def active_duration(self) -> int:
-        return (self.alert_finished_at.date() - self.alert_created_at.date()).days + 1
+        return (self.alert_finished_at.date() - self.alert_created_at.date()).days
 
 
     class Meta:
