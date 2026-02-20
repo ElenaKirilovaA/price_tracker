@@ -17,7 +17,7 @@ class Product(BaseInfoTitle, BaseInfoDescription, CreatedAtMixin):
         max_length=100,
         blank=True,
     )
-    url = models.URLField(  )
+    url = models.URLField()
     current_price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -54,8 +54,8 @@ class Product(BaseInfoTitle, BaseInfoDescription, CreatedAtMixin):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            category = self.category.title if self.category else ''
-            self.slug = slugify(f"{self.title}-{category}")
+            current_str = f'{self.title}-{self.category.title}'
+            self.slug = slugify(current_str[:100])
 
         super().save(*args, **kwargs)
 

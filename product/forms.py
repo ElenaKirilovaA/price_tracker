@@ -13,9 +13,9 @@ class ProductBasicForm(forms.ModelForm):
         }
         error_messages = {
             'title': {
-                'required': 'Category title is required.',
-                'min_length': 'Category title cannot be less than 2 characters.',
-                'max_length': 'Category title cannot exceed 100 characters',
+                'required': 'Product title is required.',
+                'min_length': 'Product title cannot be less than 2 characters.',
+                'max_length': 'Product title cannot exceed 100 characters',
             }
         }
         widgets = {
@@ -34,12 +34,3 @@ class ProductCreateForm(ProductBasicForm):
 
 class ProductEditForm(ProductBasicForm):
     pass
-
-
-class ProductDeleteForm(ProductBasicForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for name, field in self.fields.items():
-            field.widget.attrs['readonly'] = True
-            field.widget.attrs['disabled'] = True

@@ -14,13 +14,7 @@ class CategoryBasicForm(forms.ModelForm):
         help_texts = {
             'description': 'Provide a brief description of the destination.',
         }
-        error_messages = {
-            'title': {
-                'required': 'Category title is required.',
-                'min_length': 'Category title cannot be less than 2 characters.',
-                'max_length': 'Category title cannot exceed 100 characters',
-            }
-        }
+
 
 class CategoryCreateForm(CategoryBasicForm):
     pass
@@ -45,7 +39,7 @@ class TagForm(forms.Form):
     )
 
 TagFormSet = formset_factory(
-    TagForm,
+    form=TagForm,
     extra=10,
     can_delete=True,
 )

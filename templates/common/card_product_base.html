@@ -5,10 +5,8 @@
 
 <div class="card" id="{{ product.id }}">
 
-    <!-- TITLE -->
     <h2>{{ product }}</h2>
 
-    <!-- STATUS -->
     {% if product.is_tracking %}
         <p><strong>Status:</strong> <span style="color:#2ec4b6;">Tracking active</span></p>
     {% else %}
@@ -17,19 +15,16 @@
 
     <hr>
 
-    <!-- META -->
     <p>
         <strong>Category:</strong> {{ product.category }}<br>
         <strong>Added:</strong> {{ product.created_at|date:"d M Y" }}
     </p>
 
-    <!-- DESCRIPTION -->
     <p>
         <strong>Description:</strong><br>
-        {{ product.description|no_value_filler|truncatechars:70 }}
+        {{ product.description|no_value_filler|truncatechars:56|truncatewords:9}}
     </p>
 
-    <!-- TAGS -->
     <p>
         <strong>Tags:</strong>
         {% if product.tag.all %}
@@ -43,7 +38,6 @@
 
     <hr>
 
-    <!-- ACTIONS -->
     <a href="{{ product.url }}" target="_blank" rel="noopener noreferrer" class="hvr">🔗 View product</a>
 
     <br>

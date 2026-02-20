@@ -4,7 +4,7 @@ from django.template.base import kwarg_re
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from product.forms import ProductCreateForm, ProductEditForm, ProductDeleteForm
+from product.forms import ProductCreateForm, ProductEditForm
 from product.models import Product
 
 
@@ -51,16 +51,8 @@ class EditProduct(UpdateView):
 
 class DeleteProduct(DeleteView):
     model = Product
-    form_class = ProductDeleteForm
     template_name = 'common/form_delete_category.html'
     success_url = reverse_lazy('product:product_list')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['form'] = ProductDeleteForm(instance=self.object)
-        context['page_title'] = f'Delete {self.object.title}'
-
-        return context
 
 
 class SingleProduct(DetailView):
