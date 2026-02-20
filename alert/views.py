@@ -1,9 +1,8 @@
 from django.contrib import messages
-from django.db.models import F
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from alert.forms import AlertCreateForm, AlertEditForm
+from alert.forms import AlertCreateForm, AlertEditForm, AlertDeleteForm
 from alert.models import Alert, ArchiveAlert
 from alert.service import manage_simulation_tracking, set_timeline_checks
 
@@ -83,7 +82,7 @@ def alert_edit(request:HttpRequest, alert_id: int) -> HttpResponse:
 
 def alert_delete(request:HttpRequest, alert_id: int) -> HttpResponse:
     alert = get_object_or_404(Alert, id=alert_id)
-    form = AlertEditForm(request.POST or None, instance=alert)
+    form = AlertDeleteForm(request.POST or None, instance=alert)
 
     if request.method == 'POST':
         alert.delete()

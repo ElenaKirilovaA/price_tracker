@@ -11,6 +11,21 @@ class ProductBasicForm(forms.ModelForm):
             'current_price': 'Product price',
             'currency': 'Choose currency'
         }
+        error_messages = {
+            'title': {
+                'required': 'Category title is required.',
+                'min_length': 'Category title cannot be less than 2 characters.',
+                'max_length': 'Category title cannot exceed 100 characters',
+            }
+        }
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': 'Enter product name'}),
+            'description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter description:'}),
+            'url': forms.URLInput(attrs={'placeholder': 'ex: https://'}),
+        }
+        help_texts = {
+            'tag': 'choose a tag or create your own'
+        }
 
 
 class ProductCreateForm(ProductBasicForm):
@@ -18,8 +33,6 @@ class ProductCreateForm(ProductBasicForm):
 
 
 class ProductEditForm(ProductBasicForm):
-    # class Meta(ProductBasicForm.Meta):
-    #     exclude = ['currency']
     pass
 
 
