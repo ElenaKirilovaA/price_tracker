@@ -83,7 +83,7 @@ def alert_edit(request:HttpRequest, alert_id: int) -> HttpResponse:
 
 def alert_delete(request:HttpRequest, alert_id: int) -> HttpResponse:
     alert = get_object_or_404(Alert, id=alert_id)
-    form = AlertEditForm(request.POST or None, instance=alert)
+    form = AlertDeletetForm(request.POST or None, instance=alert)
 
     if request.method == 'POST':
         alert.delete()

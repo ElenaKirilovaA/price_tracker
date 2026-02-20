@@ -30,13 +30,12 @@ class AlertBasicForm(forms.ModelForm):
         product = cleaned.get('product')
 
         if not target_price or not product:
-            return cleaned  # няма как да валидираме без поле target_price или product
+            return cleaned
 
-        # Ако started_price още не е зададен, вземаме текущата цена на продукта
         started_price = self.instance.started_price or getattr(product, 'current_price', None)
 
         if started_price is None:
-            return cleaned  # няма стойност за сравнение, пропускаме
+            return cleaned
 
         if target_price >= started_price:
             self.add_error('target_price', f'Target price must be less than started price ({started_price}).')
