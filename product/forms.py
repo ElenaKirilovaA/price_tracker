@@ -34,12 +34,3 @@ class ProductCreateForm(ProductBasicForm):
 
 class ProductEditForm(ProductBasicForm):
     pass
-
-
-class ProductDeleteForm(ProductBasicForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for name, field in self.fields.items():
-            field.widget.attrs['readonly'] = True
-            field.widget.attrs['disabled'] = True

@@ -23,7 +23,7 @@
 <section class="card-container">
     {% for category in catalog %}
         <div class="card">
-            <h2>{{ category.title }}</h2>
+            <h2>{{ category.title|truncatechars:56|truncatewords:9 }}</h2>
 
             {% if category.card_image %}
                 <img src="{{ category.card_image.url }}" alt="{{ category.title }}" width="65" height="65">

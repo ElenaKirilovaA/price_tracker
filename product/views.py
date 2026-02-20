@@ -4,7 +4,7 @@ from django.template.base import kwarg_re
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from product.forms import ProductCreateForm, ProductEditForm, ProductDeleteForm
+from product.forms import ProductCreateForm, ProductEditForm
 from product.models import Product
 
 

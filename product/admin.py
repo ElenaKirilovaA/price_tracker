@@ -7,4 +7,8 @@ from product.models import Product
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['title', 'current_price', 'currency', 'slug']
+    list_filter = ['currency']
+    search_fields = ['title','slug', 'description', 'url', 'alerts__is_active']
+    ordering = ['-created_at']
+    readonly_fields = ['created_at']
