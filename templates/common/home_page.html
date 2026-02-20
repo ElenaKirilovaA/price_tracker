@@ -18,7 +18,27 @@
         <a href="{% url 'alert:history_list' %}" class="hvr">Successful tracks: {{ counter_archive }}</a>
     </div>
 
+       <div id="middle">
+         <p>Average time to trigger:
+         {% if avg  %}
+             <strong>{{ avg }}
+                  {% if avg > 1 %}
+                        days
+                    {% elif avg == 1 %}
+                        day
+                    {% else %}
+                        less than a day
+                    {% endif %}
+            </strong></p>
+             {% else %}
+             <p>Still not finished tracks</p>
+         {% endif %}
 
+    {% if best_category %}
+        <p>Most profitable category: <strong>{{ best_category.category_title }} - {{ best_category.total_saved }} €</strong> </p>
+    {% endif %}
+
+    </div>
     <div id="circle">
         <h1>Together users saved</h1>
         <h2>{{ saved_money }} €</h2>
@@ -26,7 +46,6 @@
     </div>
 
 </section>
-
 
 <h2>Find your best deal today</h2>
 <p> These are the most successful price drops tracked by our users.</p>

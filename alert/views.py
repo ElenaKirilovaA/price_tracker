@@ -1,4 +1,8 @@
+from sqlite3.dbapi2 import DateFromTicks
+
 from django.contrib import messages
+from django.db.models import Avg, ExpressionWrapper, F, PositiveIntegerField, DurationField, Max, DecimalField, Sum
+
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -8,28 +12,12 @@ from alert.service import manage_simulation_tracking, set_timeline_checks
 
 
 # Create your views here.
-def home(request: HttpRequest) -> HttpResponse:
-    active_tracks_count =  Alert.objects.get_active_alerts().count()
-    top_alerts = ArchiveAlert.objects.get_archives_by_saved_money()
-    saved_money = sum(alert.saved_money_eur for alert in top_alerts)
-
-    context = {
-        'page_title': 'Home Page',
-        'counter': active_tracks_count,
-        'alerts': top_alerts[:3],
-        'counter_archive': top_alerts.count(),
-        'saved_money': saved_money or 0,
-    }
-
-    return render(request, 'common/home_page.html', context)
-
-
 def alert_create(request: HttpRequest) -> HttpResponse:
     form = AlertCreateForm(request.POST or None)
 
     if request.method == 'POST' and form.is_valid():
         form.save()
-        return redirect('alert:home-page')
+        return redirect('common:home-page')
 
     context ={
         'home_page': 'Create new track',
