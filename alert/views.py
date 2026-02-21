@@ -3,7 +3,7 @@ from django.contrib.admin.templatetags.admin_list import pagination
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 
 from alert.forms import AlertCreateForm, AlertEditForm, AlertDeleteForm
 from alert.models import Alert, ArchiveAlert
@@ -52,21 +52,18 @@ class DisplayActiveAlerts(ListView):
 
         return context
 
-def alert_edit(request:HttpRequest, alert_id: int) -> HttpResponse:
-    alert = get_object_or_404(Alert, id=alert_id)
-    form = AlertEditForm(request.POST or None, instance=alert)
 
-    if request.method == 'POST' and form.is_valid():
-        form.save()
+class AlertEdit(UpdateView):
+    model = Alert
+    form_class = AlertEditForm
+    success_url = reverse_lazy('alert:alert_list')
+    template_name = 'common/form_base.html'
 
-        return  redirect('alert:alert_list')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['page_title'] = f'Update track for {self.object.product}'
 
-    context = {
-        'page_title': f'Update track for {alert.product}',
-        'form': form,
-    }
-
-    return render(request, 'common/form_base.html', context)
+        return context
 
 
 def alert_delete(request:HttpRequest, alert_id: int) -> HttpResponse:
@@ -92,7 +89,7 @@ class DisplayArchivedAlerts(ListView):
     model = ArchiveAlert
     template_name = 'alerts/alert_history_list.html'
     ordering = '-alert_finished_at'
-    paginate_by = 1
+    paginate_by = 9
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
