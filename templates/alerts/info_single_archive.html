@@ -41,12 +41,10 @@
         <h3>Time view for price check</h3>
         <p> <span class="material-icons" style="vertical-align: middle;">event</span>Started track: {{ alert.alert_created_at }} - {{ alert.started_price }}</p>
             {% for t in timeline %}
-                <p> <span class="material-icons" style="vertical-align: middle;">event</span>{{ t.checked_at }} - {{ t.price }}
-                    {% if forloop.last %}
-                        <strong>√</strong>
-                    {% endif%}
-                </p>
-
+                <p> <span class="material-icons" style="vertical-align: middle;">event</span>{{ t.checked_at }} - {{ t.price }}</p>
+                {% if forloop.last %}
+                <p> <span class="material-icons" style="vertical-align: middle;">event</span>{{ t.checked_at }} - {{ t.price }}√</p>
+                {% endif%}
             {% endfor %}
         <hr>
         <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #1f4e79;">timer</span>Duration: {{ alert.active_duration }} days</p>
