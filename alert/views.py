@@ -109,6 +109,7 @@ def archive_alert_info(request: HttpRequest, archived_id: int) -> HttpResponse:
         'alert': alert,
         'timeline': timeline,
         'checks': timeline.count(),
+
     }
 
     return render(request, 'alerts/info_single_archive.html', context)
