@@ -12,7 +12,7 @@ paths = [
 ]
 urlpatterns = [
         path('list/', views.DisplayActiveAlerts.as_view(), name='alert_list'),
-        path('create/', views.alert_create, name='create'),
+        path('create/', views.AlertCreate.as_view(), name='create'),
         path('<int:archived_id>/', include(paths)),
         path('past-alerts/', views.DisplayArchivedAlerts.as_view(), name='history_list')
     ]

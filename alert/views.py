@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.admin.templatetags.admin_list import pagination
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView
 
 from alert.forms import AlertCreateForm, AlertEditForm, AlertDeleteForm
 from alert.models import Alert, ArchiveAlert
@@ -11,19 +12,18 @@ from django.core.paginator import Paginator
 
 
 # Create your views here.
-def alert_create(request: HttpRequest) -> HttpResponse:
-    form = AlertCreateForm(request.POST or None)
 
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return redirect('common:home-page')
+class AlertCreate(CreateView):
+    model = Alert
+    form_class = AlertCreateForm
+    success_url = reverse_lazy('common:home-page')
+    template_name = 'common/form_base.html'
 
-    context ={
-        'home_page': 'Create new track',
-        'form': form,
-    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['home_page'] = 'Create new track'
 
-    return render(request, 'common/form_base.html', context)
+        return context
 
 
 def check_alerts(request: HttpRequest, product_id:int) -> HttpResponse:
