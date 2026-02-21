@@ -1,4 +1,6 @@
-from django.db.models import Avg, ExpressionWrapper, DurationField, F, Sum
+from audioop import avgpp
+
+from django.db.models import Avg, F, Sum
 
 from alert.models import Alert, ArchiveAlert
 
