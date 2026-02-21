@@ -52,6 +52,24 @@
             {% endfor %}
         <hr>
         <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #1f4e79;">timer</span>Duration: {{ alert.active_duration }} days</p>
+
+        <div class="pagination">
+
+            {% if timeline.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ timeline.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span>
+                Page {{ timeline.number }} of {{ timeline.paginator.num_pages }}
+            </span>
+
+            {% if timeline.has_next %}
+                <a href="?page={{ timeline.next_page_number }}">next</a>
+                <a href="?page={{ timeline.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+
+        </div>
     </div>
 
     <div id="circle">
@@ -61,6 +79,4 @@
     </div>
 
 </section>
-    <a href="#" class="btn btn-secondary" onclick="history.back(); return false;">Go back</a>
-
 {% endblock %}

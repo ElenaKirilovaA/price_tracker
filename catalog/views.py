@@ -1,5 +1,4 @@
-
-from django.db.models import Count, Max
+from django.db.models import Count
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -12,13 +11,11 @@ from catalog.forms import CategoryCreateForm, CategoryEditForm, CategoryDeleteFo
 from catalog.models import Category, Tag
 from catalog.service import create_tags
 
-
 # Create your views here.
 
 
 def catalog_overview(request: HttpRequest) -> HttpResponse:
     catalog = (Category.objects
-               .prefetch_related('products', 'archives')
                .annotate(
                     product_count=Count('products', distinct=True),
                     deals_count=Count('archives', distinct=True))
@@ -69,7 +66,7 @@ def delete_category(request: HttpRequest, category_id: int) -> HttpResponse:
     category = get_object_or_404(Category, id=category_id)
     form = CategoryDeleteForm(request.POST or None, instance=category)
 
-    if request.method == 'POST':  # TODO admin deletion
+    if request.method == 'POST':
         try:
             category.delete()
             messages.success(request, f'The {category} has been deleted.')

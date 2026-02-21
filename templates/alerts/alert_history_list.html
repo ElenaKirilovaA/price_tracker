@@ -26,8 +26,7 @@
         savings, duration and number of checks.
     </p>
 
-{% include 'common/card_archive_base.html' %}
-{% if is_paginated %}
+{% include 'common/card_archive_base.html' %}{% if is_paginated %}
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
 
@@ -66,9 +65,7 @@
 
     </ul>
 </nav>
+
 {% endif %}
-<a href="#" class="btn btn-secondary" onclick="history.back(); return false;">
-    ← Go back
-</a>
 
 {% endblock %}
