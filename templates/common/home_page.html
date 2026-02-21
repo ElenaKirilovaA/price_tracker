@@ -20,18 +20,18 @@
 
        <div id="middle">
          <p>Average time to trigger:
-         {% if avg  %}
-             <strong>{{ avg }}
+         {% if avg is not None %}
+             <strong>
                   {% if avg > 1 %}
-                        days
+                       {{ avg }} days
                     {% elif avg == 1 %}
-                        day
+                        {{ avg }} day
                     {% else %}
-                        less than a day
+                        Less than a day
                     {% endif %}
             </strong></p>
-             {% else %}
-             <p>Still not finished tracks</p>
+         {% else %}
+         <p>Still not finished tracks</p>
          {% endif %}
 
     {% if best_category %}

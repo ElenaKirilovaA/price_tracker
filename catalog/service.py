@@ -2,7 +2,6 @@ from catalog.models import Tag
 
 
 def create_tags(tags_to_create: set) -> list or None:
-
     tag_titles_already_exist = (Tag.objects
                                .filter(title__in=tags_to_create)
                                .values_list('title', flat=True))  #  value_list flat=True -> ['cool', 'fun'] ;
