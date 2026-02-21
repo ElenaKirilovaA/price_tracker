@@ -99,16 +99,6 @@ class DisplayArchivedAlerts(ListView):
         context['page_title'] = "All successful tracks"
 
         return context
-# def display_archived_alert(request:HttpRequest) -> HttpResponse:
-#     alerts = ArchiveAlert.objects.get_archives_by_saved_money()
-#
-#     context = {
-#         'page_title': 'All tracks',
-#         'alerts': alerts,
-#     }
-#
-#     return render(request, 'alerts/alert_history_list.html', context)
-#
 
 def archive_alert_info(request: HttpRequest, archived_id: int) -> HttpResponse:
     alert = get_object_or_404(ArchiveAlert, id=archived_id)
@@ -118,6 +108,7 @@ def archive_alert_info(request: HttpRequest, archived_id: int) -> HttpResponse:
         'page_title': f'Display {alert.id}',
         'alert': alert,
         'timeline': timeline,
+        'checks': timeline.count(),
     }
 
     return render(request, 'alerts/info_single_archive.html', context)
