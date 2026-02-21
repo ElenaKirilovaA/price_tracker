@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MinLengthValidator
 from django.db import models
 
-
 from alert.managers import AlertManager, ArchiveAlertManager
 from catalog.models import Category
 from common.choices import CurrencyChoices

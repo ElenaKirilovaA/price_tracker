@@ -1,8 +1,6 @@
-
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.db import transaction
-from django.db.models import F
 
 from alert.models import ArchiveAlert, Alert, PriceTimeline, PriceTimelineArchived
 from common.currency import convert_to_eur

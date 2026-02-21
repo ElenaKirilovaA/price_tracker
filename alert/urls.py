@@ -7,7 +7,7 @@ app_name = 'alert'
 paths = [
         path('info/', views.archive_alert_info, name='info_archive'),
         path('edit/', views.AlertEdit.as_view(), name='edit'),
-        path('delete/', views.alert_delete, name='delete'),
+        path('delete/', views.AlertDelete.as_view(), name='delete'),
 ]
 urlpatterns = [
         path('list/', views.DisplayActiveAlerts.as_view(), name='alert_list'),

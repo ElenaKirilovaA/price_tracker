@@ -1,15 +1,13 @@
 from django.contrib import messages
-from django.contrib.admin.templatetags.admin_list import pagination
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from alert.forms import AlertCreateForm, AlertEditForm, AlertDeleteForm
 from alert.models import Alert, ArchiveAlert
 from alert.service import manage_simulation_tracking, set_timeline_checks
 from django.core.paginator import Paginator
-
 
 # Create your views here.
 
@@ -24,6 +22,39 @@ class AlertCreate(CreateView):
         context['home_page'] = 'Create new track'
 
         return context
+
+
+class AlertEdit(UpdateView):
+    model = Alert
+    form_class = AlertEditForm
+    success_url = reverse_lazy('alert:alert_list')
+    template_name = 'common/form_base.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['page_title'] = f'Update track for {self.object.product}'
+
+        return context
+
+
+class AlertDelete(DeleteView):
+    model = Alert
+    template_name = 'common/form_delete_category.html'
+    success_url = reverse_lazy('alert:alert_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Delete track'
+        context['form'] = AlertDeleteForm(instance=self.object)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        messages.success(request, 'The track has been deleted.')
+
+        return redirect(self.success_url)
 
 
 def check_alerts(request: HttpRequest, product_id:int) -> HttpResponse:
@@ -51,39 +82,6 @@ class DisplayActiveAlerts(ListView):
         context['page_title'] = 'All tracks'
 
         return context
-
-
-class AlertEdit(UpdateView):
-    model = Alert
-    form_class = AlertEditForm
-    success_url = reverse_lazy('alert:alert_list')
-    template_name = 'common/form_base.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['page_title'] = f'Update track for {self.object.product}'
-
-        return context
-
-
-def alert_delete(request:HttpRequest, alert_id: int) -> HttpResponse:
-    alert = get_object_or_404(Alert, id=alert_id)
-    form = AlertDeleteForm(request.POST or None, instance=alert)
-
-    if request.method == 'POST':
-        alert.delete()
-        messages.success(request, f'The track has been deleted.')
-
-        return redirect('alert:alert_list')
-
-    context = {
-        'page_title': 'Delete track',
-        'form': form,
-    }
-
-    return render(request, 'common/form_delete_category.html', context)
-
-
 
 class DisplayArchivedAlerts(ListView):
     model = ArchiveAlert
@@ -113,4 +111,3 @@ def archive_alert_info(request: HttpRequest, archived_id: int) -> HttpResponse:
     }
 
     return render(request, 'alerts/info_single_archive.html', context)
-
