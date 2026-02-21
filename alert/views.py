@@ -95,8 +95,8 @@ class DisplayArchivedAlerts(ListView):
 
         return context
 
-def archive_alert_info(request: HttpRequest, archived_id: int) -> HttpResponse:
-    alert = get_object_or_404(ArchiveAlert, id=archived_id)
+def archive_alert_info(request: HttpRequest, pk: int) -> HttpResponse:
+    alert = get_object_or_404(ArchiveAlert, id=pk)
     timelines = alert.history_alerts.all()
 
     paginator = Paginator(timelines, 8)
