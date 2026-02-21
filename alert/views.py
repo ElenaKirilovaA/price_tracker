@@ -39,16 +39,18 @@ def check_alerts(request: HttpRequest, product_id:int) -> HttpResponse:
     return redirect('product:product_list')
 
 
-def display_active_alert(request:HttpRequest) -> HttpResponse:
-    alerts = Alert.objects.get_active_alerts()
+class DisplayActiveAlerts(ListView):
+    model = Alert
+    template_name = 'alerts/alert_list.html'
 
-    context = {
-        'page_title': 'All tracks',
-        'alerts': alerts,
-    }
+    def get_queryset(self):
+        return Alert.objects.get_active_alerts()
 
-    return render(request, 'alerts/alert_list.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['page_title'] = 'All tracks'
 
+        return context
 
 def alert_edit(request:HttpRequest, alert_id: int) -> HttpResponse:
     alert = get_object_or_404(Alert, id=alert_id)
