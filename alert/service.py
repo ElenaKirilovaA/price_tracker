@@ -15,7 +15,7 @@ def set_timeline_checks(alert: Alert) -> None:
 
 def send_mail(alert: Alert) -> None:
     EmailMessage(
-        subject=f'Price dropped for {alert.product.title}!',
+        subject=f'Dropped price - {alert.product.title}!',
         body=f'{alert}',
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[alert.email],
@@ -43,7 +43,7 @@ def archive_alert(alert: Alert) -> None:
         category= category,
     )
 
-    price_timelines = alert.price_timelines.all()  # TODO or list()?
+    price_timelines = alert.price_timelines.all()
     timeline_to_archive = [PriceTimelineArchived(
             history_alert=archive,
             price=timeline.price,
@@ -60,16 +60,3 @@ def manage_simulation_tracking(alert: Alert) -> None:
     alert.is_active = False
     alert.save()
     archive_alert(alert)
-
-
-
-
-
-
-
-
-
-
-
-
-

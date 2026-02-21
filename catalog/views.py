@@ -1,4 +1,3 @@
-
 from django.db.models import Count, Max
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -12,13 +11,11 @@ from catalog.forms import CategoryCreateForm, CategoryEditForm, CategoryDeleteFo
 from catalog.models import Category, Tag
 from catalog.service import create_tags
 
-
 # Create your views here.
 
 
 def catalog_overview(request: HttpRequest) -> HttpResponse:
     catalog = (Category.objects
-               .prefetch_related('products', 'archives')
                .annotate(
                     product_count=Count('products', distinct=True),
                     deals_count=Count('archives', distinct=True))
