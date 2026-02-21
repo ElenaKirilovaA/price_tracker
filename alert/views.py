@@ -5,6 +5,7 @@ from django.db.models import Avg, ExpressionWrapper, F, PositiveIntegerField, Du
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView
 
 from alert.forms import AlertCreateForm, AlertEditForm, AlertDeleteForm
 from alert.models import Alert, ArchiveAlert
@@ -86,16 +87,28 @@ def alert_delete(request:HttpRequest, alert_id: int) -> HttpResponse:
     return render(request, 'common/form_delete_category.html', context)
 
 
-def display_archived_alert(request:HttpRequest) -> HttpResponse:
-    alerts = ArchiveAlert.objects.get_archives_by_saved_money()
 
-    context = {
-        'page_title': 'All tracks',
-        'alerts': alerts,
-    }
+class DisplayArchivedAlerts(ListView):
+    model = ArchiveAlert
+    template_name = 'alerts/alert_history_list.html'
+    ordering = '-alert_finished_at'
+    paginate_by = 1
 
-    return render(request, 'alerts/alert_history_list.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['page_title'] = "All successful tracks"
 
+        return context
+# def display_archived_alert(request:HttpRequest) -> HttpResponse:
+#     alerts = ArchiveAlert.objects.get_archives_by_saved_money()
+#
+#     context = {
+#         'page_title': 'All tracks',
+#         'alerts': alerts,
+#     }
+#
+#     return render(request, 'alerts/alert_history_list.html', context)
+#
 
 def archive_alert_info(request: HttpRequest, archived_id: int) -> HttpResponse:
     alert = get_object_or_404(ArchiveAlert, id=archived_id)

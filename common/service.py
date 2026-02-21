@@ -22,7 +22,7 @@ def get_context_date_home():
     context_map = {
         'page_title': 'Home Page',
         'counter': active_tracks_count,
-        'alerts': top_alerts[:3],
+        'archivealert_list': top_alerts[:3],
         'counter_archive': top_alerts.count(),
         'saved_money': saved_money or 0,
         'avg': avg_trigger_days['aver'].days if avg_trigger_days['aver'] else None,
