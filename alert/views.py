@@ -1,8 +1,5 @@
-from sqlite3.dbapi2 import DateFromTicks
-
 from django.contrib import messages
-from django.db.models import Avg, ExpressionWrapper, F, PositiveIntegerField, DurationField, Max, DecimalField, Sum
-
+from django.contrib.admin.templatetags.admin_list import pagination
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView
@@ -10,6 +7,7 @@ from django.views.generic import ListView
 from alert.forms import AlertCreateForm, AlertEditForm, AlertDeleteForm
 from alert.models import Alert, ArchiveAlert
 from alert.service import manage_simulation_tracking, set_timeline_checks
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -102,14 +100,17 @@ class DisplayArchivedAlerts(ListView):
 
 def archive_alert_info(request: HttpRequest, archived_id: int) -> HttpResponse:
     alert = get_object_or_404(ArchiveAlert, id=archived_id)
-    timeline = alert.history_alerts.all()
+    timelines = alert.history_alerts.all()
+
+    paginator = Paginator(timelines, 8)
+    page_number = request.GET.get('page')
+    timeline = paginator.get_page(page_number)
 
     context = {
         'page_title': f'Display {alert.id}',
         'alert': alert,
         'timeline': timeline,
-        'checks': timeline.count(),
-
+        'checks': timelines.count(),
     }
 
     return render(request, 'alerts/info_single_archive.html', context)
