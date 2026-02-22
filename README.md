@@ -66,20 +66,37 @@ Business logic is intentionally extracted from views to maintain clean controlle
 
 ---
 ## Setup Instructions
-
+1. Clone the repository.
 ```bash
 git clone https://github.com/YOUR_USERNAME/price_tracker.git
 cd price_tracker
-
+```
+2. Create virtual environment:
+```bash
 python -m venv venv
 source .venv/bin/activate
-
+```
+3. Installrequirements.txt
+```bash
 pip install -r requirements.txt
+```
+4. Create .env file in the root of the project and copy from .env_copy and apply with your own values
+```bash
+SECRET_KEY=your.secret_key
+DB_NAME=your.db_name
+DB_USER=your.db_user
+DB_PASSWORD=your.db_password
+HOST=your.host
+PORT=your.posrt
 
-python manage.py pigrate
-
+```
+5. Apply migrations 
+```bash
+python manage.py migrate
+```
+6. Run server
+```bash
 python manage.py runserver
-
 ```
 ---
 
@@ -89,13 +106,13 @@ python manage.py runserver
 ![Home Page](screenshots/home.png)
 
 ### Create Track
-![Create Track](screenshots/create_track.png)
+![Add Track](screenshots/create_track.png)
 
 ### Simulation Track After Price Edit
-![Active Track](screenshots/simulation.png)
+![Products](screenshots/simulation.png)
 
 ### Archived Track Info
-![Archived Track](screenshots/track_history.png)
+![Archived Track info](screenshots/track_history.png)
 
 
 ## Author
