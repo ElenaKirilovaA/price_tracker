@@ -1,6 +1,6 @@
 # Tracky Deal (Simulation-Based Price Tracking System)
 
-A Django web application that simulates product price tracking and alert triggering using clean architecture principles.
+A Django web application that simulates product price tracking and alert triggering.
 
 ---
 
@@ -21,7 +21,7 @@ Instead of **automatic** background monitoring, the system uses **manual price s
 ## Core Features
 
 - Create price track for products
-- Manual simulation of price checks / edit price -> simulate button /
+- Manual simulation of price checks (edit price -> simulate button)
 - Price track snapshot each time the price is checked
 - Alert triggering when simulated price reaches target
 - Archive of triggered tracks
@@ -46,10 +46,6 @@ Instead of **automatic** background monitoring, the system uses **manual price s
 
 ---
 
-Business logic is intentionally extracted from views to maintain clean controllers and testable services.
-
----
-
 ## Tech Stack
 
 - Python 3.11+
@@ -68,7 +64,7 @@ Business logic is intentionally extracted from views to maintain clean controlle
 ## Setup Instructions
 1. Clone the repository.
 ```bash
-git clone https://github.com/YOUR_USERNAME/price_tracker.git
+git clone https://github.com/ElenaKirilovaA/price_tracker.git
 cd price_tracker
 ```
 2. Create virtual environment:
@@ -76,7 +72,7 @@ cd price_tracker
 python -m venv venv
 source .venv/bin/activate
 ```
-3. Installrequirements.txt
+3. Install requirements.txt
 ```bash
 pip install -r requirements.txt
 ```
