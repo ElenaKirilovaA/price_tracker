@@ -6,9 +6,9 @@ A Django web application that simulates product price tracking and alert trigger
 
 ## Overview
 
-This project demonstrates a structured backend architecture for handling price alerts, business logic separation, and state transitions between active and archived alerts.
+This project demonstrates a backend architecture for handling price tracks, business logic separation, and state transitions between active and archived alerts.
 
-Instead of automatic background monitoring, the system uses **manual price simulation** to trigger alert evaluation. This allows the focus to remain on:
+Instead of **automatic** background monitoring, the system uses **manual price simulation** to trigger alert evaluation. This allows the focus to remain on:
 
 - Clean service-layer design
 - Query optimization
@@ -21,7 +21,7 @@ Instead of automatic background monitoring, the system uses **manual price simul
 ## Core Features
 
 - Create price track for products
-- Manual simulation of price checks
+- Manual simulation of price checks / edit price -> simulate button /
 - Price track snapshot each time the price is checked
 - Alert triggering when simulated price reaches target
 - Archive of triggered tracks
@@ -67,7 +67,6 @@ Business logic is intentionally extracted from views to maintain clean controlle
 ---
 ## Setup Instructions
 
-1. Clone the repository
 ```bash
 git clone https://github.com/YOUR_USERNAME/price_tracker.git
 cd price_tracker
@@ -80,3 +79,26 @@ pip install -r requirements.txt
 python manage.py pigrate
 
 python manage.py runserver
+
+```
+---
+
+## Screenshots
+
+### Home Page
+![Home Page](screenshots/home.png)
+
+### Create Track
+![Create Track](screenshots/create_track.png)
+
+### Simulation Track After Price Edit
+![Active Track](screenshots/simulation.png)
+
+### Archived Track Info
+![Archived Track](screenshots/track_history.png)
+
+
+## Author
+
+Elena Kirilova
+
