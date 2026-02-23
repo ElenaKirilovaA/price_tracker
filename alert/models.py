@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MinLengthValidator
 from django.db import models
 
-from alert.managers import ActiveAlertQuerySet, ArchiveAlertQuerySet
+from alert.querysets import ActiveAlertQuerySet, ArchiveAlertQuerySet
 from catalog.models import Category
 from common.choices import CurrencyChoices
 from common.currency import convert_to_eur
