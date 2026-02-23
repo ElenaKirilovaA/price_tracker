@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MinLengthValidator
 from django.db import models
 
-from alert.managers import AlertManager, ArchiveAlertManager
+from alert.managers import ActiveAlertQuerySet, ArchiveAlertQuerySet
 from catalog.models import Category
 from common.choices import CurrencyChoices
 from common.currency import convert_to_eur
@@ -53,7 +53,7 @@ class Alert(CreatedAtMixin):
         on_delete=models.CASCADE,
         related_name='alerts',
     )
-    objects = AlertManager()
+    objects = ActiveAlertQuerySet.as_manager()
 
 
     @property
@@ -157,7 +157,7 @@ class ArchiveAlert(models.Model):
         related_name='archives',
     )
 
-    objects = ArchiveAlertManager()
+    objects = ArchiveAlertQuerySet.as_manager()
 
 
     @property

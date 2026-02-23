@@ -26,5 +26,7 @@ def get_context_date_home():
         'avg': results['aver'].days if results['aver'] else None,
         'best_category': most_profitable_category,
     }
-
+    print(context_map)
     return context_map
+
+get_context_date_home()
