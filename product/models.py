@@ -1,11 +1,8 @@
 from django.core.validators import MinValueValidator
 from django.db import models
-
 from django.template.defaultfilters import slugify
-
 from catalog.models import Category, Tag
 from common.choices import CurrencyChoices
-
 from common.mixins import BaseInfoTitle, CreatedAtMixin, BaseInfoDescription
 
 

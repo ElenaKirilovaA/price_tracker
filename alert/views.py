@@ -19,7 +19,7 @@ class AlertCreate(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['home_page'] = 'Create new track'
+        context['page_title'] = 'Create new track'
 
         return context
 

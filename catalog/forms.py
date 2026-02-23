@@ -1,6 +1,5 @@
 from django import forms
 from django.forms.formsets import formset_factory
-
 from catalog.models import Category
 
 
@@ -43,13 +42,3 @@ TagFormSet = formset_factory(
     extra=10,
     can_delete=True,
 )
-
-
-
-
-
-
-
-
-
-

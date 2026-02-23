@@ -16,8 +16,6 @@ class AlertBasicForm(forms.ModelForm):
                 'required': 'Please select a product.',
             }
         }
-
-
         labels = {
             'target_price': 'Your target',
             'product': 'Choose product'
@@ -57,5 +55,3 @@ class AlertDeleteForm(AlertBasicForm):
         for n, f in self.fields.items():
             f.widget.attrs['readonly'] = True
             f.widget.attrs['disabled'] = True
-
-

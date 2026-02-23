@@ -95,8 +95,8 @@ def bulk_create_tags(request:HttpRequest) -> HttpResponse:
         new_tags = create_tags(all_tags)
 
         if new_tags:
-            tags = 'tags' if len(new_tags) > 1 else 'tag'
-            messages.success(request, f'{len(new_tags)} {tags} has been created.'  )
+            tags = 'tags have' if len(new_tags) > 1 else 'tag has'
+            messages.success(request, f'{len(new_tags)} {tags} been created.'  )
 
         return redirect('product:create')
 
@@ -123,8 +123,8 @@ def tag_bulk_delete(request:HttpRequest) -> HttpResponse:
     tags = request.POST.getlist('selected_tags')
 
     if tags:
-        tags_str = 'tags' if len(tags) > 1 else 'tag'
-        messages.success(request, f'{len(tags)} {tags_str} has been deleted.')
+        tags_str = 'tags have' if len(tags) > 1 else 'tag has'
+        messages.success(request, f'{len(tags)} {tags_str} been deleted.')
         Tag.objects.filter(id__in=tags).delete()
 
     return redirect('product:create')

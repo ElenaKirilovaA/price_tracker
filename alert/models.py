@@ -2,7 +2,6 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MinLengthValidator
 from django.db import models
-
 from alert.querysets import ActiveAlertQuerySet, ArchiveAlertQuerySet
 from catalog.models import Category
 from common.choices import CurrencyChoices
@@ -19,7 +18,7 @@ class Alert(CreatedAtMixin):
         max_digits=10,
         decimal_places=2,
         validators=[
-            MinValueValidator(0.02), # TODO exclude triggered_price == 0.00
+            MinValueValidator(0.02), # intentionally exclude of triggered_price == 0.00
         ]
     )
     target_price = models.DecimalField(
@@ -180,7 +179,12 @@ class ArchiveAlert(models.Model):
 
 
 
-class PriceTimeline(models.Model):  # every time add new row in db
+class PriceTimeline(models.Model):
+    """
+    Every time the simulation for price drop is checked,
+    the class is adding a new row in db. Model is timeline snapshot.
+    """
+
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
