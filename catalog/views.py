@@ -19,14 +19,12 @@ def catalog_overview(request: HttpRequest) -> HttpResponse:
                .annotate(
                     product_count=Count('products', distinct=True),
                     deals_count=Count('archives', distinct=True))
-               .order_by('-deals_count','-product_count', 'title', ))
-
-    star_category = catalog.first()
+               .order_by('-deals_count', '-product_count', 'title', ))
 
     context = {
         'page_title': 'Catalog Overview',
         'catalog': catalog,
-        'star_category': star_category
+        'star_category': catalog[0] if catalog else None
     }
     return render(request, 'catalog/category_list_page.html', context)
 
@@ -134,12 +132,9 @@ def tag_bulk_delete(request:HttpRequest) -> HttpResponse:
 
 def category_info(request:HttpRequest, category_id: int) -> HttpResponse:
     category = (Category.objects
-                .prefetch_related('products', 'products__alerts', 'products__tag')
+                .prefetch_related('products', 'products__alerts', 'products__tag', 'archives')
                 .get(id=category_id))
-    last_deal_obj = (ArchiveAlert
-                     .objects
-                     .filter(category_id=category_id)
-                     .order_by('-alert_finished_at').first())
+    last_deal_obj = category.archives.order_by('-alert_finished_at').first()
     products = category.products.all()
 
     last_deal = None
@@ -148,7 +143,7 @@ def category_info(request:HttpRequest, category_id: int) -> HttpResponse:
 
 
     context = {
-        'page_title': f'Category {category.title} - {len(products)} products',
+        'page_title': f'Category {category.title} - products',
         'category': category,
         'last_deal': last_deal,
         'products': products,

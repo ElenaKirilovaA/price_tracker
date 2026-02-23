@@ -30,12 +30,13 @@
 .page-link:hover {
     background-color: #f4e9cd;
     border-color: #bbb;
+    color: #8bc34a;
 }
 
 /* Active page */
 .page-item.active .page-link {
     background-color: #445b73;
-    color: #f4e9cd;
+    color:#2ec4b6;
     border-color: #445b73;
     font-weight: bold;
     cursor: default;
@@ -47,4 +48,7 @@
 nav {
     display: flex;
     justify-content: center;
+}
+a:hover {
+    color: var(--olive);
 }
