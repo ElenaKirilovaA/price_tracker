@@ -108,6 +108,7 @@ def archive_alert_info(request: HttpRequest, pk: int) -> HttpResponse:
         'alert': alert,
         'timeline': timeline,
         'checks': timelines.count(),
+        'paginator': paginator,
     }
 
     return render(request, 'alerts/info_single_archive.html', context)

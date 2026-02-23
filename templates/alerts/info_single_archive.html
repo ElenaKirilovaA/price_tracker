@@ -4,7 +4,6 @@
 <section class="header-content">
 
     <div id="pre-circle">
-
         <div class="card">
             <h2>Track #{{ alert.id }}</h2>
             <h3>{{ alert.product_title }}</h3>
@@ -53,11 +52,12 @@
         <hr>
         <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #1f4e79;">timer</span>Duration: {{ alert.active_duration }} days</p>
 
-        <div class="page-link" style="display: inline-block;">
+        <div style="display: inline-block; font-size: 12px">
 
             {% if timeline.has_previous %}
-                <a href="?page=1" >&laquo; first</a>
-                <a href="?page={{ timeline.previous_page_number }}">previous</a>
+
+                <a href="?page=1" class="ahvr">&laquo; first</a>
+                <a href="?page={{ timeline.previous_page_number }}" class="ahvr">previous</a>
             {% endif %}
 
 
@@ -66,12 +66,11 @@
             </span>
 
             {% if timeline.has_next %}
-                <a href="?page={{ timeline.next_page_number }}">next</a>
-                <a href="?page={{ timeline.paginator.num_pages }}">last &raquo;</a>
+                <a href="?page={{ timeline.next_page_number }}" class="ahvr">next</a>
+                <a href="?page={{ timeline.paginator.num_pages }}" class="ahvr">last &raquo;</a>
             {% endif %}
-</div>
+            </div>
         </div>
-
 
     <div id="circle">
         <h1>Saved</h1>
