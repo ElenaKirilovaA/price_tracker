@@ -30,9 +30,11 @@
 .page-link:hover {
     background-color: #f4e9cd;
     border-color: #bbb;
+
+}
+a .page-link:hover {
     color: #8bc34a;
 }
-
 /* Active page */
 .page-item.active .page-link {
     background-color: #445b73;
@@ -49,6 +51,6 @@ nav {
     display: flex;
     justify-content: center;
 }
-a:hover {
-    color: var(--olive);
-}
+/*a:hover {*/
+/*    color: var(--olive);*/
+/*}*/
