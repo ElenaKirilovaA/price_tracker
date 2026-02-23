@@ -15,4 +15,6 @@ def price_with_currency(value: Decimal, currency) -> str:
     if value is None:
         return '-'
 
-    return mapper.get(currency) if currency else f'{value}{currency}'
+    result = mapper.get(currency)
+
+    return result if result else f'{value}{currency}'

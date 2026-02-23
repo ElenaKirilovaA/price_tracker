@@ -20,12 +20,12 @@
 
        <div id="middle">
          <p>Average time to trigger:
-         {% if avg is not None %}
+         {% if average_days is not None %}
              <strong>
-                  {% if avg > 1 %}
-                       {{ avg }} days
-                    {% elif avg == 1 %}
-                        {{ avg }} day
+                  {% if average_days > 1 %}
+                       {{ average_days }} days
+                    {% elif average_days == 1 %}
+                        {{ average_days }} day
                     {% else %}
                         Less than a day
                     {% endif %}

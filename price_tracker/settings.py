@@ -132,4 +132,3 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'no-reply@pricetracker.com'
-print("DB PASSWORD:", os.getenv("DB_PASSWORD"))
