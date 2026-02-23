@@ -19,14 +19,12 @@ def catalog_overview(request: HttpRequest) -> HttpResponse:
                .annotate(
                     product_count=Count('products', distinct=True),
                     deals_count=Count('archives', distinct=True))
-               .order_by('-deals_count','-product_count', 'title', ))
-
-    star_category = catalog.first()
+               .order_by('-deals_count', '-product_count', 'title', ))
 
     context = {
         'page_title': 'Catalog Overview',
         'catalog': catalog,
-        'star_category': star_category
+        'star_category': catalog[0] if catalog else None
     }
     return render(request, 'catalog/category_list_page.html', context)
 

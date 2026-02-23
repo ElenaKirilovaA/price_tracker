@@ -14,7 +14,9 @@
         <div class="star-category">
             <p><span class="badge-star">
                 <span class="material-icons star-icon">star</span>
+                {% if star_category %}
                 <strong>{{ star_category.title }}:</strong> deals - <strong>{{ star_category.deals_count }}</strong>  •  products - <strong>{{ star_category.product_count }}</strong>
+                {% endif %}
             </span></p>
         </div>
     </div>
