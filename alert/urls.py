@@ -17,5 +17,3 @@ urlpatterns = [
         path('<int:pk>/', include(paths)),
         path('past-alerts/', views.DisplayArchivedAlerts.as_view(), name='history_list')
     ]
-
-
