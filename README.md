@@ -24,6 +24,7 @@ Instead of **automatic** background monitoring, the system uses **manual price s
 - Manual simulation of price checks (edit price -> simulate button)
 - Price track snapshot each time the price is checked
 - Alert triggering when simulated price reaches target
+- Send console notification
 - Archive of triggered tracks
 - Saved money calculation (started vs triggered price)
 - Separation of concerns (views vs service layer)
@@ -67,7 +68,7 @@ Instead of **automatic** background monitoring, the system uses **manual price s
 git clone https://github.com/ElenaKirilovaA/price_tracker.git
 cd price_tracker
 ```
-2. Create virtual environment:
+2. Create a virtual environment:
 ```bash
 python -m venv venv
 source .venv/bin/activate
@@ -76,14 +77,14 @@ source .venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-4. Create .env file in the root of the project and copy from .env_copy and apply with your own values
+4. Create .env file in the root of the project and copy from .env_copy and fill in with your own values
 ```bash
 SECRET_KEY=your.secret_key
 DB_NAME=your.db_name
 DB_USER=your.db_user
 DB_PASSWORD=your.db_password
 HOST=your.host
-PORT=your.posrt
+PORT=your.port
 
 ```
 5. Apply migrations 
