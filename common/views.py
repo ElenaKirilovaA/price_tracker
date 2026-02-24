@@ -7,7 +7,6 @@ from common.service import get_context_date_home
 # Create your views here.
 
 def custom_404(request: HttpRequest, exception):
-    handler404 = custom_404
     return render(request, '404.html', status=404)
 
 
