@@ -34,9 +34,7 @@ urlpatterns = [
     path('catalog/', include('catalog.urls')),
     path('product/', include('product.urls')),
 ]
-
-
+handler404 = custom_404
 if settings.DEBUG:
     urlpatterns += static(MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler404 = custom_404
