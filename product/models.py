@@ -4,6 +4,7 @@ from django.template.defaultfilters import slugify
 from catalog.models import Category, Tag
 from common.choices import CurrencyChoices
 from common.mixins import BaseInfoTitle, CreatedAtMixin, BaseInfoDescription
+from decimal import Decimal
 
 
 # Create your models here.
@@ -19,7 +20,7 @@ class Product(BaseInfoTitle, BaseInfoDescription, CreatedAtMixin):
         max_digits=10,
         decimal_places=2,
         validators=[
-            MinValueValidator(0.01)
+            MinValueValidator(Decimal('0.00'))
         ],
     )
     currency = models.CharField(

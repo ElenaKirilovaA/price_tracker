@@ -5,7 +5,6 @@ from django.db import models
 from alert.querysets import ActiveAlertQuerySet, ArchiveAlertQuerySet
 from catalog.models import Category
 from common.choices import CurrencyChoices
-from common.currency import convert_to_eur
 from common.mixins import CreatedAtMixin
 from product.models import Product
 
@@ -18,14 +17,14 @@ class Alert(CreatedAtMixin):
         max_digits=10,
         decimal_places=2,
         validators=[
-            MinValueValidator(0.02), # intentionally exclude of triggered_price == 0.00
+            MinValueValidator(Decimal('0.01')), # track with started price 0.00 intentionally exclude
         ]
     )
     target_price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         validators=[
-            MinValueValidator(0.01),
+            MinValueValidator(Decimal('0.01')),
 
         ]
     )
@@ -33,7 +32,7 @@ class Alert(CreatedAtMixin):
         max_digits=10,
         decimal_places=2,
         validators=[
-            MinValueValidator(0.01),
+            MinValueValidator(Decimal('0.01')),
         ],
         blank=True,
         null=True,
@@ -103,7 +102,7 @@ class ArchiveAlert(models.Model):
         max_digits=10,
         decimal_places=2,
         validators=[
-            MinValueValidator(0.02)
+            MinValueValidator(Decimal('0.01')),
         ]
     )
     target = models.DecimalField(
@@ -116,7 +115,7 @@ class ArchiveAlert(models.Model):
         max_digits=10,
         decimal_places=2,
         validators=[
-            MinValueValidator(0.01),
+            MinValueValidator(Decimal('0.01')),
         ],
         blank=True,
         null=True,
