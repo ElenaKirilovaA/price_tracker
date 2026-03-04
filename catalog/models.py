@@ -1,11 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from common.mixins import CreatedAtMixin, BaseInfoTitle, BaseInfoDescription
 
 
 # Create your models here.
 
-class Category(CreatedAtMixin, BaseInfoTitle, BaseInfoDescription):
+UserModel = get_user_model()
 
+class Category(CreatedAtMixin, BaseInfoTitle, BaseInfoDescription):
     card_image = models.ImageField(
         upload_to='post_images/',  # it can be uploaded to cloud-> show the path to cloud
         blank=True,
@@ -17,6 +19,9 @@ class Category(CreatedAtMixin, BaseInfoTitle, BaseInfoDescription):
 
 
 class Tag(CreatedAtMixin, BaseInfoTitle):
-
+    user = models.ForeignKey(
+        to=UserModel,
+        on_delete=models.CASCADE,
+    )
     def __str__(self):
         return self.title

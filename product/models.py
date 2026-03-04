@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.template.defaultfilters import slugify
@@ -8,6 +9,7 @@ from decimal import Decimal
 
 
 # Create your models here.
+UserModel = get_user_model()
 
 class Product(BaseInfoTitle, BaseInfoDescription, CreatedAtMixin):
     slug = models.SlugField(
@@ -43,7 +45,10 @@ class Product(BaseInfoTitle, BaseInfoDescription, CreatedAtMixin):
         blank=True,
         help_text='choose a tag or create your own',
     )
-
+    user = models.ForeignKey(
+        to=UserModel,
+        on_delete=models.CASCADE,
+    )
 
     @property
     def is_tracking(self):
