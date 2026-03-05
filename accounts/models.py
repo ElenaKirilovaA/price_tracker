@@ -1,5 +1,8 @@
 from django.db import models
-from django.contrib.auth import models as auth_models, get_user_model
+from django.contrib.auth import models as auth_models
+
+from accounts.managers import AppUserManager
+
 
 # Create your models here.
 
@@ -28,6 +31,7 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
+    objects = AppUserManager()
 
     def __str__(self):
         return f'{self.user.full_name()}\'s profile'
