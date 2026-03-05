@@ -12,5 +12,16 @@
                 <a href='{% url 'product:create' %}'><strong> Add Product</strong></a>
                 <a href='{% url "catalog:create" %}'><strong> Add Category</strong></a>
                 <a href='{% url "alert:create" %}'><strong> Add Tack</strong></a>
+                {% if request.user.is_authenticated %}
+                    <form action="{% url 'accounts:logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="button">Logout</button>
+
+                    </form>
+                {% else %}
+                    <a href='{% url "accounts:login" %}'><strong> Login</strong></a>
+
+                {% endif %}
+                <a href='{% url "accounts:create_user" %}'><strong> Add user</strong></a>
             </nav>
         </div>

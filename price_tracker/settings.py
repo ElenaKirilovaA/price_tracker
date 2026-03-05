@@ -133,3 +133,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'no-reply@pricetracker.com'
 
 AUTH_USER_MODEL = 'accounts.AppUser'
+LOGIN_REDIRECT_URL = 'common:home-page'
+LOGOUT_REDIRECT_URL = 'accounts:login'
+LOGIN_URL = 'accounts:login'
