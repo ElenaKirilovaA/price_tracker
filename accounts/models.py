@@ -15,6 +15,9 @@ class AppUser(auth_models.AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    # Use the custom manager that knows how to create users with email as username
+    objects = AppUserManager()
+
 
 class Profile(models.Model):
     date_of_birth = models.DateField(
@@ -31,7 +34,7 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    objects = AppUserManager()
+    objects = models.Manager()
 
     def __str__(self):
-        return f'{self.user.full_name()}\'s profile'
+        return f"{self.user.get_full_name()}\'s profile"
