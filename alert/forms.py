@@ -6,7 +6,7 @@ from alert.models import Alert
 class AlertBasicForm(forms.ModelForm):
     class Meta:
         model = Alert
-        fields = ['target_price', 'email', 'message', 'product']
+        fields = ['target_price', 'email', 'message', 'product', 'user']
         error_messages = {
             'email': {
                 'required': 'Please enter your email address.',
