@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -18,10 +18,7 @@ class AppUserCreationView(CreateView):
     model = UserModel
     form_class = AppUserCreationForm
     template_name = 'common/form_base.html'
-    success_url = reverse_lazy('common:home-page')
-
-    # def login(self): TODO
-    #     return
+    success_url = reverse_lazy('accounts:profile')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -30,9 +27,8 @@ class AppUserCreationView(CreateView):
         return context
 
     def form_valid(self, form):
-        # Save the new user instance
         response = super().form_valid(form)
-        # self.object is the newly created user
+        login(self.request, self.object)
         messages.success(self.request, f'Welcome {self.object.get_username()}.' )
         return response
 
