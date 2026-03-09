@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, DetailView
 
 from accounts.forms import AppUserCreationForm
+from accounts.models import Profile
 from alert.models import Alert
 from product.models import Product
 
@@ -19,16 +20,21 @@ class AppUserCreationView(CreateView):
     template_name = 'common/form_base.html'
     success_url = reverse_lazy('common:home-page')
 
+    # def login(self): TODO
+    #     return
+
     def get_context_data(self, **kwargs):
-        context = super().get_context_data()
+        context = super().get_context_data(**kwargs)
         context['page_title'] = 'Create user'
 
         return context
 
-    def post(self, request, *args, **kwargs):
-        messages.success(request, f'Welcome {request.user}.')
-
-        return redirect(self.success_url)
+    def form_valid(self, form):
+        # Save the new user instance
+        response = super().form_valid(form)
+        # self.object is the newly created user
+        messages.success(self.request, f'Welcome {self.object.get_username()}.' )
+        return response
 
 
 class UserDashboardView(LoginRequiredMixin, TemplateView):
@@ -42,17 +48,10 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
 
         return context
 
+class UserProfileView(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = 'accounts/profile_page.html'
+    context_object_name = 'profile'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def get_object(self, queryset=None):
+        return self.request.user.profile
