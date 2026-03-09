@@ -1,0 +1,68 @@
+{% extends "common/base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1>Dashboard</h1>
+    <p>Welcome, {{ request.user.email }}!</p>
+
+    <hr>
+
+    <!-- PRODUCTS SECTION -->
+    <div class="dashboard-section">
+
+        <div class="section-header">
+            <h2>My Products</h2>
+            <a href="{% url 'product:create' %}" class="btn">+ Add Product</a>
+        </div>
+
+        {% if products %}
+            <ul class="dashboard-list">
+                {% for product in products %}
+                    <li>
+                        <strong>{{ product.name }}</strong><br>
+                        Current price: {{ product.current_price }} €
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <a href="#">View all products</a>
+
+        {% else %}
+            <p>No products yet.</p>
+        {% endif %}
+
+    </div>
+
+    <hr>
+
+    <!-- ALERTS SECTION -->
+    <div class="dashboard-section">
+
+        <div class="section-header">
+            <h2>My Alerts</h2>
+            <a href="{% url 'alert:create' %}" class="btn">+ Add Alert</a>
+        </div>
+
+        {% if alerts %}
+            <ul class="dashboard-list">
+                {% for alert in alerts %}
+                    <li>
+                        {{ alert.product.name }} <br>
+                        Target price: {{ alert.target_price }} €
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <a href="#">View all alerts</a>
+
+        {% else %}
+            <p>No alerts yet.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -29,6 +29,7 @@ from price_tracker.settings import MEDIA_URL
 urlpatterns = [
        path('admin/', admin.site.urls),
     path('', include('common.urls')),
+    path('accounts/', include('accounts.urls')),
     path('alert/', include('alert.urls')),
 
     path('catalog/', include('catalog.urls')),

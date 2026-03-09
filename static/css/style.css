@@ -380,7 +380,28 @@ main > p {
 /* =====================
    FORMS
 ===================== */
+.logout-form {
+    margin: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+}
 
+.nav-link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+
+    color: var(--soft-white);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.nav-link-btn:hover {
+    color: var(--turquoise);
+}
 form {
     max-width: 520px;
     margin: 2.5rem auto;

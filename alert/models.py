@@ -1,4 +1,6 @@
 from decimal import Decimal
+
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MinLengthValidator
 from django.db import models
@@ -10,6 +12,8 @@ from product.models import Product
 
 
 # Create your models here.
+UserModel = get_user_model()
+
 
 class Alert(CreatedAtMixin):
     started_price = models.DecimalField(
@@ -50,6 +54,11 @@ class Alert(CreatedAtMixin):
         to=Product,
         on_delete=models.CASCADE,
         related_name='alerts',
+    )
+    user = models.ForeignKey(
+        to=UserModel,
+        on_delete=models.CASCADE,
+        related_name='tags'
     )
     objects = ActiveAlertQuerySet.as_manager()
 
@@ -153,6 +162,10 @@ class ArchiveAlert(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         related_name='archives',
+    )
+    user = models.ForeignKey(
+        to=UserModel,
+        on_delete=models.CASCADE,
     )
 
     objects = ArchiveAlertQuerySet.as_manager()
