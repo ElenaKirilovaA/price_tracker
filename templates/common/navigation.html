@@ -4,23 +4,24 @@
         <div class="icon-price"><img src="{% static 'img/trackydeal-logo.svg' %}" alt="logo"></div>
 
             <nav>
-                <a href="{% url 'alert:alert_list' %}" class="nav-primary"><strong>Tracks</strong>
-                    <span class="material-icons star-icon" title="Most important">bolt</span></a>
-                <a href="{% url 'common:home-page' %}"><strong> Home</strong></a>
-                <a href='{% url "product:product_list" %}'><strong> Products</strong></a>
-                <a href='{% url "catalog:catalog-overview" %}'><strong> Categories</strong></a>
-                <a href='{% url 'product:create' %}'><strong> Add Product</strong></a>
-                <a href='{% url "catalog:create" %}'><strong> Add Category</strong></a>
-                <a href='{% url "alert:create" %}'><strong> Add Tack</strong></a>
+
 
                 {% if request.user.is_authenticated %}
                     <a href="{% url 'accounts:dashboard' %}"><strong>Dashboard</strong></a>
-                    <a href="#"><strong>Profile</strong></a>
+                    <a href="{% url 'accounts:profile' %}"><strong>Profile</strong></a>
                     <form action="{% url 'accounts:logout' %}" method="post" class="logout-form">
                         {% csrf_token %}
                         <button type="submit" class="nav-link-btn"><strong>Logout</strong></button>
                     </form>
                 {% else %}
+                    <a href="{% url 'alert:alert_list' %}" class="nav-primary"><strong>Tracks</strong>
+                    <span class="material-icons star-icon" title="Most important">bolt</span></a>
+                    <a href="{% url 'common:home-page' %}"><strong> Home</strong></a>
+                    <a href='{% url "product:product_list" %}'><strong> Products</strong></a>
+                    <a href='{% url "catalog:catalog-overview" %}'><strong> Categories</strong></a>
+                    <a href='{% url 'product:create' %}'><strong> Add Product</strong></a>
+                    <a href='{% url "catalog:create" %}'><strong> Add Category</strong></a>
+                    <a href='{% url "alert:create" %}'><strong> Add Tack</strong></a>
                     <a href="{% url 'accounts:login' %}"><strong>Login</strong></a>
                     <a href="{% url 'accounts:create_user' %}"><strong>Register</strong></a>
                 {% endif %}
