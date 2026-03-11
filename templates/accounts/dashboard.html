@@ -27,7 +27,7 @@
                 {% endfor %}
             </ul>
 
-            <a href="#">View all products</a>
+            <a href="{% url 'product:product_list' %}">View all products</a>
 
         {% else %}
             <p>No products yet.</p>

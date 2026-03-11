@@ -32,3 +32,9 @@ class CreatedAtMixin(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
     )
+
+class AppUserQuerysetMixin:
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user=self.request.user)
+

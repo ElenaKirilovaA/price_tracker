@@ -1,17 +1,22 @@
+from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest,HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.base import kwarg_re
+from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from common.mixins import AppUserQuerysetMixin
 from product.forms import ProductCreateForm, ProductEditForm
 from product.models import Product
 
 
 # Create your views here.
 
+UserModel = get_user_model()
 
-class ProductList(ListView):
+class ProductList(LoginRequiredMixin,AppUserQuerysetMixin, ListView):
     model = Product
     template_name = 'products/product_list.html'
     ordering = '-created_at'
@@ -23,7 +28,7 @@ class ProductList(ListView):
         return context
 
 
-class AddProduct(CreateView):
+class AddProduct(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductCreateForm
     success_url = reverse_lazy('product:product_list')
@@ -41,10 +46,7 @@ class AddProduct(CreateView):
         return super().form_valid(form)
 
 
-
-
-
-class EditProduct(UpdateView):
+class EditProduct(LoginRequiredMixin, AppUserQuerysetMixin, UpdateView):
     model = Product
     form_class = ProductEditForm
     template_name = 'common/form_base.html'
@@ -57,7 +59,7 @@ class EditProduct(UpdateView):
         return context
 
 
-class DeleteProduct(DeleteView):
+class DeleteProduct(LoginRequiredMixin, AppUserQuerysetMixin, DeleteView):
     model = Product
     template_name = 'common/form_delete_category.html'
     success_url = reverse_lazy('product:product_list')
@@ -68,7 +70,8 @@ class DeleteProduct(DeleteView):
 
         return context
 
-class SingleProduct(DetailView):
+
+class SingleProduct(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'products/product_detail_page.html'
 

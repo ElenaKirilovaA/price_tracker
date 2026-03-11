@@ -19,9 +19,6 @@ class Category(CreatedAtMixin, BaseInfoTitle, BaseInfoDescription):
 
 
 class Tag(CreatedAtMixin, BaseInfoTitle):
-    user = models.ForeignKey(
-        to=UserModel,
-        on_delete=models.CASCADE,
-    )
+
     def __str__(self):
         return self.title

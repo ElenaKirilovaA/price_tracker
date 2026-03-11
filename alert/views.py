@@ -14,7 +14,7 @@ from django.core.paginator import Paginator
 class AlertCreate(CreateView):
     model = Alert
     form_class = AlertCreateForm
-    success_url = reverse_lazy('common:home-page')
+    success_url = reverse_lazy('accounts:dashboard')
     template_name = 'common/form_base.html'
 
     # def get_success_url(self):
@@ -25,6 +25,10 @@ class AlertCreate(CreateView):
         context['page_title'] = 'Create new track'
 
         return context
+
+
+    def get_queryset(self):
+        return Alert.objects.filter(user=self.request.user)
 
     def form_valid(self, form):
         form.instance.user = self.request.user
