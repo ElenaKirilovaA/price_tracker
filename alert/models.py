@@ -58,7 +58,7 @@ class Alert(CreatedAtMixin):
     user = models.ForeignKey(
         to=UserModel,
         on_delete=models.CASCADE,
-        related_name='tags'
+        related_name='alerts'
     )
     objects = ActiveAlertQuerySet.as_manager()
 
@@ -97,8 +97,9 @@ class Alert(CreatedAtMixin):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['product', 'target_price'],
-                name='product_target_price_constraint'
+                fields=['product', 'target_price', 'user'],
+                name='product_target_price_constraint',
+                violation_error_message='You already have a track with this product and this target price.'
             )
         ]
 
