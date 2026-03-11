@@ -166,6 +166,7 @@ class ArchiveAlert(models.Model):
     user = models.ForeignKey(
         to=UserModel,
         on_delete=models.CASCADE,
+        related_name='archives'
     )
 
     objects = ArchiveAlertQuerySet.as_manager()

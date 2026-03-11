@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -119,6 +120,7 @@ def tag_display(request:HttpRequest) -> HttpResponse:
 
 
 @require_POST
+@login_required
 def tag_bulk_delete(request:HttpRequest) -> HttpResponse:
     tags = request.POST.getlist('selected_tags')
 

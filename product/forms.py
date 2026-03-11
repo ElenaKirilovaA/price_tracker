@@ -6,7 +6,7 @@ from product.models import Product
 class ProductBasicForm(forms.ModelForm):
     class Meta:
         model = Product
-        exclude = ['slug','started_price', 'started_price_eur' ,'updated_at']
+        exclude = ['slug', 'started_price', 'started_price_eur' ,'updated_at', 'user']
         labels = {
             'current_price': 'Product price',
             'currency': 'Choose currency'
