@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -11,11 +12,17 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 
-class AlertCreate(CreateView):
+class AlertCreate(LoginRequiredMixin, CreateView):
     model = Alert
     form_class = AlertCreateForm
     success_url = reverse_lazy('accounts:dashboard')
     template_name = 'common/form_base.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+
+        return kwargs
 
     # def get_success_url(self):
     #     return reverse('alert:alert_list', kwargs={'pk': self.object.user.pk})  #TODO
@@ -25,7 +32,6 @@ class AlertCreate(CreateView):
         context['page_title'] = 'Create new track'
 
         return context
-
 
     def get_queryset(self):
         return Alert.objects.filter(user=self.request.user)

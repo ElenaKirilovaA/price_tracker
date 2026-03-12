@@ -6,7 +6,6 @@ from django.contrib import messages
 from django.db.models.deletion import ProtectedError, RestrictedError
 from django.utils.timezone import now
 from django.views.decorators.http import require_POST
-
 from alert.models import ArchiveAlert
 from catalog.forms import CategoryCreateForm, CategoryEditForm, CategoryDeleteForm, TagFormSet
 from catalog.models import Category, Tag

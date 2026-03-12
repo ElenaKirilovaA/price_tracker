@@ -93,12 +93,12 @@ class Alert(CreatedAtMixin):
         return self.message or (f'Price of {self.product.title} has dropped!\n'
                                 f'Status: {self.product}')
 
-
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['product', 'target_price'],
-                name='product_target_price_constraint'
+                fields=['product', 'target_price', 'user'],
+                name='product_target_price_constraint',
+                violation_error_message='You already have a track with this product and this target price.'
             )
         ]
 

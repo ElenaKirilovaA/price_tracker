@@ -3,11 +3,12 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView, DetailView
+from django.views.generic import CreateView, TemplateView, DetailView, UpdateView
 
-from accounts.forms import AppUserCreationForm
+from accounts.forms import AppUserCreationForm, ProfileForm
 from accounts.models import Profile
 from alert.models import Alert
+from common.mixins import AppUserQuerysetMixin
 from product.models import Product
 
 # Create your views here.
@@ -33,7 +34,7 @@ class AppUserCreationView(CreateView):
         return response
 
 
-class UserDashboardView(LoginRequiredMixin, TemplateView):
+class AppUserDashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/dashboard.html'
 
     def get_context_data(self, **kwargs):
@@ -44,10 +45,38 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
 
         return context
 
-class UserProfileView(LoginRequiredMixin, DetailView):
+class AppUserProfileView(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = 'accounts/profile_page.html'
     context_object_name = 'profile'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Profile'
+
+        return context
+
     def get_object(self, queryset=None):
         return self.request.user.profile
+
+
+class AppUserProfileEditView(LoginRequiredMixin, UpdateView):
+    form_class = ProfileForm
+    template_name = 'common/form_base.html'
+    success_url = reverse_lazy('accounts:profile')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+
+        return kwargs
+
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['page_title'] = f'Update {str(self)} info'
+
+        return context
