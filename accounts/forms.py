@@ -22,6 +22,10 @@ class AppUserChangeForm(UserChangeForm):
 
 
 class ProfileForm(forms.ModelForm):
+    def __init__(self, user=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+
     class Meta:
         model = Profile
         exclude = ["user"]
