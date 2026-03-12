@@ -10,11 +10,7 @@
     <div class="profile-card">
 
         <div class="profile-info">
-            {% if profile.avatar %}
-                <img src="{{ profile.avatar }}" alt="Profile avatar" width="65" height="65">
-            {% else %}
-                <img src="{% static 'img/alt_picture.png' %}" class="card-icon" alt="No image">
-            {% endif %}
+            <img src="{{ profile.avatar|default:'/static/img/alt_picture.png' }}" alt="Profile avatar" width="65" height="65">
             <p><strong>Username:</strong> {{ request.user.get_username }}</p>
             <p><strong>Email:</strong> {{ request.user.email }}</p>
             <p><strong>First name:</strong> {{ request.user.first_name }}</p>

@@ -9,7 +9,7 @@ UserModel = get_user_model()
 class AppUserCreationForm(UserCreationForm):
     class Meta:
         model = UserModel
-        fields = ("email",)
+        fields = ('email', 'first_name', 'last_name')
         field_classes = {"email": UsernameField}
         widgets = {"email": forms.EmailInput(attrs={"autofocus": True})}
 
@@ -32,5 +32,9 @@ class ProfileForm(forms.ModelForm):
 
         labels = {
             'date_of_birth': "Date of Birth:",
-            'profile_picture': "Profile Picture:",
+            'avatar': "Profile avatar:",
+        }
+        widgets = {
+            'avatar': forms.URLInput(attrs={'placeholder': 'ex: https://'}),
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }
