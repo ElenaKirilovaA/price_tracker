@@ -16,6 +16,7 @@ from product.models import Product
 
 UserModel = get_user_model()
 
+
 class ProductList(LoginRequiredMixin, AppUserQuerysetMixin, ListView):
     model = Product
     template_name = 'products/product_list.html'

@@ -17,7 +17,9 @@ class Product(BaseInfoTitle, BaseInfoDescription, CreatedAtMixin):
         max_length=100,
         blank=True,
     )
-    url = models.URLField()
+    url = models.URLField(
+
+    )
     current_price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -47,8 +49,11 @@ class Product(BaseInfoTitle, BaseInfoDescription, CreatedAtMixin):
     )
     user = models.ForeignKey(
         to=UserModel,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='products'
     )
+
 
     @property
     def is_tracking(self):
