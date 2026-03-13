@@ -38,9 +38,15 @@ class ProductEditForm(ProductBasicForm):
         self.user = user
 
 
-
         if not self.user.is_staff:
-
             self.fields['current_price'].disabled = True
             self.fields['currency'].disabled = True
 
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not self.user.is_staff:
+            cleaned_data['current_price'] = self.instance.current_price
+            cleaned_data['currency'] = self.instance.currency
+
+        return cleaned_data
