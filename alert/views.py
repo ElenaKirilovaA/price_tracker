@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.context_processors import request
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -9,6 +10,9 @@ from alert.forms import AlertCreateForm, AlertEditForm, AlertDeleteForm
 from alert.models import Alert, ArchiveAlert
 from alert.service import manage_simulation_tracking, set_timeline_checks
 from django.core.paginator import Paginator
+
+from common.mixins import AppUserQuerysetMixin
+
 
 # Create your views here.
 
@@ -31,8 +35,6 @@ class AlertCreate(LoginRequiredMixin, CreateView):
 
         return context
 
-    def get_queryset(self):
-        return Alert.objects.filter(user=self.request.user)
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -40,7 +42,7 @@ class AlertCreate(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class AlertEdit(UpdateView):
+class AlertEdit(LoginRequiredMixin, AppUserQuerysetMixin, UpdateView):
     model = Alert
     form_class = AlertEditForm
     success_url = reverse_lazy('alert:alert_list')
@@ -53,7 +55,7 @@ class AlertEdit(UpdateView):
         return context
 
 
-class AlertDelete(DeleteView):
+class AlertDelete(LoginRequiredMixin, AppUserQuerysetMixin, DeleteView):
     model = Alert
     template_name = 'common/form_delete_category.html'
     success_url = reverse_lazy('alert:alert_list')

@@ -33,4 +33,14 @@ class ProductCreateForm(ProductBasicForm):
 
 
 class ProductEditForm(ProductBasicForm):
-    pass
+    def __init__(self, user=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+
+
+
+        if not self.user.is_staff:
+
+            self.fields['current_price'].disabled = True
+            self.fields['currency'].disabled = True
+
