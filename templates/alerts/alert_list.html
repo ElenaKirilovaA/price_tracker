@@ -18,6 +18,7 @@
                 <p><span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #2ec4b6;">attach_money</span>
                     Started: {% price_with_currency alert.started_price alert.product.currency %}</p>
                 <a href="{% url 'product:single_product' alert.product.slug %}" rel="noopener noreferrer" class="hvr">🔗 Product's tracking detail </a>
+
                 <hr>
                 <a href="{% url 'alert:edit' alert.id %}" class="btn"> Edit</a>
                 <a href="{% url 'alert:delete' alert.id %}" class="btn btn-danger">Delete</a>

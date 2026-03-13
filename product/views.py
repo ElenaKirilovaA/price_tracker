@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.http import HttpRequest,HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.base import kwarg_re
@@ -47,11 +47,12 @@ class AddProduct(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class EditProduct(LoginRequiredMixin, AppUserQuerysetMixin, UpdateView):
+class EditProduct(UserPassesTestMixin, UpdateView):
     model = Product
     form_class = ProductEditForm
     template_name = 'common/form_base.html'
     success_url = reverse_lazy('product:product_list')
+    permission_required =  'product.change_product'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -65,7 +66,14 @@ class EditProduct(LoginRequiredMixin, AppUserQuerysetMixin, UpdateView):
 
         return kwargs
 
-class DeleteProduct(LoginRequiredMixin, AppUserQuerysetMixin, DeleteView):
+
+    def test_func(self):
+        product = self.get_object()
+        user = self.request.user
+        return user == product.user or user.has_perm('product.change_product') or user.is_staff
+
+
+class DeleteProduct(UserPassesTestMixin, DeleteView):
     model = Product
     template_name = 'common/form_delete_category.html'
     success_url = reverse_lazy('product:product_list')
@@ -75,6 +83,11 @@ class DeleteProduct(LoginRequiredMixin, AppUserQuerysetMixin, DeleteView):
         context['page_title'] = f'{self.object.title}'
 
         return context
+
+    def test_func(self):
+        product = self.get_object()
+        user = self.request.user
+        return user == product.user or user.is_staff
 
 
 class SingleProduct(LoginRequiredMixin, DetailView):

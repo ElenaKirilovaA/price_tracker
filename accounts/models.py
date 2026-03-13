@@ -19,6 +19,7 @@ class AppUser(auth_models.AbstractUser):
     objects = AppUserManager()
 
 
+
 class Profile(models.Model):
     date_of_birth = models.DateField(
         null=True,
