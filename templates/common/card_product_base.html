@@ -45,10 +45,12 @@
    <hr>
 
 <div class="actions">
-   {% if request.user == product.user or request.user.is_staff or request.hes_perm == 'change_product' %}
+   {% if request.user == product.user or request.user.is_staff or perms.product.change_product %}
         <a href="{% url 'product:edit' product.slug %}" class="btn">Edit</a>
+       {% endif %}
+   {% if request.user == product.user or request.user.is_staff %}
         <a href="{% url 'product:delete' product.slug %}" class="btn btn-danger">Delete</a>
-    {% endif %}
+   {% endif %}
     <a href="{% url 'alert:check' product.id %}" class="btn">Simulate</a>
 
 

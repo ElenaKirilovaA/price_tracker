@@ -29,6 +29,7 @@ def archive_alert(alert: Alert) -> None:
 
     product = alert.product
     category = alert.product.category
+    user = alert.user
 
     archive = ArchiveAlert.objects.create(
         product_title=product.title,
@@ -41,6 +42,7 @@ def archive_alert(alert: Alert) -> None:
         alert_created_at = alert.created_at,
         category_title= category.title,
         category= category,
+        user=user,
     )
 
     price_timelines = alert.price_timelines.all()
