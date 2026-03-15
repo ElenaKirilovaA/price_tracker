@@ -50,7 +50,7 @@ class AddProduct(LoginRequiredMixin, CreateView):
 class EditProduct(UserPassesTestMixin, UpdateView):
     model = Product
     form_class = ProductEditForm
-    template_name = 'common/form_base.html'
+    template_name = 'products/form_create_product.html'
     success_url = reverse_lazy('product:product_list')
     permission_required =  'product.change_product'
 
