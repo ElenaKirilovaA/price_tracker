@@ -11,3 +11,4 @@ python-decouple==3.8
 python-dotenv==1.2.1
 smmap==5.0.2
 sqlparse==0.5.5
+whitenoise==6.12.0

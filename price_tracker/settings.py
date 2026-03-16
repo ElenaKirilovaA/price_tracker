@@ -24,9 +24,13 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# Read DEBUG from environment so you can run locally with DEBUG=True while
+# keeping production controlled via an environment variable. Accept common
+# truthy values ("1", "true", "yes"). Default to True for local dev so
+# media/static are served when running the development server.
+DEBUG = os.getenv("DEBUG", "True").lower() in ("1", "true", "yes")
 
-ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS').split(',') if host]
+ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
 
 
 # Application definition
@@ -47,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -126,8 +131,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+# Where `collectstatic` will collect static files for production. Use a
+# dedicated folder (not the media folder). The previous value pointed to
+# `post_images/` which looked like a media folder and could cause confusion.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+# Note: Whitenoise (used for static files) does not serve media files. In
+# development the project serves `MEDIA_URL` only when DEBUG is True (see
+# `price_tracker/urls.py`). In production serve media from a proper media
+# server or cloud storage.
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
