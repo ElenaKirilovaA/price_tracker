@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block content %}
+<section class="header-content">
 
 <div class="profile-container">
-
     <h1>User Profile</h1>
 
     <div class="profile-card">
@@ -27,11 +27,11 @@
             <a href="{% url 'accounts:profile-edit' %}" class="btn">
                 Edit Profile
             </a>
-             <div id="circle">
-        <h1>You saved</h1>
-        <h2> €</h2>
-        <small>Real money saved by real users</small>
+
+        </div>
     </div>
+
+    <div>
             <form action="{% url 'accounts:logout' %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn logout-btn">
@@ -43,6 +43,11 @@
 
     </div>
 
-</div>
+ <div id="circle">
+        <h1>You saved</h1>
+        <h2> €</h2>
+        <small>Total real money saved</small>
+    </div>
+</section>
 
 {% endblock %}
