@@ -14,12 +14,13 @@ def set_timeline_checks(alert: Alert) -> None:
 
 
 def send_mail(alert: Alert) -> None:
+    print('send mail', alert.email)
     EmailMessage(
         subject=f'Dropped price - {alert.product.title}!',
         body=f'{alert}',
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[alert.email],
-    ).send()
+    ).send(fail_silently=False)
 
 @transaction.atomic
 def archive_alert(alert: Alert) -> None:
