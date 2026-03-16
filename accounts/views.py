@@ -1,14 +1,16 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView, DetailView, UpdateView
 
 from accounts.forms import AppUserCreationForm, ProfileForm
 from accounts.models import Profile
-from alert.models import Alert
+from alert.models import Alert, ArchiveAlert
 from product.models import Product
+from django.db.models import F, Sum, ExpressionWrapper, DecimalField
 
 # Create your views here.
 
@@ -41,6 +43,8 @@ class AppUserDashboardView(LoginRequiredMixin, TemplateView):
         context['page_title'] = f"{self.request.user}'s dashboard"
         context['products'] = Product.objects.filter(user=self.request.user)[:5]
         context['alerts'] = Alert.objects.filter(user=self.request.user)[:5]
+        context['archives'] = ArchiveAlert.objects.filter(user=self.request.user)[:5]
+
 
         return context
 
@@ -51,6 +55,28 @@ class AppUserProfileView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         return self.request.user.profile
+
+
+    def get_context_data(self, **kwargs):
+
+        archives = (
+            ArchiveAlert.objects
+            .filter(user=self.request.user)
+            .aggregate(
+                saved_money_db=Sum(
+                    ExpressionWrapper(
+                        F('started_price_eur') - F('triggered_price_eur'),
+                        output_field=DecimalField()
+                    )
+                )
+            )
+        )
+        context = super().get_context_data()
+        context['money_saved'] = archives['saved_money_db'] or 0
+
+        return context
+
+
 
 
 class AppUserProfileEdit(LoginRequiredMixin, UpdateView):

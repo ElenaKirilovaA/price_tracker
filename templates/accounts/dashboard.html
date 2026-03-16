@@ -5,6 +5,8 @@
 <div class="container">
 
     <h1>Dashboard</h1>
+
+
     <p>Welcome, {{ request.user.email }}!</p>
 
     <hr>
@@ -55,7 +57,15 @@
                 {% endfor %}
             </ul>
 
-            <a href="#">View all alerts</a>
+            <a href="{% url 'alert:user-alert_list' %}">View all alerts</a>
+
+        {% else %}
+            <p>No alerts yet.</p>
+        {% endif %}
+    {% if archives %}
+
+
+            <a href="{% url 'alert:user-history_list' %}">Successful tracks</a>
 
         {% else %}
             <p>No alerts yet.</p>

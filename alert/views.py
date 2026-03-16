@@ -101,6 +101,9 @@ class DisplayActiveAlerts(ListView):
 
         return context
 
+
+class DisplayAppUserActiveAlerts(LoginRequiredMixin, AppUserQuerysetMixin, DisplayActiveAlerts):
+   pass
 class DisplayArchivedAlerts(ListView):
     model = ArchiveAlert
     template_name = 'alerts/alert_history_list.html'
@@ -109,9 +112,13 @@ class DisplayArchivedAlerts(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['page_title'] = "All successful tracks"
+        context['page_title'] = f"All successful tracks of {self.request.user}"
 
         return context
+
+
+class DisplayAppUserArchiveAlert(LoginRequiredMixin, AppUserQuerysetMixin, DisplayArchivedAlerts):
+   pass
 
 def archive_alert_info(request: HttpRequest, pk: int) -> HttpResponse:
     alert = get_object_or_404(ArchiveAlert, id=pk)

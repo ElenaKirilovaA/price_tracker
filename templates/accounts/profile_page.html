@@ -5,7 +5,7 @@
 <section class="header-content">
 
 <div class="profile-container">
-    <h1>User Profile</h1>
+    <h1>{{ request.user.get_full_name|capfirst }} Profile</h1>
 
     <div class="profile-card">
 
@@ -13,8 +13,8 @@
             <img src="{{ profile.avatar|default:'/static/img/alt_picture.png' }}" alt="Profile avatar" width="65" height="65">
             <p><strong>Username:</strong> {{ request.user.get_username }}</p>
             <p><strong>Email:</strong> {{ request.user.email }}</p>
-            <p><strong>First name:</strong> {{ request.user.first_name }}</p>
-            <p><strong>Last name:</strong> {{ request.user.last_name }}</p>
+            <p><strong>First name:</strong> {{ request.user.first_name|capfirst }}</p>
+            <p><strong>Last name:</strong> {{ request.user.last_name|capfirst }}</p>
             <p><strong>Joined:</strong> {{ request.user.date_joined|date:"d M Y" }}</p>
         </div>
 
@@ -45,7 +45,7 @@
 
  <div id="circle">
         <h1>You saved</h1>
-        <h2> €</h2>
+        <h2>{{ money_saved }} €</h2>
         <small>Total real money saved</small>
     </div>
 </section>
