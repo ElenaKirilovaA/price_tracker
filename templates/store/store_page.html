@@ -1,0 +1,25 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block body %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+<h1>Store Page</h1>
+
+<div class="card-container">
+<form>
+    {% csrf_token %}
+    <input type="text" id="title" placeholder="Store title">
+    <input type="text" id="url" placeholder="Store URL">
+    <div>
+    <button type="submit" class="btn" id="add-btn">Add</button>
+    <button type="submit" class="btn" id="edit-btn">Edit</button>
+        </div>
+</form>
+</div>
+ <button type="submit" id="load-btn" class="btn">Load all stores</button>
+
+ <section class="card-container" id="store-card">
+
+</section>
+<script src="{% static 'store/js/store.js' %}"></script>
+
+{% endblock %}

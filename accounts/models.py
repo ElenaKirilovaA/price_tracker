@@ -1,7 +1,10 @@
+
+
 from django.db import models
 from django.contrib.auth import models as auth_models
 
 from accounts.managers import AppUserManager
+
 
 
 # Create your models here.
@@ -11,6 +14,11 @@ class AppUser(auth_models.AbstractUser):
     username = None
     email = models.EmailField(
         unique=True,
+    )
+    favourite_product = models.ManyToManyField(
+        'product.Product',
+        blank=True,
+        related_name='users_favorite',
     )
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

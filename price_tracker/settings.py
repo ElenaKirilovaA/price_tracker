@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'alert',
     'common',
     'accounts',
+    'store',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
