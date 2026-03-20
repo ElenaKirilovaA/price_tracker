@@ -1,4 +1,5 @@
 {% extends "common/base.html" %}
+{% load static %}
 
 {% block content %}
 <h1>Tags</h1>
@@ -44,19 +45,7 @@
 
 </form>
 
-    <script>
-    const checkBoxAllEl = document.getElementById('select-all')
-
-    checkBoxAllEl.addEventListener('change', handleCheckBox)
-
-    function handleCheckBox(){
-        const checkBoxSingleEl = document.querySelectorAll('input[name="selected_tags"]')
-
-        checkBoxSingleEl.forEach(el => {
-            el.checked = this.checked;
-        })
-    }
-    </script>
+<script src="{% static 'store/js/tag.js' %}"></script>
 
 {% endblock %}
 
