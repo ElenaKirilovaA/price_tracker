@@ -1,11 +1,10 @@
-from django.contrib.auth import get_user_model
+
 from django.db import models
 from common.mixins import CreatedAtMixin, BaseInfoTitle, BaseInfoDescription
 
 
 # Create your models here.
 
-UserModel = get_user_model()
 
 class Category(CreatedAtMixin, BaseInfoTitle, BaseInfoDescription):
     card_image = models.ImageField(

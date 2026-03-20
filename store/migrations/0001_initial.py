@@ -13,24 +13,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Category',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100, unique=True, validators=[django.core.validators.MinLengthValidator(2)])),
-                ('description', models.TextField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('card_image', models.ImageField(blank=True, null=True, upload_to='post_images/')),
-            ],
-            options={
-                'abstract': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='Tag',
+            name='Store',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=100, unique=True, validators=[django.core.validators.MinLengthValidator(2)])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('url', models.URLField()),
             ],
             options={
                 'abstract': False,

@@ -34,6 +34,7 @@ urlpatterns = [
 
     path('catalog/', include('catalog.urls')),
     path('product/', include('product.urls')),
+    path('store/', include('store.urls')),
 ]
 handler404 = custom_404
 if settings.DEBUG:

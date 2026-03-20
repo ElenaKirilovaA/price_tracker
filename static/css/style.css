@@ -359,6 +359,13 @@ main > p {
     transform: translateY(-2px);
     box-shadow: 0 10px 22px rgba(46, 196, 182, 0.55);
 }
+
+button:disabled {
+    background-color: #ccc; /* светлосиво */
+    color: #666; /* тъмносиво за текста */
+    cursor: not-allowed; /* курсор, който показва, че не е кликаем */
+    opacity: 0.6; /* допълнителна прозрачност, ако искаш */
+}
 .delete-wrapper {
     max-width: 480px;
     margin: 4rem auto;
