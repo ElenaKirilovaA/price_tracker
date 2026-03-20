@@ -1,11 +1,11 @@
-  const checkBoxAllEl = document.getElementById('select-all')
+const checkBoxAllEl = document.getElementById('select-all')
 
-    checkBoxAllEl.addEventListener('change', handleCheckBox)
+checkBoxAllEl.addEventListener('change', handleCheckBox)
 
-    function handleCheckBox(){
-        const checkBoxSingleEl = document.querySelectorAll('input[name="selected_tags"]')
+function handleCheckBox(){
+    const checkBoxSingleEl = document.querySelectorAll('input[name="selected_tags"]')
 
-        checkBoxSingleEl.forEach(el => {
-            el.checked = this.checked;
-        })
-    }
+    checkBoxSingleEl.forEach(el => {
+        el.checked = this.checked;
+    })
+}

@@ -1,4 +1,4 @@
- const aTagFieldEl = document.getElementById('tag-add');
+const aTagFieldEl = document.getElementById('tag-add');
 const helpTextEl = aTagFieldEl.dataset.help;
 const divHelpEl = document.getElementById('help-container');
 
