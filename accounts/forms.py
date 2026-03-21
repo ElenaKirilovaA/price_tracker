@@ -23,8 +23,8 @@ class AppUserChangeForm(UserChangeForm):
 
 
 class ProfileForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=30)
-    last_name = forms.CharField(max_length=30)
+    first_name = forms.CharField(max_length=30, required=False)
+    last_name = forms.CharField(max_length=30, required=False)
 
     def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -36,7 +36,7 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        exclude = ["user"]
+        fields = ["date_of_birth", 'avatar', 'first_name', 'last_name']
 
         labels = {
             'date_of_birth': "Date of Birth:",
@@ -52,8 +52,8 @@ class ProfileForm(forms.ModelForm):
         profile = super().save(commit=False)
 
         if self.user:
-            self.user.first_name = self.cleaned_data['first_name']
-            self.user.last_name = self.cleaned_data['last_name']
+            self.user.first_name = self.cleaned_data['first_name'] or ''
+            self.user.last_name = self.cleaned_data['last_name'] or ''
 
             if commit:
                 self.user.save()
@@ -62,10 +62,3 @@ class ProfileForm(forms.ModelForm):
             profile.save()
 
         return profile
-
-
-
-
-
-
-

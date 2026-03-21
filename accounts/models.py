@@ -1,11 +1,6 @@
-
-
 from django.db import models
 from django.contrib.auth import models as auth_models
-
 from accounts.managers import AppUserManager
-
-
 
 # Create your models here.
 
@@ -25,7 +20,6 @@ class AppUser(auth_models.AbstractUser):
 
     # Use the custom manager that knows how to create users with email as username
     objects = AppUserManager()
-
 
 
 class Profile(models.Model):
