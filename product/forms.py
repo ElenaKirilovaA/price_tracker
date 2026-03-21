@@ -1,12 +1,16 @@
+from unicodedata import category
+
 from django import forms
 
 from product.models import Product
+from product.services import get_price
 
 
 class ProductBasicForm(forms.ModelForm):
     class Meta:
         model = Product
-        exclude = ['slug', 'started_price', 'started_price_eur' ,'updated_at', 'user']
+
+        fields = '__all__'
         labels = {
             'current_price': 'Product price',
             'currency': 'Choose currency'
@@ -29,14 +33,46 @@ class ProductBasicForm(forms.ModelForm):
 
 
 class ProductCreateForm(ProductBasicForm):
-    pass
+    class Meta(ProductBasicForm.Meta):
+        fields = ['url', 'category', 'tag', 'store']
+
+    def save(self, commit=True):
+        product = super().save(commit=False)
+        info = get_price(product.url)
+
+        if info:
+            product.title = info['title']
+            product.description = info['description']
+            product.current_price = info['price']
+            product.currency = 'EUR'  # TODO
+
+        if commit:
+            product.save()
+
+        return product
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        store = cleaned_data.get('store')
+        url = cleaned_data.get('url')
+
+        if store and url:
+            if store.url not in url:
+                raise forms.ValidationError('URL not from the selected store')
+
+        return cleaned_data
+
+
 
 
 class ProductEditForm(ProductBasicForm):
+    class Meta(ProductBasicForm.Meta):
+        fields = ['title', 'category', 'tag', 'description', 'current_price', 'currency']
+
     def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.user = user
-
 
         if not self.user.is_staff:
             self.fields['current_price'].disabled = True
@@ -45,8 +81,16 @@ class ProductEditForm(ProductBasicForm):
 
     def clean(self):
         cleaned_data = super().clean()
+
         if not self.user.is_staff:
             cleaned_data['current_price'] = self.instance.current_price
             cleaned_data['currency'] = self.instance.currency
 
         return cleaned_data
+
+
+
+
+
+
+
