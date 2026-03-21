@@ -14,9 +14,6 @@ from store.serializers import StoreSerializer
 from rest_framework.permissions import BasePermission
 
 class StoreCRUPPermissions(BasePermission):
-    """
-    Позволява достъп само на потребители с подходящи CRUD permissions
-    """
     def has_permission(self, request, view):
         user = request.user
         if request.method in ['GET']:
@@ -54,6 +51,7 @@ class DetailStoreView(generics.RetrieveUpdateDestroyAPIView):
 
 class StorePageView(UserPassesTestMixin, TemplateView):
     template_name = 'store/store_page.html'
+
 
     def test_func(self):
         user = self.request.user

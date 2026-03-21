@@ -196,7 +196,7 @@ class ArchiveAlert(models.Model):
 class PriceTimeline(models.Model):
     """
     Every time the simulation for price drop is checked,
-    the class is adding a new row in db. Model is timeline snapshot.
+    the class is adding a new row in db. Model is a timeline snapshot.
     """
 
     price = models.DecimalField(

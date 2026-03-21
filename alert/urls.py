@@ -5,7 +5,7 @@ from alert import views
 app_name = 'alert'
 
 paths = [
-        path('info/', views.archive_alert_info, name='info_archive'),
+        path('info/', views.ArchiveAlertInfo.as_view(), name='info_archive'),
         path('edit/', views.AlertEdit.as_view(), name='edit'),
         path('delete/', views.AlertDelete.as_view(), name='delete'),
 ]
