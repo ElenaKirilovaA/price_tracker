@@ -27,7 +27,6 @@ class CategoryDeleteForm(CategoryBasicForm):
 
         for name, field in self.fields.items():
             field.widget.attrs['readonly'] = True
-            field.widget.attrs['disabled'] = True
 
 
 class TagForm(forms.Form):

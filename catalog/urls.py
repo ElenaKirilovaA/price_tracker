@@ -12,15 +12,15 @@ tag_urls = [
 category_id_urls = [
     path('info/', views.category_info, name='info'),
 
-    path('edit/', views.edit_category, name='edit'),
-    path('delete/', views.delete_category, name='delete'),
+    path('edit/', views.EditCategory.as_view(), name='edit'),
+    path('delete/', views.DeleteCategory.as_view(), name='delete'),
 ]
 urlpatterns  = [
-    path('', views.catalog_overview, name='catalog-overview'),
+    path('', views.CatalogOverview.as_view(), name='catalog-overview'),
 
 
-    path('create/', views.add_category, name='create'),
-    path('<int:category_id>/', include(category_id_urls)),
+    path('create/', views.AddCategory.as_view(), name='create'),
+    path('<int:pk>/', include(category_id_urls)),
 
     path('tag/', include(tag_urls)),
 ]

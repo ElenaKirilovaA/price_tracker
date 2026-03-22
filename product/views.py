@@ -87,6 +87,8 @@ class DeleteProduct(UserPassesTestMixin, DeleteView):
         return user == product.user or user.is_staff
 
 
+
+
 class SingleProduct(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'products/product_detail_page.html'

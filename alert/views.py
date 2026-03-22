@@ -104,6 +104,8 @@ class DisplayActiveAlerts(ListView):
 
 class DisplayAppUserActiveAlerts(LoginRequiredMixin, AppUserQuerysetMixin, DisplayActiveAlerts):
    pass
+
+
 class DisplayArchivedAlerts(ListView):
     model = ArchiveAlert
     template_name = 'alerts/alert_history_list.html'
@@ -119,7 +121,6 @@ class DisplayArchivedAlerts(ListView):
 
 class DisplayAppUserArchiveAlert(LoginRequiredMixin, AppUserQuerysetMixin, DisplayArchivedAlerts):
    pass
-
 
 
 class ArchiveAlertInfo(LoginRequiredMixin, AppUserQuerysetMixin, DetailView):
