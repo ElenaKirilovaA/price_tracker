@@ -11,3 +11,18 @@ currency_mapper = {
 def convert_to_eur(price: Decimal, currency) -> Decimal:
     rate = currency_mapper.get(currency) * price
     return rate.quantize(Decimal('0.01'))  # != .:2f-> пази стойността такава и в базата
+
+
+def symbol_to_currency(symbol: str) -> str:
+    mapper = {
+        '€': CurrencyChoices.EUR,
+        '$': CurrencyChoices.USD,
+        '£': CurrencyChoices.GBP,
+    }
+
+    if symbol is None:
+        return ''
+
+    result = mapper.get(symbol)
+    return result if result else ""
+

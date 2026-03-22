@@ -1,9 +1,7 @@
-from unicodedata import category
-
 from django import forms
-
 from product.models import Product
-from product.services import get_price
+from product.services import KateoStoreScraper
+import re
 
 
 class ProductBasicForm(forms.ModelForm):
@@ -38,18 +36,19 @@ class ProductCreateForm(ProductBasicForm):
 
     def save(self, commit=True):
         product = super().save(commit=False)
-        info = get_price(product.url)
+        info = KateoStoreScraper.get_price(product.url)
 
         if info:
-            product.title = info['title']
-            product.description = info['description']
-            product.current_price = info['price']
-            product.currency = 'EUR'  # TODO
+            product.title = info.get('title')
+            product.description = info.get('description')
+            product.current_price = info.get('price')
+            product.currency = info.get('currency')
 
         if commit:
             product.save()
 
         return product
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -59,11 +58,11 @@ class ProductCreateForm(ProductBasicForm):
 
         if store and url:
             if store.url not in url:
-                raise forms.ValidationError('URL not from the selected store')
+                self.add_error('url', 'URL not from the selected store')
+            elif not re.search(r'/^\/products\/[a-z-]+\?variant=\d{14}(&|$)', url):
+                self.add_error('url', 'URL doesn show a single product. Select one product only')
 
         return cleaned_data
-
-
 
 
 class ProductEditForm(ProductBasicForm):
@@ -87,10 +86,3 @@ class ProductEditForm(ProductBasicForm):
             cleaned_data['currency'] = self.instance.currency
 
         return cleaned_data
-
-
-
-
-
-
-
