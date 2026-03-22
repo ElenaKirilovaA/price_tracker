@@ -1,86 +1,110 @@
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Count
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.db.models.deletion import ProtectedError, RestrictedError
+from django.urls import reverse_lazy
 from django.utils.timezone import now
 from django.views.decorators.http import require_POST
-
-from alert.models import ArchiveAlert
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from catalog.forms import CategoryCreateForm, CategoryEditForm, CategoryDeleteForm, TagFormSet
 from catalog.models import Category, Tag
 from catalog.service import create_tags
 
 # Create your views here.
 
+class CatalogOverview(ListView):
+    model = Category
+    template_name = 'catalog/category_list_page.html'
 
-def catalog_overview(request: HttpRequest) -> HttpResponse:
-    catalog = (Category.objects
-               .annotate(
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catalog = (Category.objects
+                   .annotate(
                     product_count=Count('products', distinct=True),
                     deals_count=Count('archives', distinct=True))
-               .order_by('-deals_count', '-product_count', 'title', ))
+                   .order_by('-deals_count', '-product_count', 'title', ))
 
-    context = {
-        'page_title': 'Catalog Overview',
-        'catalog': catalog,
-        'star_category': catalog[0] if catalog else None
-    }
-    return render(request, 'catalog/category_list_page.html', context)
+        context['page_title'] = 'Catalog Overview'
+        context['catalog'] = catalog
+        context['star_category'] = catalog[0] if catalog else None
 
-
-def add_category(request:HttpRequest) -> HttpResponse:
-    form = CategoryCreateForm(request.POST or None, request.FILES or None)
-
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return redirect('catalog:catalog-overview')
-
-    context = {
-        'page_title': 'Add category',
-        'form': form,
-
-    }
-
-    return render(request, 'common/form_base.html', context)
+        return context
 
 
-def edit_category(request:HttpRequest, category_id: int) -> HttpResponse:
-    category = get_object_or_404(Category, id=category_id)
-    form = CategoryEditForm(request.POST or None, request.FILES or None, instance=category)
+class AddCategory(UserPassesTestMixin, CreateView):
+    model = Category
+    form_class = CategoryCreateForm
+    success_url = reverse_lazy('catalog:catalog-overview')
+    template_name = 'common/form_base.html'
 
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return redirect('catalog:catalog-overview')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['page_title'] = 'Add category'
 
-    context = {
-        'page_title': f'Update {category}',
-        'form': form,
-    }
-    return render(request, 'common/form_base.html', context)
+        return context
+
+    def test_func(self):
+        user = self.request.user
+
+        return user.has_perm('catalog.add_category') or user.is_staff
 
 
-def delete_category(request: HttpRequest, category_id: int) -> HttpResponse:
-    category = get_object_or_404(Category, id=category_id)
-    form = CategoryDeleteForm(request.POST or None, instance=category)
+class EditCategory(UserPassesTestMixin, UpdateView):
+    model = Category
+    form_class = CategoryEditForm
+    success_url = reverse_lazy('catalog:catalog-overview')
+    template_name = 'common/form_base.html'
 
-    if request.method == 'POST':
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        product = self.get_object()
+        context['page_title'] = f'Update {product}'
+
+        return context
+
+    def test_func(self):
+        user = self.request.user
+
+        return user.has_perm('catalog.change_category') or user.is_staff
+
+
+class DeleteCategory(UserPassesTestMixin, DeleteView):
+    model = Category
+    form_class = CategoryDeleteForm
+    success_url = reverse_lazy('catalog:catalog-overview')
+    template_name = 'common/form_delete_category.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.get_object()
+
+        return kwargs
+
+    def form_valid(self, form):
+        category = self.get_object()
+
         try:
             category.delete()
-            messages.success(request, f'The {category} has been deleted.')
+            messages.success(self.request,f'The {category} has been deleted.')
         except (ProtectedError, RestrictedError):
-            messages.error(request, f'The {category} can not be deleted. There is connection.')
+            messages.error(self.request,f'The {category} cannot be deleted. There are related objects.')
+        return redirect(self.success_url)
 
 
-        return redirect('catalog:catalog-overview')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = self.get_object()
+        context['page_title'] = f'Delete {category}'
 
-    context = {
-        'page_title': f'Delete {category}',
-        'form': form,
-    }
+        return context
 
-    return render(request, 'common/form_delete_category.html', context)
+    def test_func(self):
+        user = self.request.user
+
+        return user.has_perm('catalog.delete_category') or user.is_staff
 
 
 def bulk_create_tags(request:HttpRequest) -> HttpResponse:
@@ -132,10 +156,10 @@ def tag_bulk_delete(request:HttpRequest) -> HttpResponse:
     return redirect('product:create')
 
 
-def category_info(request:HttpRequest, category_id: int) -> HttpResponse:
+def category_info(request:HttpRequest, pk: int) -> HttpResponse:
     category = (Category.objects
                 .prefetch_related('products', 'products__alerts', 'products__tag', 'archives')
-                .get(id=category_id))
+                .get(id=pk))
     last_deal_obj = category.archives.order_by('-alert_finished_at').first()
     products = category.products.all()
 

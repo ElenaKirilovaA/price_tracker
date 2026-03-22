@@ -32,11 +32,11 @@ def get_context_date_home():
     return context_map
 
 def get_context_date_moderator_home():
-
     products = Product.objects.count()
     categories = Category.objects.count()
     tags = Tag.objects.count()
     stores = Store.objects.count()
+
     base_context = get_context_date_home()
     moderator_context = {
         'products': products,
