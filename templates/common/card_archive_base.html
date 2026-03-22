@@ -23,7 +23,9 @@
             </p>
 
             <hr>
+        {% if request.user == alert.user %}
             <a href="{% url 'alert:info_archive' alert.id %}" rel="noopener noreferrer" class="hvr">🔗 View track </a>
+        {% endif %}
         </div>
 
     {% empty %}

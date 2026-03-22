@@ -7,3 +7,6 @@ from common.mixins import CreatedAtMixin, BaseInfoTitle
 
 class Store(CreatedAtMixin, BaseInfoTitle):
     url = models.URLField()
+
+    def __str__(self):
+        return self.title
