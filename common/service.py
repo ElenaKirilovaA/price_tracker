@@ -1,5 +1,8 @@
 from django.db.models import Avg, F, Sum, Count
 from alert.models import Alert, ArchiveAlert
+from catalog.models import Category, Tag
+from product.models import Product
+from store.models import Store
 
 
 def get_context_date_home():
@@ -27,3 +30,19 @@ def get_context_date_home():
     }
 
     return context_map
+
+def get_context_date_moderator_home():
+
+    products = Product.objects.count()
+    categories = Category.objects.count()
+    tags = Tag.objects.count()
+    stores = Store.objects.count()
+    base_context = get_context_date_home()
+    moderator_context = {
+        'products': products,
+        'categories': categories,
+        'stores': stores,
+        'tags': tags,
+    }
+
+    return {**base_context, **moderator_context}

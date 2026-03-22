@@ -1,0 +1,133 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Moderator Dashboard{% endblock %}
+
+{% block body %}
+
+<section class="moderator-summary">
+    <h2>Moderator Dashboard</h2>
+
+    <!-- STATS -->
+    <div class="stats-row">
+
+        <div class="stat-box">
+            <p class="stat-label">💰 Total money saved</p>
+            <h2 class="stat-value">{{ saved_money }} €</h2>
+            <small class="stat-subtext">Based on all completed price tracks</small>
+        </div>
+
+        <div class="stat-box">
+            <p class="stat-label">⏱ Average tracking time</p>
+            <h2 class="stat-value">
+                {% if average_days is not None %}
+             <strong>
+                  {% if average_days > 1 %}
+                       {{ average_days }} days
+                    {% elif average_days == 1 %}
+                        {{ average_days }} day
+                    {% else %}
+                        Less than a day
+                    {% endif %}
+            </strong>
+         {% else %}
+         <p>Still not finished tracks</p>
+         {% endif %}
+            </h2>
+            <small class="stat-subtext">Time until a price drop is detected</small>
+        </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+        <table class="dashboard-table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>
+                        <strong>Active tracks</strong><br>
+                        <span class="muted">{{ counter }}</span>
+                    </td>
+                    <td>
+                        <a href="{% url 'alert:alert_list' %}" class="hvr">
+                            View <span class="material-icons">arrow_forward</span>
+                        </a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <strong>Successful tracks</strong><br>
+                        <span class="muted">{{ counter_archive }}</span>
+                    </td>
+                    <td>
+                        <a href="{% url 'alert:history_list' %}" class="hvr">
+                            View <span class="material-icons">arrow_forward</span>
+                        </a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>Categories</strong><br>
+                        <span class="muted">{{ categories }}</span>
+                    </td>
+                    <td class="icon-actions">
+                        <a href="{% url 'catalog:catalog-overview' %}">
+                            <span class="material-icons">visibility</span>
+                        </a>
+                        <a href="{% url 'catalog:create' %}">
+                            <span class="material-icons">add</span>
+                        </a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>Tags</strong><br>
+                        <span class="muted">{{ tags }}</span>
+                    </td>
+                    <td class="icon-actions">
+                        <a href="{% url 'catalog:tag_create' %}">
+                            <span class="material-icons">add</span>
+                        </a>
+                        <a href="{% url 'catalog:display' %}">
+                            <span class="material-icons delete-icon">delete</span>
+                        </a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>Products</strong><br>
+                        <span class="muted">{{ products }}</span>
+                    </td>
+                    <td class="icon-actions">
+                        <a href="{% url 'product:list' %}">
+                            <span class="material-icons">inventory</span>
+                        </a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>Stores</strong><br>
+                        <span class="muted">{{ stores }}</span>
+                    </td>
+                    <td class="icon-actions">
+                        <a href="{% url 'store:main' %}">
+                            <span class="material-icons">store</span>
+                        </a>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</section>
+{% include 'common/card_archive_base.html' %}
+
+{% endblock %}

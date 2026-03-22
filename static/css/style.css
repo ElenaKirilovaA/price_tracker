@@ -1,4 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* =====================
+   RESPONSIVE
+===================== */
+@media (max-width: 900px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #circle {
+        width: 260px;
+        height: 260px;
+        margin-top: 2rem;
+    }
+
+    #circle h2 {
+        font-size: 2.1rem;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
 @media (max-width: 768px) {
     .header-content {
         flex-direction: column;
@@ -563,9 +588,9 @@ td .btn-danger{
     margin-left: 0.3rem;
 }
 
-.tag-actions a:hover {
-    color: var(--highlight-color-second);
-}
+/*.tag-actions a:hover {*/
+/*    color: var(--secondary);*/
+/*}*/
 
 .material-icons {
     font-size: 18px;
@@ -591,28 +616,4 @@ footer {
     color: var(--sand);
 }
 
-/* =====================
-   RESPONSIVE
-===================== */
-@media (max-width: 900px) {
-    .header-content {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    #circle {
-        width: 260px;
-        height: 260px;
-        margin-top: 2rem;
-    }
-
-    #circle h2 {
-        font-size: 2.1rem;
-    }
-
-    nav {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-}
 

@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Count
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -108,7 +108,7 @@ def bulk_create_tags(request:HttpRequest) -> HttpResponse:
 
     return render(request, 'catalog/tag_create.html', context)
 
-
+@permission_required('catalog.delete_tag', raise_exception=True)
 def tag_display(request:HttpRequest) -> HttpResponse:
     tags = Tag.objects.all().order_by('title')
 
@@ -118,9 +118,9 @@ def tag_display(request:HttpRequest) -> HttpResponse:
     }
     return render(request, 'catalog/tag_list.html', context)
 
-
 @require_POST
-@login_required
+@permission_required('catalog.delete_tag', raise_exception=True)
+
 def tag_bulk_delete(request:HttpRequest) -> HttpResponse:
     tags = request.POST.getlist('selected_tags')
 

@@ -1,23 +1,17 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
-from django.http import HttpRequest,HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.template.base import kwarg_re
-from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
 from common.mixins import AppUserQuerysetMixin
 from product.forms import ProductCreateForm, ProductEditForm
 from product.models import Product
-
 
 # Create your views here.
 
 UserModel = get_user_model()
 
 
-class ProductList(LoginRequiredMixin, AppUserQuerysetMixin, ListView):
+class ProductList(ListView):
     model = Product
     template_name = 'products/product_list.html'
     ordering = '-created_at'
@@ -27,6 +21,9 @@ class ProductList(LoginRequiredMixin, AppUserQuerysetMixin, ListView):
         context['page_title'] = 'Product List'
 
         return context
+
+class AppUserProductList(LoginRequiredMixin, AppUserQuerysetMixin, ProductList):
+    pass
 
 
 class AddProduct(LoginRequiredMixin, CreateView):

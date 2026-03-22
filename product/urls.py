@@ -11,7 +11,9 @@ paths = [
     ]
 
 urlpatterns = [
-    path('', views.ProductList.as_view(), name='product_list'),
+    path('', views.ProductList.as_view(), name='list'),
+
+    path('user/', views.AppUserProductList.as_view(), name='product_list'),
     path('create/', views.AddProduct.as_view(), name='create'),
     path('<slug:slug>/', include(paths)),
 ]

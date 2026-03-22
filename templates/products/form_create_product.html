@@ -29,9 +29,11 @@
                         <a id="tag-add" href="{% url 'catalog:tag_create' %}" data-help="{{ field.help_text }}">
                             <span class="material-icons">add</span>
                         </a>
+                        {% if request.user.is_staff or perms.catalog.delete_tag %}
                         <a id="tag-delete" href="{% url 'catalog:display' %}">
                             <span class="material-icons delete-icon">delete</span>
                         </a>
+                            {% endif %}
                         <div id="help-container"></div>
                     </span>
                 </label>

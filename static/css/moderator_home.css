@@ -1,0 +1,132 @@
+/* Wrapper to give "card feel" */
+.table-wrapper {
+    margin: 2rem 3rem;
+    background: var(--soft-white);
+    border-radius: 16px;
+    box-shadow: 0 12px 30px var(--shadow);
+    overflow: hidden;
+}
+
+/* Table base */
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Header */
+.dashboard-table thead {
+    background: linear-gradient(
+        90deg,
+        var(--deep-blue),
+        var(--sea-blue)
+    );
+    color: white;
+}
+
+.dashboard-table th {
+    text-align: left;
+    padding: 14px 18px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Rows */
+.dashboard-table td {
+    padding: 16px 18px;
+    border-bottom: 1px solid #e6ecf2;
+    vertical-align: middle;
+}
+
+/* Hover effect */
+.dashboard-table tbody tr:hover {
+    background-color: rgba(46, 196, 182, 0.08);
+}
+
+/* Typography helpers */
+.muted {
+    color: #6b7c93;
+    font-size: 0.9rem;
+}
+
+.highlight {
+    color: var(--turquoise);
+    font-weight: 700;
+}
+
+/* Icon actions */
+.icon-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.icon-actions a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 8px;
+    background: rgba(46, 196, 182, 0.12);
+
+    color: var(--sea-blue);
+    transition: all 0.2s ease;
+}
+
+.icon-actions a:hover {
+    background: var(--turquoise);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Delete icon special */
+.delete-icon {
+    color: #c0392b;
+}
+
+.icon-actions a:hover .delete-icon {
+    color: white;
+}
+
+.stats-row {
+    display: flex;
+    gap: 2rem;
+    margin: 2rem 3rem;
+    flex-wrap: wrap;
+}
+
+.stat-box {
+    flex: 1;
+    min-width: 240px;
+
+    background: var(--soft-white);
+    padding: 1.5rem;
+    border-radius: 16px;
+
+    box-shadow: 0 12px 30px var(--shadow);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px var(--shadow);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #6b7c93;
+    margin-bottom: 0.4rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    color: var(--deep-blue);
+    margin-bottom: 0.3rem;
+}
+
+.stat-subtext {
+    font-size: 0.8rem;
+    color: #8aa0b5;
+}
