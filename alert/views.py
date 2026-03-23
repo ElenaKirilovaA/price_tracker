@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.template.context_processors import request
@@ -123,10 +123,16 @@ class DisplayAppUserArchiveAlert(LoginRequiredMixin, AppUserQuerysetMixin, Displ
    pass
 
 
-class ArchiveAlertInfo(LoginRequiredMixin, AppUserQuerysetMixin, DetailView):
+class ArchiveAlertInfo(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = ArchiveAlert
     template_name = 'alerts/info_single_archive.html'
     context_object_name = 'alert'
+
+    def test_func(self):
+        user = self.request.user
+        archive = self.get_object()
+
+        return user == archive.user or user.has_perm('alert.view_archivealert')
 
 
     def get_context_data(self,  **kwargs):

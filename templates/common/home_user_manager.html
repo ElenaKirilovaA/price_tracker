@@ -1,0 +1,48 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}User Manager Dashboard{% endblock %}
+
+{% block body %}
+
+
+    <section class="moderator-summary">
+        <h2>User Manager Dashboard</h2>
+     <a href="{% url 'alert:history_list' %}" class="hvr">Successful tracks</a>
+
+        <!-- TABLE -->
+        <div class="table-wrapper">
+            <table class="dashboard-table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Alerts</th>
+                        <th>Saved Money</th>
+                        <th>Links</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pk, user_data in context_mapper.items %}
+                    <tr>
+                        <td>{{ pk }}</td>
+                        <td>{{ user_data.name }}</td>
+                        <td>{{ user_data.email }}</td>
+                        <td>{{ user_data.alerts }}</td>
+                        <td>{{ user_data.saved_money }}</td>
+                        <td><a href="{% url 'accounts:profile-user' pk=pk %}">View profile</a></td>
+                        <td><a href="{% url 'accounts:profile-delete-manager' pk=pk %}">
+                            <span class="material-icons delete-icon">delete</span>
+                        </a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    {% endblock %}
+</body>
+</html>
