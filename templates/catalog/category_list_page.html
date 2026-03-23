@@ -42,8 +42,10 @@
             <p>Total products: {{ category.product_count }}</p>
             <a href="{% url 'catalog:info' category.id %}" class="hvr">View Category</a>
             <hr>
+            {% if request.user.is_staff or perms.product.change_product %}
             <a href="{% url 'catalog:edit' category.id %}" class="btn"> Edit</a>
             <a href="{% url 'catalog:delete' category.id %}" class="btn btn-danger">Delete</a>
+            {% endif %}
 
         </div>
     {% empty %}
