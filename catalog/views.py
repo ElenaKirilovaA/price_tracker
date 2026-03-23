@@ -93,7 +93,6 @@ class DeleteCategory(UserPassesTestMixin, DeleteView):
             messages.error(self.request,f'The {category} cannot be deleted. There are related objects.')
         return redirect(self.success_url)
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category = self.get_object()
@@ -154,7 +153,6 @@ def tag_bulk_delete(request:HttpRequest) -> HttpResponse:
         Tag.objects.filter(id__in=tags).delete()
 
     return redirect('product:create')
-
 
 def category_info(request:HttpRequest, pk: int) -> HttpResponse:
     category = (Category.objects

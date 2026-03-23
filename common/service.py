@@ -1,4 +1,6 @@
 from django.db.models import Avg, F, Sum, Count
+
+from accounts.models import AppUser
 from alert.models import Alert, ArchiveAlert
 from catalog.models import Category, Tag
 from product.models import Product
@@ -46,3 +48,25 @@ def get_context_date_moderator_home():
     }
 
     return {**base_context, **moderator_context}
+
+def get_context_data_appuser_manager():
+    users = AppUser.objects.all()
+
+    context_mapper = {}
+
+    for user in users:
+        name = user.get_full_name()
+        email = user.email
+        user_alerts = user.alerts.count()
+        saved_money = sum((a.started_price_eur - a.triggered_price_eur) for a in user.archives.all())
+        context_mapper[user.pk] = {
+            'name': name,
+            'email': email,
+            'alerts': user_alerts,
+            'saved_money': saved_money,
+        }
+
+    return {'context_mapper': context_mapper}
+# {2: {'name': 'Logan Ninefingers', 'email': 'moderator@moderator.com', 'alerts': 0, 'saved_money': 0},
+# 1: {'name': '', 'email': 'admin@admin.com', 'alerts': 0, 'saved_money': 0}, 3: {'name': 'Elena Kirilova', 'email': 'kirilovae@rocketmail.com', 'alerts': 1, 'saved_money': Decimal('2.27')}, 4: {'name': 'AppUser-Manager', 'email': 'motiday441@pazard.com', 'alerts': 0, 'saved_money': Decimal('2.00')}}
+

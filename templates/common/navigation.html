@@ -21,7 +21,10 @@
                     <a href="{% url 'accounts:login' %}"><strong>Login</strong></a>
                     <a href="{% url 'accounts:create_user' %}"><strong>Register</strong></a>
                 {% endif %}
+                {% if request.user.is_staff %}
                     <a href='{% url "catalog:create" %}'><strong> Add Category</strong></a>
+                    <a href='{% url "store:main" %}'><strong> Stores </strong></a>
+                {% endif %}
 
             </nav>
         </div>

@@ -45,7 +45,7 @@
    <hr>
 
 <div class="actions">
-   {% if request.user == product.user or request.user.is_staff or perms.product.change_product %}
+   {% if request.user == product.user or request.user.is_staff or perms.product.view_archivealert %}
         <a href="{% url 'product:edit' product.slug %}" class="btn">Edit</a>
        {% endif %}
    {% if request.user == product.user or request.user.is_staff %}
