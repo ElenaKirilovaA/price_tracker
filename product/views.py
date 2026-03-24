@@ -34,10 +34,7 @@ class AppUserProductList(LoginRequiredMixin, AppUserQuerysetMixin, ProductList):
 
 class AppUserFavouriteProductList(AppUserProductList):
     def get_queryset(self):
-        qs = super().get_queryset()
-        qs = self.request.user.favourite_product.all()
-
-        return qs
+        return self.request.user.favourite_product.all()
 
 class AddProduct(LoginRequiredMixin, CreateView):
     model = Product

@@ -10,7 +10,6 @@
     {% csrf_token %}
 
     <button type="submit" class="like-btn">
-
     <span>{{ product.users_favorite.count }}</span>
         <span class="material-icons">
             {% if product in user.favourite_product.all %}
