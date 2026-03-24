@@ -1,5 +1,9 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.db.models import Count
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from common.mixins import AppUserQuerysetMixin
@@ -17,14 +21,23 @@ class ProductList(ListView):
     ordering = '-created_at'
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data()
         context['page_title'] = 'Product List'
 
+
         return context
+
 
 class AppUserProductList(LoginRequiredMixin, AppUserQuerysetMixin, ProductList):
     pass
 
+class AppUserFavouriteProductList(AppUserProductList):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = self.request.user.favourite_product.all()
+
+        return qs
 
 class AddProduct(LoginRequiredMixin, CreateView):
     model = Product
@@ -98,3 +111,18 @@ class SingleProduct(LoginRequiredMixin, DetailView):
         context['page_title'] = f'{self.object.title}'
 
         return context
+
+@login_required
+def liked_product(request: HttpRequest, slug: str) -> HttpResponse:
+    user = request.user
+    current_product = Product.objects.get(slug=slug)
+
+    if current_product in user.favourite_product.all():
+        user.favourite_product.remove(current_product)
+
+    else:
+        user.favourite_product.add(current_product)
+
+    return redirect('product:list')
+
+

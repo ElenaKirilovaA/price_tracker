@@ -527,6 +527,19 @@ form .btn-danger {
 
     box-shadow: 0 6px 16px rgba(192, 57, 43, 0.4);
 }
+
+.like-form {
+    display: inline;   /* prevents line breaks */
+    margin: 0;
+    padding: 0;
+}
+
+.like-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
 .btn-secondary {
     background: linear-gradient(
         135deg,

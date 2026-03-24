@@ -3,9 +3,28 @@
 {% load no_value %}
 {% block body %}
 
+
 <div class="card" id="{{ product.id }}">
 
+<form action="{% url 'product:liked_product' product.slug %}" method="post" class="like-form">
+    {% csrf_token %}
+
+    <button type="submit" class="like-btn">
+
+    <span>{{ product.users_favorite.count }}</span>
+        <span class="material-icons">
+            {% if product in user.favourite_product.all %}
+                favorite
+            {% else %}
+                favorite_border
+            {% endif %}
+        </span>
+    </button>
+
+</form>
+
     <h2>{{ product }}</h2>
+
 
     {% if product.is_tracking %}
         <p><strong>Status:</strong> <span style="color:#2ec4b6;">Tracking active</span></p>
@@ -37,6 +56,7 @@
     </p>
 
     <hr>
+        <strong>Store:</strong> {{ product.store}}<br>
 
     <a href="{{ product.url }}" target="_blank" rel="noopener noreferrer" class="hvr">🔗 View product</a>
 
@@ -52,7 +72,6 @@
         <a href="{% url 'product:delete' product.slug %}" class="btn btn-danger">Delete</a>
    {% endif %}
     <a href="{% url 'alert:check' product.id %}" class="btn">Simulate</a>
-
 
 </div>
 

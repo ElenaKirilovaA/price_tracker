@@ -30,9 +30,10 @@
 
         </div>
     </div>
+<br>
 
     <div>
-            <form action="{% url 'accounts:logout' %}" method="post">
+            <form action="{% url 'accounts:logout' %}" method="post" class="like-form">
                 {% csrf_token %}
                 <button type="submit" class="btn logout-btn">
                     Logout

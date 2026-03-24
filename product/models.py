@@ -65,14 +65,12 @@ class Product(BaseInfoTitle, BaseInfoDescription, CreatedAtMixin):
     def is_tracking(self):
         return self.alerts.filter(is_active=True).exists()
 
-
     def save(self, *args, **kwargs):
         if not self.slug:
             current_str = f'{self.title}-{self.category.title}'
             self.slug = slugify(current_str[:100])
 
         super().save(*args, **kwargs)
-
 
     def __str__(self):
         return f"{self.title} - {self.current_price} {self.currency}"

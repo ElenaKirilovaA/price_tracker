@@ -20,7 +20,7 @@
             <ul class="dashboard-list">
                 {% for product in products %}
                     <li>
-                        <strong>{{ product.name }}</strong><br>
+                        <strong>{{ product.title }}</strong><br>
                         Current price: {{ product.current_price }} €
                     </li>
                 {% endfor %}
@@ -31,6 +31,26 @@
         {% else %}
             <p>No products yet.</p>
         {% endif %}
+    <hr>
+      <div class="section-header">
+            <h2>Favourite Products</h2>
+        </div>
+    {% if favourite_products %}
+
+          <ul class="dashboard-list">
+                {% for product in favourite_products %}
+                    <li>
+                        <strong>{{ product.title }}</strong><br>
+                        Current price: {{ product.current_price }} €
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <a href="{% url 'product:product_favourite_list' %}" class="hvr">View your favourites</a>
+    {% else %}
+            <p>No products yet.</p>
+
+    {% endif %}
 
     </div>
 
