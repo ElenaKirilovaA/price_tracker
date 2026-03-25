@@ -22,11 +22,10 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            if self.request.user.groups.filter(name='Moderator').exists():
-                context.update(get_context_date_moderator_home())
-            elif self.request.user.groups.filter(name='AppUser-manager').exists():
-                context.update(get_context_data_appuser_manager())
+        if self.request.user.groups.filter(name='Moderator').exists():
+            context.update(get_context_date_moderator_home())
+        elif self.request.user.groups.filter(name='AppUser-manager').exists():
+            context.update(get_context_data_appuser_manager())
         else:
             context.update(get_context_date_home())
 

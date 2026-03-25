@@ -55,11 +55,12 @@ class ProductCreateForm(ProductBasicForm):
 
         store = cleaned_data.get('store')
         url = cleaned_data.get('url')
+        pattern = r'https:\/\/kateo\.bg\/products\/[a-z0-9-]+\/?\?variant=\d{14}'
 
         if store and url:
             if store.url not in url:
                 self.add_error('url', 'URL not from the selected store')
-            elif not re.search(r'/^\/products\/[a-z-]+\?variant=\d{14}(&|$)', url):
+            elif not re.search(pattern, url):
                 self.add_error('url', 'URL doesn show a single product. Select one product only')
 
         return cleaned_data

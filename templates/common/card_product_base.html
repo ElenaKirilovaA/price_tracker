@@ -9,7 +9,7 @@
 <form action="{% url 'product:liked_product' product.slug %}" method="post" class="like-form">
     {% csrf_token %}
 
-    <button type="submit" class="like-btn">
+    <button type="submit" class="like-btn" style="color:  #0f2a44">
     <span>{{ product.users_favorite.count }}</span>
         <span class="material-icons">
             {% if product in user.favourite_product.all %}
@@ -64,7 +64,7 @@
    <hr>
 
 <div class="actions">
-   {% if request.user == product.user or request.user.is_staff or perms.product.view_archivealert %}
+   {% if request.user == product.user or request.user.is_staff or perms.product.change_product %}
         <a href="{% url 'product:edit' product.slug %}" class="btn">Edit</a>
        {% endif %}
    {% if request.user == product.user or request.user.is_staff %}
