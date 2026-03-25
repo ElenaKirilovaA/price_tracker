@@ -12,7 +12,12 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+
+from celery.schedules import crontab
 from dotenv import load_dotenv
+
+import alert
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -49,6 +54,7 @@ INSTALLED_APPS = [
     'accounts',
     'store',
     'rest_framework',
+    'celery',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +167,22 @@ LOGIN_URL = 'accounts:login'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
+
+# settings.py
+...
+
+ # Celery
+# CELERY_BROKER_URL = 'redis://127.0.0.1:6379' # Locally
+CELERY_BROKER_URL = 'redis://default:EtI10K12LvlcF2IrZTuLLQQrrg5y9LX4@redis-19125.c56.east-us.azure.cloud.redislabs.com:19125/0' # Redis Cloud Your Redis URL
+CELERY_RESULT_BACKEND = 'redis://default:EtI10K12LvlcF2IrZTuLLQQrrg5y9LX4@redis-19125.c56.east-us.azure.cloud.redislabs.com:19125/0' # Redis Cloud
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Sofia'
+
+CELERY_BEAT_SCHEDULE = {
+    "check-alerts-every-30-min": {
+        "task": "alert.tasks.check_alerts",  # виж по-долу
+        "schedule": crontab(minute="*/3"),
+    }
+}

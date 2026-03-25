@@ -13,8 +13,6 @@ urlpatterns = [
         path('list/', views.DisplayActiveAlerts.as_view(), name='alert_list'),
         path('list/user/', views.DisplayAppUserActiveAlerts.as_view(), name='user-alert_list'),
         path('create/', views.AlertCreate.as_view(), name='create'),
-        path('<int:product_id>/check/', views.check_alerts, name='check'),
-
         path('<int:pk>/', include(paths)),
         path('past-alerts/', views.DisplayArchivedAlerts.as_view(), name='history_list'),
         path('user-past-alerts/', views.DisplayAppUserArchiveAlert.as_view(), name='user-history_list'),

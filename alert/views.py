@@ -1,3 +1,4 @@
+from celery import shared_task
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.http import HttpRequest, HttpResponse
@@ -8,7 +9,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, D
 
 from alert.forms import AlertCreateForm, AlertEditForm, AlertDeleteForm
 from alert.models import Alert, ArchiveAlert
-from alert.service import manage_simulation_tracking, set_timeline_checks
+from alert.tasks import manage_simulation_tracking, set_timeline_checks
 from django.core.paginator import Paginator
 
 from common.mixins import AppUserQuerysetMixin
@@ -74,18 +75,18 @@ class AlertDelete(LoginRequiredMixin, AppUserQuerysetMixin, DeleteView):
 
         return redirect(self.success_url)
 
-
-def check_alerts(request: HttpRequest, product_id:int) -> HttpResponse:
-    alerts = Alert.objects.filter(product_id=product_id, is_active=True)
-
-    for alert in alerts:
-        set_timeline_checks(alert)
-
-        if alert.price_is_dropped:
-            manage_simulation_tracking(alert)
-            messages.success(request, 'Your turn. Check your email')
-
-    return redirect('product:product_list')
+# @shared_task
+# def check_alerts(request: HttpRequest, product_id:int) -> HttpResponse:
+#     alerts = Alert.objects.filter(is_active=True)
+#
+#     for alert in alerts:
+#         set_timeline_checks(alert)
+#
+#         if alert.price_is_dropped:
+#             manage_simulation_tracking.delay(alert.id)
+#             messages.success(request, 'Your turn. Check your email')
+#
+#     return redirect('product:product_list')
 
 
 class DisplayActiveAlerts(ListView):

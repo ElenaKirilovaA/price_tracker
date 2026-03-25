@@ -70,7 +70,6 @@
    {% if request.user == product.user or request.user.is_staff %}
         <a href="{% url 'product:delete' product.slug %}" class="btn btn-danger">Delete</a>
    {% endif %}
-    <a href="{% url 'alert:check' product.id %}" class="btn">Simulate</a>
 
 </div>
 
