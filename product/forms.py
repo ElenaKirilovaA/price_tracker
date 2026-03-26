@@ -36,7 +36,7 @@ class ProductCreateForm(ProductBasicForm):
 
     def save(self, commit=True):
         product = super().save(commit=False)
-        info = KateoStoreScraper.get_price(product.url)
+        info = KateoStoreScraper.get_product_info(product.url)
 
         if info:
             product.title = info.get('title')

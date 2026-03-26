@@ -75,20 +75,6 @@ class AlertDelete(LoginRequiredMixin, AppUserQuerysetMixin, DeleteView):
 
         return redirect(self.success_url)
 
-# @shared_task
-# def check_alerts(request: HttpRequest, product_id:int) -> HttpResponse:
-#     alerts = Alert.objects.filter(is_active=True)
-#
-#     for alert in alerts:
-#         set_timeline_checks(alert)
-#
-#         if alert.price_is_dropped:
-#             manage_simulation_tracking.delay(alert.id)
-#             messages.success(request, 'Your turn. Check your email')
-#
-#     return redirect('product:product_list')
-
-
 class DisplayActiveAlerts(ListView):
     model = Alert
     template_name = 'alerts/alert_list.html'

@@ -181,8 +181,9 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Sofia'
 
 CELERY_BEAT_SCHEDULE = {
-    "check-alerts-every-30-min": {
-        "task": "alert.tasks.check_alerts",  # виж по-долу
+    "check-tracking-products-every-30-min": {
+        "task": "product.tasks.check_price",
         "schedule": crontab(minute="*/3"),
     }
 }
+SCRAPER_TEST_MODE = True
