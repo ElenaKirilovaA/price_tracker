@@ -23,6 +23,7 @@
     color: white;
 }
 
+
 .dashboard-table th {
     text-align: left;
     padding: 14px 18px;
@@ -129,4 +130,43 @@
 .stat-subtext {
     font-size: 0.8rem;
     color: #8aa0b5;
+}
+
+/* Header layout */
+.table-header-main {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+/* Title */
+.table-title {
+    font-weight: 600;
+    color: white;
+}
+
+/* Count badge */
+.table-count {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+.table-header-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+}
+
+/* make header icons visible on dark bg */
+.dashboard-table thead a {
+    background: rgba(255,255,255,0.15);
+    color: white;
+}
+
+.dashboard-table thead a:hover {
+    background: var(--turquoise);
+    color: white;
 }

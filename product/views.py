@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
-from django.db.models import Count
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
+from django.db.models import ProtectedError, RestrictedError
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -96,7 +97,15 @@ class DeleteProduct(UserPassesTestMixin, DeleteView):
         user = self.request.user
         return user == product.user or user.is_staff
 
+    def form_valid(self, form):
+        product = self.get_object()
 
+        try:
+            product.delete()
+            messages.success(self.request,f'The {product} has been deleted.')
+        except (ProtectedError, RestrictedError):
+            messages.error(self.request,f'The {product} cannot be deleted. The product is tracking by our users.')
+        return redirect(self.success_url)
 
 
 class SingleProduct(LoginRequiredMixin, DetailView):

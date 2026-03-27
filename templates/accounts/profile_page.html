@@ -7,59 +7,86 @@
 <div class="profile-container">
     <h1>{{ profile.user.get_full_name|capfirst }} Profile</h1>
 
+    <!-- Profile Card -->
     <div class="profile-card">
-
         <div class="profile-info">
-            <img src="{{ profile.avatar|default:'/static/img/alt_picture.png' }}" alt="Profile avatar" width="65" height="65">
+            <img src="{{ profile.avatar|default:'/static/img/alt_picture.png' }}" alt="Profile avatar" class="avatar">
             <p><strong>Username:</strong> {{ profile.user.get_username }}</p>
             <p><strong>Email:</strong> {{ profile.user.email }}</p>
             <p><strong>First name:</strong> {{ profile.user.first_name|capfirst }}</p>
             <p><strong>Last name:</strong> {{ profile.user.last_name|capfirst }}</p>
+            <p><strong>Date of birth:</strong> {{ profile.date_of_birth|date:"d M Y"|default:'no info' }}</p>
             <p><strong>Joined:</strong> {{ profile.user.date_joined|date:"d M Y" }}</p>
         </div>
 
+        <!-- Action Buttons -->
+
+    <br>
+
         <div class="profile-actions">
-
-            <a href="{% url 'accounts:dashboard' %}" class="btn">
-                Dashboard
+            <a href="{% url 'accounts:dashboard' %}" title="Dashboard">
+                <span class="material-icons">dashboard</span>
             </a>
 
-            <a href="{% url 'accounts:profile-edit' %}" class="btn">
-                Edit Profile
+            <a href="{% url 'accounts:profile-edit' %}" title="Edit Profile">
+                <span class="material-icons">edit</span>
             </a>
 
-        </div>
-    </div>
-<br>
-
-    <div>
-            <form action="{% url 'accounts:logout' %}" method="post" class="like-form">
-                {% csrf_token %}
-                <button type="submit" class="btn logout-btn">
-                    Logout
-                </button>
-                {% if request.user == profile.user %}
-         <a href="{% url 'accounts:profile-delete' %}" class="btn btn-danger">
-                Delete Profile
+              {% if request.user == profile.user %}
+            <a href="{% url 'accounts:profile-delete' %}" title="Delete Profile">
+                <span class="material-icons delete-icon">delete</span>
             </a>
-    {% elif perms.accounts.delete_appuser %}
-      <a href="{% url 'accounts:profile-delete-manager' pk=profile.user.pk %}" class="btn btn-danger">
-                Delete Profile
+        {% elif perms.accounts.delete_appuser %}
+            <a href="{% url 'accounts:profile-delete-manager' pk=profile.user.pk %}" title="Delete Profile">
+                <span class="material-icons delete-icon">delete</span>
             </a>
         {% endif %}
-            </form>
-
-{#pk=profile.user.pk#}
 
         </div>
+    </div>
+
+    <!-- Add Product / Category / Track -->
+<div class="profile-actions">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+        <h3>Add</h3>
+        <h4>Product  •   Tags   •  Track</h4>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <div style="text-align: center;">
+                <a href="{% url 'product:create' %}" title="Add Product">
+                    <span class="material-icons">add</span>
+                </a>
+
+            </div>
+
+            <div style="text-align: center;">
+                <a href="{% url 'catalog:tag_create' %}" title="Add tag">
+                    <span class="material-icons">add</span>
+                </a>
+
+            </div>
+
+            <div style="text-align: center;">
+                <a href="{% url 'alert:create' %}" title="Add Track">
+                    <span class="material-icons">add</span>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
 
     </div>
 
- <div id="circle">
+    <!-- Savings Circle -->
+    <div id="circle">
         <h1>You saved</h1>
         <h2>{{ money_saved }} €</h2>
         <small>Total real money saved</small>
     </div>
+
 </section>
+
+
+
 
 {% endblock %}

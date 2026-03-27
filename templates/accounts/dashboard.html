@@ -2,107 +2,179 @@
 
 {% block content %}
 
-<div class="container">
+<section class="moderator-summary">
 
-    <h1>Dashboard</h1>
-    <p>Welcome, {{ request.user.profile }}!</p>
-    <hr>
+    <h2>Dashboard</h2>
+    <p class="muted">Welcome, {{ request.user.get_full_name }}!</p>
 
-    <!-- PRODUCTS SECTION -->
-    <div class="dashboard-section">
+    <!-- PRODUCTS -->
+    <div class="table-wrapper">
+        <table class="dashboard-table">
+            <thead>
+                <tr>
+                  <th>
+    <div class="table-header-main">
+        <span class="table-title">Products added by you:</span>
+        <span class="table-count">{{ products|length }}</span>
+    </div>
+</th>
+         <th class="icon-actions">
+                        <a href="{% url 'product:create' %}">
+                            <span class="material-icons">add</span>
+                        </a>
+                        <a href="{% url 'product:product_list' %}">
+                            <span class="material-icons">visibility</span>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
 
-        <div class="section-header">
-            <h2>My Products</h2>
-            <a href="{% url 'product:create' %}" class="btn">+ Add Product</a>
-        </div>
+            <tbody>
+                {% if products %}
+                    {% for product in products %}
+                    <tr>
+                        <td>
+                            <strong>{{ product.title }}</strong><br>
+                            <span class="muted">{{ product.current_price }} €</span>
+                        </td>
+                        <td class="icon-actions">
 
-        {% if products %}
-            <ul class="dashboard-list">
-                {% for product in products %}
-                    <li>
-                        <strong>{{ product.title }}</strong><br>
-                        Current price: {{ product.current_price }} €
-                    </li>
-                {% endfor %}
-            </ul>
-
-            <a href="{% url 'product:product_list' %}" class="hvr">View all products</a>
-
-        {% else %}
-            <p>No products yet.</p>
-        {% endif %}
-    <hr>
-      <div class="section-header">
-            <h2>Favourite Products</h2>
-        </div>
-    {% if favourite_products %}
-
-          <ul class="dashboard-list">
-                {% for product in favourite_products %}
-                    <li>
-                        <strong>{{ product.title }}</strong><br>
-                        Current price: {{ product.current_price }} €
-                    </li>
-                {% endfor %}
-            </ul>
-
-            <a href="{% url 'product:product_favourite_list' %}" class="hvr">View your favourites</a>
-    {% else %}
-            <p>No products yet.</p>
-
-    {% endif %}
-
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td>No products yet.</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
     </div>
 
-    <hr>
 
-    <!-- ALERTS SECTION -->
-    <div class="dashboard-section">
+    <!-- FAVOURITE PRODUCTS -->
+    <div class="table-wrapper">
+        <table class="dashboard-table">
+            <thead>
+                <tr>
 
-        <div class="section-header">
-            <h2>My Alerts</h2>
-            <a href="{% url 'alert:create' %}" class="btn">+ Add Alert</a>
-        </div>
-
-        {% if alerts %}
-            <ul class="dashboard-list">
-                {% for alert in alerts %}
-                    <li>
-                        {{ alert.product.name }} <br>
-                        Target price: {{ alert.target_price }} €
-                    </li>
-                {% endfor %}
-            </ul>
-
-            <a href="{% url 'alert:user-alert_list' %}"  class="hvr">View all alerts</a>
-
-        {% else %}
-            <p>No alerts yet.</p>
-        {% endif %}
-        <hr>
-    <div class="dashboard-section">
-     <div class="section-header">
-         <h2>My successful tracks</h2>
-     </div>
-        {% if archives %}
-        <ul class="dashboard-list">
-                {% for archive in archives %}
-                    <li>
-                        {{ archive.product_title }} <br>
-                        Saved money {{ archive.saved_money_eur }} €
-                    </li>
-                {% endfor %}
-            </ul>
-
-            <a href="{% url 'alert:user-history_list' %}"  class="hvr">Successful tracks</a>
-
-        {% else %}
-            <p>No alerts yet.</p>
-        {% endif %}
-
+                    <th>
+                            <div class="table-header-main">
+        <span class="table-title">Your Favourite Products:</span>
+        <span class="table-count">{{ favourite_products|length }}</span>
     </div>
+                    </th>
+                    <th class="icon-actions">
+                        <a href="{% url 'product:product_favourite_list' %}">
+                            <span class="material-icons">visibility</span>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% if favourite_products %}
+                    {% for product in favourite_products %}
+                    <tr>
+                        <td>
+                            <strong>{{ product.title }}</strong><br>
+                            <span class="muted">{{ product.current_price }} €</span>
+                        </td>
+                        <td class="icon-actions">
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td>No favourite products yet.</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
     </div>
 
-</div>
+
+    <!-- ALERTS -->
+    <div class="table-wrapper">
+        <table class="dashboard-table">
+            <thead>
+                <tr>
+                    <th>
+                       <div class="table-header-main">
+        <span class="table-title">Your tracks:</span>
+        <span class="table-count">{{ alerts|length }}</span>
+    </div>
+                    </th>
+                    <th class="icon-actions">
+                        <a href="{% url 'alert:create' %}">
+                            <span class="material-icons">add</span>
+                        </a>
+                        <a href="{% url 'alert:user-alert_list' %}">
+                            <span class="material-icons">visibility</span>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% if alerts %}
+                    {% for alert in alerts %}
+                    <tr>
+                        <td>
+                            <strong>{{ alert.product.name }}</strong><br>
+                            <span class="muted">
+                                Target: {{ alert.target_price }} €
+                            </span>
+                        </td>
+                        <td class="icon-actions">
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td>No alerts yet.</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- SUCCESSFUL TRACKS -->
+    <div class="table-wrapper">
+        <table class="dashboard-table">
+            <thead>
+                <tr>
+                    <th>
+                         <div class="table-header-main">
+        <span class="table-title">Your Successful tracks:</span>
+        <span class="table-count">{{ archives|length }}</span>
+    </div>
+                    </th>
+                    <th class="icon-actions">
+<a href="{% url 'alert:user-history_list' %}">
+                            <span class="material-icons">visibility</span>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% if archives %}
+                    {% for archive in archives %}
+                    <tr>
+                        <td>
+                            <strong>{{ archive.product_title }}</strong><br>
+                            <span class="highlight">
+                                Saved {{ archive.saved_money_eur }} €
+                            </span>
+                        </td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td>No successful tracks yet.</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+</section>
 
 {% endblock %}

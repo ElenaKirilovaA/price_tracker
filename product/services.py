@@ -10,6 +10,7 @@ from common.currency import symbol_to_currency
 # url = 'https://kateo.bg/products/sacha-care-casse-control-komplekt-za-kosa-protiv-nakasvane-500ml?variant=55511543218562'
 
 def get_price(url: str) -> dict or None:
+    # Test mode -> skip real scraping and return a random fake price
     if settings.SCRAPER_TEST_MODE:
         price_random = random.randint(20, 150)
         price = Decimal(str(price_random))

@@ -84,6 +84,7 @@ class AppUserProfileView(LoginRequiredMixin, UserPassesTestMixin ,DetailView):
             )
         )
         context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Profile'
         context['money_saved'] = archives['saved_money_db'] or 0
         return context
 

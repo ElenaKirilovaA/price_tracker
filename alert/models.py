@@ -52,7 +52,7 @@ class Alert(CreatedAtMixin):
     )
     product = models.ForeignKey(
         to=Product,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='alerts',
     )
     user = models.ForeignKey(
