@@ -8,7 +8,7 @@ from common.mixins import CreatedAtMixin, BaseInfoTitle, BaseInfoDescription
 
 class Category(CreatedAtMixin, BaseInfoTitle, BaseInfoDescription):
     card_image = models.ImageField(
-        upload_to='post_images/',  # it can be uploaded to cloud-> show the path to cloud
+        upload_to='post_images/',
         blank=True,
         null=True,
     )

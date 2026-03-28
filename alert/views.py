@@ -12,7 +12,7 @@ from alert.models import Alert, ArchiveAlert
 from alert.tasks import manage_simulation_tracking, set_timeline_checks
 from django.core.paginator import Paginator
 
-from common.mixins import AppUserQuerysetMixin
+from common.mixins import AppUserQuerysetMixin, PageTitleMixin
 
 
 # Create your views here.
@@ -56,14 +56,14 @@ class AlertEdit(LoginRequiredMixin, AppUserQuerysetMixin, UpdateView):
         return context
 
 
-class AlertDelete(LoginRequiredMixin, AppUserQuerysetMixin, DeleteView):
+class AlertDelete(LoginRequiredMixin, AppUserQuerysetMixin, PageTitleMixin, DeleteView):
     model = Alert
     template_name = 'common/form_delete_category.html'
     success_url = reverse_lazy('alert:alert_list')
+    page_title = 'Delete track'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Delete track'
         context['form'] = AlertDeleteForm(instance=self.object)
 
         return context
@@ -75,42 +75,34 @@ class AlertDelete(LoginRequiredMixin, AppUserQuerysetMixin, DeleteView):
 
         return redirect(self.success_url)
 
-class DisplayActiveAlerts(ListView):
+class DisplayActiveAlerts(PageTitleMixin, ListView):
     model = Alert
     template_name = 'alerts/alert_list.html'
+    page_title = 'All tracks'
 
     def get_queryset(self):
         return Alert.objects.get_active_alerts()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['page_title'] = 'All tracks'
-
-        return context
 
 
 class DisplayAppUserActiveAlerts(LoginRequiredMixin, AppUserQuerysetMixin, DisplayActiveAlerts):
    pass
 
 
-class DisplayArchivedAlerts(ListView):
+class DisplayArchivedAlerts(PageTitleMixin, ListView):
     model = ArchiveAlert
     template_name = 'alerts/alert_history_list.html'
     ordering = '-alert_finished_at'
     paginate_by = 6
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['page_title'] = f"All successful tracks of {self.request.user}"
-
-        return context
+    def get_page_title(self):
+        return f"All successful tracks of {self.request.user}"
 
 
 class DisplayAppUserArchiveAlert(LoginRequiredMixin, AppUserQuerysetMixin, DisplayArchivedAlerts):
    pass
 
 
-class ArchiveAlertInfo(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+class ArchiveAlertInfo(LoginRequiredMixin, UserPassesTestMixin, PageTitleMixin, DetailView):
     model = ArchiveAlert
     template_name = 'alerts/info_single_archive.html'
     context_object_name = 'alert'
@@ -121,6 +113,8 @@ class ArchiveAlertInfo(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
         return user == archive.user or user.has_perm('alert.view_archivealert')
 
+    def get_page_title(self):
+        return f'Display {self.object.id}'
 
     def get_context_data(self,  **kwargs):
         context = super().get_context_data(**kwargs)
@@ -130,8 +124,6 @@ class ArchiveAlertInfo(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
-        context['page_title'] = f'Display {self.object.id}'
-        context['page_title'] = f'Display {self.object.id}'
         context['timeline'] = page_obj
         context['checks'] = paginator.count
         context['paginator'] = paginator

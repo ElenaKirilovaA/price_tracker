@@ -1,3 +1,5 @@
+from unicodedata import category
+
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Count
@@ -8,16 +10,19 @@ from django.db.models.deletion import ProtectedError, RestrictedError
 from django.urls import reverse_lazy
 from django.utils.timezone import now
 from django.views.decorators.http import require_POST
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from catalog.forms import CategoryCreateForm, CategoryEditForm, CategoryDeleteForm, TagFormSet
 from catalog.models import Category, Tag
 from catalog.service import create_tags
+from common.mixins import PageTitleMixin
+
 
 # Create your views here.
 
-class CatalogOverview(ListView):
+class CatalogOverview(PageTitleMixin, ListView):
     model = Category
     template_name = 'catalog/category_list_page.html'
+    page_title = 'Catalog Overview'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -27,24 +32,18 @@ class CatalogOverview(ListView):
                     deals_count=Count('archives', distinct=True))
                    .order_by('-deals_count', '-product_count', 'title', ))
 
-        context['page_title'] = 'Catalog Overview'
         context['catalog'] = catalog
         context['star_category'] = catalog[0] if catalog else None
 
         return context
 
 
-class AddCategory(UserPassesTestMixin, CreateView):
+class AddCategory(UserPassesTestMixin, PageTitleMixin, CreateView):
     model = Category
     form_class = CategoryCreateForm
     success_url = reverse_lazy('catalog:catalog-overview')
     template_name = 'common/form_base.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['page_title'] = 'Add category'
-
-        return context
+    page_title = 'Add category'
 
     def test_func(self):
         user = self.request.user
@@ -52,18 +51,16 @@ class AddCategory(UserPassesTestMixin, CreateView):
         return user.has_perm('catalog.add_category') or user.is_staff
 
 
-class EditCategory(UserPassesTestMixin, UpdateView):
+class EditCategory(UserPassesTestMixin, PageTitleMixin, UpdateView):
     model = Category
     form_class = CategoryEditForm
     success_url = reverse_lazy('catalog:catalog-overview')
     template_name = 'common/form_base.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        product = self.get_object()
-        context['page_title'] = f'Update {product}'
+    def get_page_title(self):
+        category = self.get_object()
 
-        return context
+        return f'Update {category.title}'
 
     def test_func(self):
         user = self.request.user
@@ -71,7 +68,7 @@ class EditCategory(UserPassesTestMixin, UpdateView):
         return user.has_perm('catalog.change_category') or user.is_staff
 
 
-class DeleteCategory(UserPassesTestMixin, DeleteView):
+class DeleteCategory(UserPassesTestMixin, PageTitleMixin, DetailView):
     model = Category
     form_class = CategoryDeleteForm
     success_url = reverse_lazy('catalog:catalog-overview')
@@ -93,12 +90,10 @@ class DeleteCategory(UserPassesTestMixin, DeleteView):
             messages.error(self.request,f'The {category} cannot be deleted. There are related objects.')
         return redirect(self.success_url)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_page_title(self):
         category = self.get_object()
-        context['page_title'] = f'Delete {category}'
 
-        return context
+        return f'Delete {category}'
 
     def test_func(self):
         user = self.request.user
@@ -154,23 +149,26 @@ def tag_bulk_delete(request:HttpRequest) -> HttpResponse:
 
     return redirect('product:create')
 
-def category_info(request:HttpRequest, pk: int) -> HttpResponse:
-    category = (Category.objects
-                .prefetch_related('products', 'products__alerts', 'products__tag', 'archives')
-                .get(id=pk))
-    last_deal_obj = category.archives.order_by('-alert_finished_at').first()
-    products = category.products.all()
+class CategoryInfo(PageTitleMixin, DetailView):
+    model = Category
+    template_name = 'catalog/current_category_page.html'
 
-    last_deal = None
-    if last_deal_obj:
-        last_deal = (now().date() - last_deal_obj.alert_finished_at.date()).days
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_deal_obj = self.object.archives.order_by('-alert_finished_at').first()
+        products = self.object.products.all()
+
+        last_deal = None
+        if last_deal_obj:
+            last_deal = (now().date() - last_deal_obj.alert_finished_at.date()).days
+
+        context['last_deal'] = last_deal
+        context['products'] = products
+
+        return context
 
 
-    context = {
-        'page_title': f'Category {category.title} - products',
-        'category': category,
-        'last_deal': last_deal,
-        'products': products,
-    }
+    def get_page_title(self):
+        category = self.get_object()
 
-    return render(request, 'catalog/current_category_page.html', context)
+        return f'Category {category} - products',

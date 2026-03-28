@@ -7,7 +7,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from common.mixins import AppUserQuerysetMixin
+from common.mixins import AppUserQuerysetMixin, PageTitleMixin
 from product.forms import ProductCreateForm, ProductEditForm
 from product.models import Product
 
@@ -16,18 +16,11 @@ from product.models import Product
 UserModel = get_user_model()
 
 
-class ProductList(ListView):
+class ProductList(PageTitleMixin, ListView):
     model = Product
     template_name = 'products/product_list.html'
     ordering = '-created_at'
-
-    def get_context_data(self, **kwargs):
-
-        context = super().get_context_data()
-        context['page_title'] = 'Product List'
-
-
-        return context
+    page_title = 'Product List'
 
 
 class AppUserProductList(LoginRequiredMixin, AppUserQuerysetMixin, ProductList):
@@ -37,17 +30,12 @@ class AppUserFavouriteProductList(AppUserProductList):
     def get_queryset(self):
         return self.request.user.favourite_product.all()
 
-class AddProduct(LoginRequiredMixin, CreateView):
+class AddProduct(LoginRequiredMixin, PageTitleMixin, CreateView):
     model = Product
     form_class = ProductCreateForm
     success_url = reverse_lazy('product:product_list')
     template_name = 'products/form_create_product.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['page_title'] = 'Add new product'
-
-        return context
+    page_title = 'Add new product'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -55,18 +43,15 @@ class AddProduct(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class EditProduct(UserPassesTestMixin, UpdateView):
+class EditProduct(UserPassesTestMixin, PageTitleMixin, UpdateView):
     model = Product
     form_class = ProductEditForm
     template_name = 'products/form_create_product.html'
     success_url = reverse_lazy('product:product_list')
     permission_required =  'product.change_product'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['page_title'] = f'Edit product {self.object.title}'
-
-        return context
+    def get_page_title(self):
+        return f'Edit product {self.object.title}'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -74,23 +59,19 @@ class EditProduct(UserPassesTestMixin, UpdateView):
 
         return kwargs
 
-
     def test_func(self):
         product = self.get_object()
         user = self.request.user
         return user == product.user or user.has_perm('product.change_product') or user.is_staff
 
 
-class DeleteProduct(UserPassesTestMixin, DeleteView):
+class DeleteProduct(UserPassesTestMixin, PageTitleMixin, DeleteView):
     model = Product
     template_name = 'common/form_delete_category.html'
     success_url = reverse_lazy('product:product_list')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['page_title'] = f'{self.object.title}'
-
-        return context
+    def get_page_title(self):
+        return f'{self.object.title}'
 
     def test_func(self):
         product = self.get_object()
@@ -108,15 +89,13 @@ class DeleteProduct(UserPassesTestMixin, DeleteView):
         return redirect(self.success_url)
 
 
-class SingleProduct(LoginRequiredMixin, DetailView):
+class SingleProduct(LoginRequiredMixin, PageTitleMixin, DetailView):
     model = Product
     template_name = 'products/product_detail_page.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['page_title'] = f'{self.object.title}'
+    def get_page_title(self):
+        return f'{self.object.title}'
 
-        return context
 
 @login_required
 def liked_product(request: HttpRequest, slug: str) -> HttpResponse:
@@ -130,5 +109,3 @@ def liked_product(request: HttpRequest, slug: str) -> HttpResponse:
         user.favourite_product.add(current_product)
 
     return redirect('product:list')
-
-

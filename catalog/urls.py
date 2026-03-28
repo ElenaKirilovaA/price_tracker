@@ -10,7 +10,7 @@ tag_urls = [
 ]
 
 category_id_urls = [
-    path('info/', views.category_info, name='info'),
+    path('info/', views.CategoryInfo.as_view(), name='info'),
 
     path('edit/', views.EditCategory.as_view(), name='edit'),
     path('delete/', views.DeleteCategory.as_view(), name='delete'),
