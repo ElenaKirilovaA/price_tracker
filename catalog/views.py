@@ -37,6 +37,30 @@ class CatalogOverview(PageTitleMixin, ListView):
 
         return context
 
+class CategoryInfo(PageTitleMixin, DetailView):
+    model = Category
+    template_name = 'catalog/current_category_page.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_deal_obj = self.object.archives.order_by('-alert_finished_at').first()
+        products = self.object.products.all()
+
+        last_deal = None
+        if last_deal_obj:
+            last_deal = (now().date() - last_deal_obj.alert_finished_at.date()).days
+
+        context['last_deal'] = last_deal
+        context['products'] = products
+
+        return context
+
+
+    def get_page_title(self):
+        category = self.get_object()
+
+        return f'Category {category} - products',
+
 
 class AddCategory(UserPassesTestMixin, PageTitleMixin, CreateView):
     model = Category
@@ -148,27 +172,3 @@ def tag_bulk_delete(request:HttpRequest) -> HttpResponse:
         Tag.objects.filter(id__in=tags).delete()
 
     return redirect('product:create')
-
-class CategoryInfo(PageTitleMixin, DetailView):
-    model = Category
-    template_name = 'catalog/current_category_page.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        last_deal_obj = self.object.archives.order_by('-alert_finished_at').first()
-        products = self.object.products.all()
-
-        last_deal = None
-        if last_deal_obj:
-            last_deal = (now().date() - last_deal_obj.alert_finished_at.date()).days
-
-        context['last_deal'] = last_deal
-        context['products'] = products
-
-        return context
-
-
-    def get_page_title(self):
-        category = self.get_object()
-
-        return f'Category {category} - products',
