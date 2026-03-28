@@ -1,6 +1,6 @@
 from django import forms
 from product.models import Product
-from product.services import KateoStoreScraper
+from product.services import KateoStoreScraper, dispatch_store, get_pattern
 import re
 
 
@@ -34,9 +34,26 @@ class ProductCreateForm(ProductBasicForm):
     class Meta(ProductBasicForm.Meta):
         fields = ['url', 'category', 'tag', 'store']
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        store = cleaned_data.get('store')
+        url = cleaned_data.get('url')
+
+        if store and url:
+            pattern = get_pattern(store.title)
+
+            if store.url not in url:
+                self.add_error('url', 'URL not from the selected store')
+            elif not re.search(pattern, url):
+                self.add_error('url', 'URL doesn show a single product. Select one product only')
+
+        return cleaned_data
+
+
     def save(self, commit=True):
         product = super().save(commit=False)
-        info = KateoStoreScraper.get_product_info(product.url)
+        info = dispatch_store(product.url, product.store.title)
 
         if info:
             product.title = info.get('title')
@@ -48,22 +65,6 @@ class ProductCreateForm(ProductBasicForm):
             product.save()
 
         return product
-
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        store = cleaned_data.get('store')
-        url = cleaned_data.get('url')
-        pattern = r'https:\/\/kateo\.bg\/products\/[a-z0-9-]+\/?\?variant=\d{14}'
-
-        if store and url:
-            if store.url not in url:
-                self.add_error('url', 'URL not from the selected store')
-            elif not re.search(pattern, url):
-                self.add_error('url', 'URL doesn show a single product. Select one product only')
-
-        return cleaned_data
 
 
 class ProductEditForm(ProductBasicForm):
