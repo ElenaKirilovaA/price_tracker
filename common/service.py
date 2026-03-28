@@ -1,4 +1,5 @@
-from django.db.models import Avg, F, Sum, Count
+from django.db.models import Avg, F, Sum, Count, ExpressionWrapper, DecimalField
+
 
 from accounts.models import AppUser
 from alert.models import Alert, ArchiveAlert
@@ -7,7 +8,7 @@ from product.models import Product
 from store.models import Store
 
 
-def get_context_date_home():
+def get_context_date_home() -> dict:
     active_tracks_count = Alert.objects.get_active_alerts()
     top_alerts = ArchiveAlert.objects.get_archives_with_saved_money()
     results = top_alerts.aggregate(total=Sum('saved_money_db'),
@@ -33,12 +34,11 @@ def get_context_date_home():
 
     return context_map
 
-def get_context_date_moderator_home():
+def get_context_date_moderator_home() -> dict:
     products = Product.objects.count()
     categories = Category.objects.count()
     tags = Tag.objects.count()
     stores = Store.objects.count()
-
     base_context = get_context_date_home()
     moderator_context = {
         'products': products,
@@ -49,24 +49,22 @@ def get_context_date_moderator_home():
 
     return {**base_context, **moderator_context}
 
-def get_context_data_appuser_manager():
+def get_context_data_appuser_manager() -> dict:
     users = AppUser.objects.all()
-
     context_mapper = {}
 
     for user in users:
         name = user.get_full_name()
         email = user.email
         user_alerts = user.alerts.count()
-        saved_money = sum((a.started_price_eur - a.triggered_price_eur) for a in user.archives.all())
+        saved_money = (ArchiveAlert.objects
+                       .filter(user=user)
+                       .aggregate(saved_money_db=Sum(ExpressionWrapper(F('started_price_eur') - F('triggered_price_eur'), output_field=DecimalField()))))
         context_mapper[user.pk] = {
             'name': name,
             'email': email,
             'alerts': user_alerts,
-            'saved_money': saved_money,
+            'saved_money': saved_money['saved_money_db'] or 0,
         }
 
     return {'context_mapper': context_mapper}
-# {2: {'name': 'Logan Ninefingers', 'email': 'moderator@moderator.com', 'alerts': 0, 'saved_money': 0},
-# 1: {'name': '', 'email': 'admin@admin.com', 'alerts': 0, 'saved_money': 0}, 3: {'name': 'Elena Kirilova', 'email': 'kirilovae@rocketmail.com', 'alerts': 1, 'saved_money': Decimal('2.27')}, 4: {'name': 'AppUser-Manager', 'email': 'motiday441@pazard.com', 'alerts': 0, 'saved_money': Decimal('2.00')}}
-

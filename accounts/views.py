@@ -9,7 +9,7 @@ from django.views.generic import CreateView, TemplateView, DetailView, UpdateVie
 from accounts.forms import AppUserCreationForm, ProfileForm
 from accounts.models import Profile
 from alert.models import Alert, ArchiveAlert
-from common.mixins import AppUserQuerysetMixin
+from common.mixins import AppUserQuerysetMixin, PageTitleMixin
 from product.models import Product
 from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count
 
@@ -17,17 +17,12 @@ from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count
 
 UserModel = get_user_model()
 
-class AppUserCreationView(CreateView):
+class AppUserCreationView(PageTitleMixin, CreateView):
     model = UserModel
     form_class = AppUserCreationForm
     template_name = 'common/form_base.html'
     success_url = reverse_lazy('accounts:profile')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Create user'
-
-        return context
+    page_title = 'Create user'
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -35,12 +30,13 @@ class AppUserCreationView(CreateView):
         messages.success(self.request, f'Welcome {self.object.get_username()}.' )
         return response
 
-class AppUserDashboardView(LoginRequiredMixin,  TemplateView):
+class AppUserDashboardView(LoginRequiredMixin, PageTitleMixin, TemplateView):
     template_name = 'accounts/dashboard.html'
 
+    def get_page_title(self):
+        return f"{self.request.user}'s dashboard"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = f"{self.request.user}'s dashboard"
         context['products'] = Product.objects.filter(user=self.request.user)[:5]
         context['favourite_products'] = self.request.user.favourite_product.all()[:5]
         context['alerts'] = Alert.objects.filter(user=self.request.user)[:5]
@@ -69,29 +65,21 @@ class AppUserProfileView(LoginRequiredMixin, UserPassesTestMixin ,DetailView):
 
     def get_context_data(self, **kwargs):
         profile = self.get_object()
-        print(profile)
-
         archives = (
             ArchiveAlert.objects
             .filter(user=profile.user)
-            .aggregate(
-                saved_money_db=Sum(
-                    ExpressionWrapper(
-                        F('started_price_eur') - F('triggered_price_eur'),
-                        output_field=DecimalField()
-                    )
-                )
-            )
-        )
+            .aggregate(saved_money_db=Sum(ExpressionWrapper(F('started_price_eur') - F('triggered_price_eur'),output_field=DecimalField()))))
         context = super().get_context_data(**kwargs)
         context['page_title'] = 'Profile'
         context['money_saved'] = archives['saved_money_db'] or 0
+
         return context
 
-class AppUserProfileEdit(LoginRequiredMixin, UpdateView):
+class AppUserProfileEdit(LoginRequiredMixin, PageTitleMixin, UpdateView):
     form_class = ProfileForm
     template_name = 'common/form_base.html'
     success_url = reverse_lazy('accounts:profile')
+    page_title = 'Profile edit'
 
     def get_object(self, queryset=None):
         return self.request.user.profile
@@ -102,16 +90,12 @@ class AppUserProfileEdit(LoginRequiredMixin, UpdateView):
 
         return kwargs
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Profile edit'
 
-        return context
-
-class AppUserProfileDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class AppUserProfileDelete(LoginRequiredMixin, UserPassesTestMixin, PageTitleMixin, DeleteView):
     model = UserModel
     template_name = 'common/form_delete_category.html'
     success_url = reverse_lazy('common:home-page')
+    page_title = 'Delete profile'
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
@@ -132,4 +116,3 @@ class AppUserProfileDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             logout(request)
 
         return super().delete(request, *args, **kwargs)
-

@@ -27,7 +27,6 @@ class StoreCRUPPermissions(BasePermission):
         return False
 
     def has_object_permission(self, request, view, obj):
-        # Същата логика и на ниво обект
         return self.has_permission(request, view)
 class ListStoreView(APIView):
     permission_classes = [StoreCRUPPermissions]

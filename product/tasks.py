@@ -1,7 +1,4 @@
-from decimal import Decimal
-
 from celery import shared_task
-
 from alert.tasks import check_alerts
 from product.models import Product
 from product.services import get_price

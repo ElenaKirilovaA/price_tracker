@@ -1,6 +1,6 @@
 from django import forms
 from product.models import Product
-from product.services import KateoStoreScraper, dispatch_store, get_pattern
+from product.services import dispatch_store, get_pattern
 import re
 
 
@@ -36,7 +36,6 @@ class ProductCreateForm(ProductBasicForm):
 
     def clean(self):
         cleaned_data = super().clean()
-
         store = cleaned_data.get('store')
         url = cleaned_data.get('url')
 
@@ -46,7 +45,7 @@ class ProductCreateForm(ProductBasicForm):
             if store.url not in url:
                 self.add_error('url', 'URL not from the selected store')
             elif not re.search(pattern, url):
-                self.add_error('url', 'URL doesn show a single product. Select one product only')
+                self.add_error('url', 'URL does not show a single product. Select one product only')
 
         return cleaned_data
 
@@ -73,18 +72,6 @@ class ProductEditForm(ProductBasicForm):
 
     def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user = user
 
-        if not self.user.is_staff:
-            self.fields['current_price'].disabled = True
-            self.fields['currency'].disabled = True
-
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        if not self.user.is_staff:
-            cleaned_data['current_price'] = self.instance.current_price
-            cleaned_data['currency'] = self.instance.currency
-
-        return cleaned_data
+        self.fields['current_price'].disabled = True
+        self.fields['currency'].disabled = True
