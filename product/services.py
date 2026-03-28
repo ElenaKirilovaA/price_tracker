@@ -1,4 +1,5 @@
 import random
+from collections import deque
 from decimal import Decimal
 
 import requests
@@ -7,12 +8,11 @@ from django.conf import settings
 
 from common.currency import symbol_to_currency
 
-# url = 'https://kateo.bg/products/sacha-care-casse-control-komplekt-za-kosa-protiv-nakasvane-500ml?variant=55511543218562'
 
-def get_price(url: str) -> dict or None:
+def get_price(url: str) -> dict:
     # Test mode -> skip real scraping and return a random fake price
     if settings.SCRAPER_TEST_MODE:
-        price_random = random.randint(20, 150)
+        price_random = random.randint(10, 50)
         price = Decimal(str(price_random))
         return {'price': price, 'currency': 'EUR'}
 
@@ -29,11 +29,12 @@ def get_price(url: str) -> dict or None:
         if not raw_text:
             return result
 
-        currency_symbol = raw_text[0]
+        raw_text = price_tag.get_text(strip=True)
+        deque_text = deque(raw_text)
+        currency_symbol = deque_text.popleft()
         currency = symbol_to_currency(currency_symbol)
-        price_text = raw_text.replace('€', '').replace(',', '.')
-        price_text = price_text.strip()
-        price = Decimal(price_text)
+
+        price = Decimal(''.join(deque_text).replace(',', '.'))
 
         if currency:
             result['currency'] = str(currency)
@@ -52,7 +53,6 @@ class KateoStoreScraper:
         soup = BeautifulSoup(res.text, 'html.parser')
 
         result = {}
-
         price_tag = get_price(url)
         title_tag = soup.find('h1')
         description_formatter = soup.find('rte-formatter')
@@ -70,3 +70,69 @@ class KateoStoreScraper:
                 result['description'] = p_description.get_text(strip=True)
 
         return result
+
+class BookToScrapeScraper:
+    @staticmethod
+    def get_product_info(url: str) -> dict:
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        res = requests.get(url, headers=headers)
+        soup = BeautifulSoup(res.text, 'html.parser')
+
+        result = {}
+        price_tag = soup.select_one('p.price_color:-soup-contains("£")')
+
+        if price_tag:
+            raw_text = price_tag.get_text(strip=True)
+
+            if not raw_text:
+                return result
+
+            deque_text = deque(raw_text)
+            hidden_symbol = deque_text.popleft()
+            currency_symbol = deque_text.popleft()
+            currency = symbol_to_currency(currency_symbol)
+
+            price = Decimal(''.join(deque_text))
+
+            if currency:
+                result['currency'] = str(currency)
+            if price:
+                result['price'] = price
+
+        title_tag = soup.find('div', class_='col-sm-6 product_main')
+        if title_tag:
+            title_tag = title_tag.find('h1')
+            title = title_tag.get_text(strip=True)
+
+            if title:
+                result['title'] = title
+
+        p_tags = soup.find_all('p')
+        for p_tag in p_tags:
+            description_tag = p_tag.find_previous('div', id='product_description')
+            if description_tag:
+                description = p_tag.get_text(strip=True)
+                result['description'] = description
+                break
+
+        return result
+
+
+def get_pattern(store: str) -> str:
+    pattern = {
+        'Kateo': r'https:\/\/kateo\.bg\/products\/[a-z0-9-]+\/?\?variant=\d{14}',
+        'Books to Scrape': r"^https://books\.toscrape\.com/catalogue/[a-z][a-z0-9-]*_\d{3,}/index\.html$",
+    }
+
+    return pattern[store]
+
+
+def dispatch_store(url: str, store: str) -> dict:
+    info = {}
+
+    if store == 'Kateo':
+        info = KateoStoreScraper.get_product_info(url)
+    elif store == 'Books to Scrape':
+        info = BookToScrapeScraper.get_product_info(url)
+
+    return info
