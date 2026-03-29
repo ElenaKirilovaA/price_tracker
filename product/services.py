@@ -1,11 +1,9 @@
 import random
 from collections import deque
 from decimal import Decimal
-
 import requests
 from bs4 import BeautifulSoup
 from django.conf import settings
-
 from common.currency import symbol_to_currency
 
 
@@ -43,8 +41,12 @@ def get_price(url: str) -> dict:
 
     return result
 
+class StoreScraper:
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    res = requests.get(url, headers=headers)
+    soup = BeautifulSoup(res.text, 'html.parser')
 
-class KateoStoreScraper:
+class KateoStoreScraper(StoreScraper):
     @staticmethod
     def get_product_info(url: str) -> dict or None:
 
