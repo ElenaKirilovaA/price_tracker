@@ -186,4 +186,4 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(minute="*/3"),
     }
 }
-SCRAPER_TEST_MODE = True
+SCRAPER_TEST_MODE = False

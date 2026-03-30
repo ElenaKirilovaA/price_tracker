@@ -25,4 +25,3 @@ def symbol_to_currency(symbol: str) -> str:
 
     result = mapper.get(symbol)
     return result if result else ""
-

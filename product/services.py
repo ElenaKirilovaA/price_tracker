@@ -1,123 +1,125 @@
+from decimal import Decimal
 import random
 from collections import deque
-from decimal import Decimal
 import requests
 from bs4 import BeautifulSoup
 from django.conf import settings
 from common.currency import symbol_to_currency
+from abc import ABC, abstractmethod
 
 
-def get_price(url: str) -> dict:
-    # Test mode -> skip real scraping and return a random fake price
-    if settings.SCRAPER_TEST_MODE:
-        price_random = random.randint(10, 50)
-        price = Decimal(str(price_random))
-        return {'price': price, 'currency': 'EUR'}
 
+def get_fake_data():
+    price_random = random.randint(10, 150)
+    price = Decimal(str(price_random))
+    return {'price': price}
+
+
+class BaseScraper(ABC):
     headers = {'User-Agent': 'Mozilla/5.0'}
-    res = requests.get(url, headers=headers)
-    soup = BeautifulSoup(res.text, 'html.parser')
 
-    price_tag = soup.select_one('span.price:-soup-contains("€")')
-    result = {}
+    def get_soup(self, url: str) -> BeautifulSoup:
+        res = requests.get(url, headers=self.headers)
+        return BeautifulSoup(res.text, 'html.parser')
 
-    if price_tag:
-        raw_text = price_tag.get_text(strip=True)
+    def scrape(self, url: str) -> dict:  # when create product from form
+        soup = self.get_soup(url)
 
+        result = {}
+        result.update(self.get_price(soup) or {})
+        result.update(self.get_title(soup) or {})
+        result.update(self.get_description(soup) or {})
+
+        return result
+
+    def get_price_only(self, url: str) -> dict:  # when use Celery
+        soup = self.get_soup(url)
+        return self.get_price(soup)
+
+    def get_price(self, soup: BeautifulSoup) -> dict:
+        if settings.SCRAPER_TEST_MODE:
+            return get_fake_data()
+
+        raw_text = self.get_price_text(soup)
         if not raw_text:
-            return result
+            return {}
 
-        raw_text = price_tag.get_text(strip=True)
+        return self.parse_price(raw_text)
+
+    def parse_price(self, raw_text: str) -> dict:
+        deque_text = deque(raw_text)
+        deque_text.popleft()  # hidden_symbol
+        currency_symbol = deque_text.popleft()
+        currency = symbol_to_currency(currency_symbol)
+        price = Decimal(''.join(deque_text))
+
+        return {'price': price, 'currency': str(currency)}
+
+    @abstractmethod
+    def get_price_text(self, soup: BeautifulSoup) -> str:
+        pass
+
+    @abstractmethod
+    def get_title(self, soup: BeautifulSoup) -> dict:
+        pass
+
+    @abstractmethod
+    def get_description(self, soup: BeautifulSoup) -> dict:
+        pass
+
+
+class KateoStoreScraper(BaseScraper):
+
+    def parse_price(self, raw_text):
         deque_text = deque(raw_text)
         currency_symbol = deque_text.popleft()
         currency = symbol_to_currency(currency_symbol)
-
         price = Decimal(''.join(deque_text).replace(',', '.'))
 
-        if currency:
-            result['currency'] = str(currency)
-        if price:
-            result['price'] = price
+        return {'price': price, 'currency': str(currency)}
 
-    return result
+    def get_price_text(self, soup: BeautifulSoup):
+        price_tag = soup.select_one('span.price:-soup-contains("€")')
 
-class StoreScraper:
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    res = requests.get(url, headers=headers)
-    soup = BeautifulSoup(res.text, 'html.parser')
+        return price_tag.get_text(strip=True) if price_tag else None
 
-class KateoStoreScraper(StoreScraper):
-    @staticmethod
-    def get_product_info(url: str) -> dict or None:
-
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        res = requests.get(url, headers=headers)
-        soup = BeautifulSoup(res.text, 'html.parser')
-
-        result = {}
-        price_tag = get_price(url)
+    def get_title(self, soup) -> dict:
         title_tag = soup.find('h1')
-        description_formatter = soup.find('rte-formatter')
 
+        return {'title': title_tag.get_text(strip=True)[:100]} if title_tag else {}
 
-        if price_tag:
-            result = price_tag
-
-        if title_tag:
-            result['title'] = title_tag.get_text(strip=True)[:100]
-
-        if description_formatter:
-            p_description = description_formatter.find_next('p')
+    def get_description(self, soup):
+        result = {}
+        description = soup.find('rte-formatter')
+        if description:
+            p_description = description.find_next('p')
             if p_description:
                 result['description'] = p_description.get_text(strip=True)
 
         return result
 
-class BookToScrapeScraper:
-    @staticmethod
-    def get_product_info(url: str) -> dict:
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        res = requests.get(url, headers=headers)
-        soup = BeautifulSoup(res.text, 'html.parser')
 
-        result = {}
+class BookToScrapeScraper(BaseScraper):
+
+    def get_price_text(self, soup: BeautifulSoup) -> str:
         price_tag = soup.select_one('p.price_color:-soup-contains("£")')
 
-        if price_tag:
-            raw_text = price_tag.get_text(strip=True)
+        return price_tag.get_text(strip=True) if price_tag else None
 
-            if not raw_text:
-                return result
-
-            deque_text = deque(raw_text)
-            hidden_symbol = deque_text.popleft()
-            currency_symbol = deque_text.popleft()
-            currency = symbol_to_currency(currency_symbol)
-
-            price = Decimal(''.join(deque_text))
-
-            if currency:
-                result['currency'] = str(currency)
-            if price:
-                result['price'] = price
-
+    def get_title(self, soup: BeautifulSoup):
         title_tag = soup.find('div', class_='col-sm-6 product_main')
         if title_tag:
             title_tag = title_tag.find('h1')
-            title = title_tag.get_text(strip=True)
 
-            if title:
-                result['title'] = title
+        return {'title': title_tag.get_text(strip=True)[:100]} if title_tag else {}
 
+    def get_description(self, soup: BeautifulSoup):
         p_tags = soup.find_all('p')
         for p_tag in p_tags:
             description_tag = p_tag.find_previous('div', id='product_description')
             if description_tag:
-                description = p_tag.get_text(strip=True)
-                result['description'] = description
-                break
-
-        return result
+                return {'description':  p_tag.get_text(strip=True)}
+        return {}
 
 
 def get_pattern(store: str) -> str:
@@ -129,12 +131,16 @@ def get_pattern(store: str) -> str:
     return pattern[store]
 
 
-def dispatch_store(url: str, store: str) -> dict:
-    info = {}
+def dispatch_store(store: str) -> BaseScraper or dict:
+    stores = {
+        'Kateo': KateoStoreScraper,
+        'Books to Scrape': BookToScrapeScraper,
+    }
+    scraper_class = stores.get(store)
 
-    if store == 'Kateo':
-        info = KateoStoreScraper.get_product_info(url)
-    elif store == 'Books to Scrape':
-        info = BookToScrapeScraper.get_product_info(url)
+    if not scraper_class:
+        return {}
 
-    return info
+    store_scraper = scraper_class()
+
+    return store_scraper

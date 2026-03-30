@@ -1,6 +1,6 @@
 from django import forms
 from product.models import Product
-from product.services import dispatch_store, get_pattern
+from product.services import dispatch_store, get_pattern, BaseScraper
 import re
 
 
@@ -52,13 +52,14 @@ class ProductCreateForm(ProductBasicForm):
 
     def save(self, commit=True):
         product = super().save(commit=False)
-        info = dispatch_store(product.url, product.store.title)
+        scraper: BaseScraper = dispatch_store(product.store.title)
+        info = scraper.scrape(product.url)
 
         if info:
-            product.title = info.get('title')
-            product.description = info.get('description')
-            product.current_price = info.get('price')
-            product.currency = info.get('currency')
+                product.title = info.get('title')
+                product.description = info.get('description')
+                product.current_price = info.get('price')
+                product.currency = info.get('currency')
 
         if commit:
             product.save()
