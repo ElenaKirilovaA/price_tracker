@@ -1,0 +1,17 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="icon-price-body">
+    <img src="{% static 'img/trackydeal-logo.svg' %}" alt="logo">
+</div>
+
+<div class="delete-wrapper">
+    <h2>Something went wrong (500)</h2>
+    <p>Oops! Our server ran into a problem.</p>
+    <p>We’re already working on fixing it. Please try again later.</p>
+
+    <a href="{% url 'common:home-page' %}" class="btn">Go back to Home</a>
+</div>
+
+{% endblock %}

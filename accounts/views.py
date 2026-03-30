@@ -26,8 +26,10 @@ class AppUserCreationView(PageTitleMixin, CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        self.object.backend = 'django.contrib.auth.backends.ModelBackend'
         login(self.request, self.object)
-        messages.success(self.request, f'Welcome {self.object.get_username()}.' )
+        messages.success(self.request, f'Welcome {self.object.get_username()}.')
+
         return response
 
 class AppUserDashboardView(LoginRequiredMixin, PageTitleMixin, TemplateView):
