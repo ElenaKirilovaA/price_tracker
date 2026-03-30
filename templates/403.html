@@ -1,0 +1,17 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="icon-price-body">
+    <img src="{% static 'img/trackydeal-logo.svg' %}" alt="logo">
+</div>
+
+<div class="delete-wrapper">
+    <h2>Access Denied (403)</h2>
+    <p>You don’t have permission to view this page.</p>
+    <p>Please check your account or contact support if this seems wrong.</p>
+
+    <a href="{% url 'common:home-page' %}" class="btn">Go back to Home</a>
+</div>
+
+{% endblock %}

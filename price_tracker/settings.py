@@ -33,9 +33,11 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # keeping production controlled via an environment variable. Accept common
 # truthy values ("1", "true", "yes"). Default to True for local dev so
 # media/static are served when running the development server.
-DEBUG = os.getenv("DEBUG", "True").lower() in ("1", "true", "yes")
+# DEBUG = os.getenv("DEBUG", "True").lower() in ("1", "true", "yes")
+DEBUG = False
 
-ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
+# ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -55,6 +57,7 @@ INSTALLED_APPS = [
     'store',
     'rest_framework',
     'celery',
+    'axes',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +67,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'axes.middleware.AxesMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -138,18 +142,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-
-# Where `collectstatic` will collect static files for production. Use a
-# dedicated folder (not the media folder). The previous value pointed to
-# `post_images/` which looked like a media folder and could cause confusion.
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-# Note: Whitenoise (used for static files) does not serve media files. In
-# development the project serves `MEDIA_URL` only when DEBUG is True (see
-# `price_tracker/urls.py`). In production serve media from a proper media
-# server or cloud storage.
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -165,14 +161,16 @@ LOGIN_REDIRECT_URL = 'accounts:dashboard'
 LOGOUT_REDIRECT_URL = 'accounts:login'
 LOGIN_URL = 'accounts:login'
 AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesBackend',
     'django.contrib.auth.backends.ModelBackend'
 ]
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF = 1
+AXES_LOCKOUT_PARAMETERS = ["ip_address", "username"]
+AXES_VERBOSE = True
 
-# settings.py
-...
 
  # Celery
-# CELERY_BROKER_URL = 'redis://127.0.0.1:6379' # Locally
 CELERY_BROKER_URL = 'redis://default:EtI10K12LvlcF2IrZTuLLQQrrg5y9LX4@redis-19125.c56.east-us.azure.cloud.redislabs.com:19125/0' # Redis Cloud Your Redis URL
 CELERY_RESULT_BACKEND = 'redis://default:EtI10K12LvlcF2IrZTuLLQQrrg5y9LX4@redis-19125.c56.east-us.azure.cloud.redislabs.com:19125/0' # Redis Cloud
 CELERY_ACCEPT_CONTENT = ['application/json']
@@ -187,3 +185,5 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 SCRAPER_TEST_MODE = False
+
+

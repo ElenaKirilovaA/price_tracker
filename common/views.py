@@ -10,6 +10,14 @@ from common.service import get_context_date_home, get_context_date_moderator_hom
 def custom_404(request: HttpRequest, exception):
     return render(request, '404.html', status=404)
 
+def custom_403(request: HttpRequest, exception=None):
+    return render(request, '403.html', status=403)
+
+def custom_429(request: HttpRequest, exception=None):
+    return render(request, '429.html', status=429)
+
+def custom_500(request: HttpRequest):
+    return render(request, '500.html', status=500)
 class HomeView(TemplateView):
 
     def get_template_names(self):
