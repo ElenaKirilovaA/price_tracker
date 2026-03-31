@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -27,14 +27,8 @@ load_dotenv(BASE_DIR / ".env")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# Read DEBUG from environment so you can run locally with DEBUG=True while
-# keeping production controlled via an environment variable. Accept common
-# truthy values ("1", "true", "yes"). Default to True for local dev so
-# media/static are served when running the development server.
-# DEBUG = os.getenv("DEBUG", "True").lower() in ("1", "true", "yes")
-DEBUG = False
+DEBUG = os.getenv("DEBUG", "True").lower() in ("1", "true", "yes")
+# DEBUG = False
 
 # ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
@@ -165,9 +159,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 AXES_FAILURE_LIMIT = 5
-AXES_COOLOFF = 1
-AXES_LOCKOUT_PARAMETERS = ["ip_address", "username"]
-AXES_VERBOSE = True
+AXES_COOLOFF_TIME = timedelta(hours=1)
+AXES_LOCKOUT_PARAMETERS = ['username']
+AXES_USERNAME_FORM_FIELD = 'username'
+# AXES_VERBOSE = True
 
 
  # Celery

@@ -7,7 +7,7 @@ from accounts.views import AppUserDashboardView, AppUserProfileView, AppUserProf
 app_name = 'accounts'
 urlpatterns = [
     path('', views.AppUserCreationView.as_view(), name='create_user'),
-    path('login/', LoginView.as_view(template_name='common/form_base.html'), name='login'),
+    path('login/', LoginView.as_view(template_name='accounts/login.html'), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('dashboard/', AppUserDashboardView.as_view(), name='dashboard'),
 

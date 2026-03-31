@@ -1,0 +1,13 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="icon-price-body"><img src="{% static 'img/trackydeal-logo.svg' %}" alt="logo"></div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-row"><input type="email" name="username" placeholder="Email"></div>
+        <div class="form-row"><input type="password" name="password" placeholder="Password"></div>
+        <button type="submit" class="btn"><strong>Login</strong></button>
+    </form>
+
+{% endblock %}
