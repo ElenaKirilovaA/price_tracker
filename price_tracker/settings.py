@@ -27,8 +27,8 @@ load_dotenv(BASE_DIR / ".env")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = os.getenv("DEBUG", "True").lower() in ("1", "true", "yes")
-# DEBUG = False
+# DEBUG = os.getenv("DEBUG", "True").lower() in ("1", "true", "yes")
+DEBUG = False
 
 # ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
