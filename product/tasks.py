@@ -4,7 +4,7 @@ from product.models import Product
 from product.services import BaseScraper, dispatch_store
 
 
-@shared_task
+@shared_task(max_retries=3, default_retry_dalay=10)
 def check_price():
     products =  Product.objects.prefetch_related('alerts').filter(alerts__is_active=True)
 
