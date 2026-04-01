@@ -31,6 +31,9 @@
             <a href="{% url 'accounts:profile-edit' %}" title="Edit Profile">
                 <span class="material-icons">edit</span>
             </a>
+          <a href="{% url 'accounts:password_change' %}" title="Change Password">
+            <span class="material-icons">lock</span>
+          </a>
 
               {% if request.user == profile.user %}
             <a href="{% url 'accounts:profile-delete' %}" title="Delete Profile">
@@ -40,8 +43,8 @@
             <a href="{% url 'accounts:profile-delete-manager' pk=profile.user.pk %}" title="Delete Profile">
                 <span class="material-icons delete-icon">delete</span>
             </a>
-        {% endif %}
 
+        {% endif %}
         </div>
     </div>
 

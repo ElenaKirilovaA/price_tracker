@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.views import PasswordChangeView
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
 from django.shortcuts import redirect, get_list_or_404, get_object_or_404
@@ -37,6 +38,7 @@ class AppUserDashboardView(LoginRequiredMixin, PageTitleMixin, TemplateView):
 
     def get_page_title(self):
         return f"{self.request.user}'s dashboard"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['products'] = Product.objects.filter(user=self.request.user)[:5]
@@ -118,3 +120,15 @@ class AppUserProfileDelete(LoginRequiredMixin, UserPassesTestMixin, PageTitleMix
             logout(request)
 
         return super().delete(request, *args, **kwargs)
+
+
+class AppUserChangePassword(PageTitleMixin, PasswordChangeView):
+    template_name = 'common/form_base.html'
+    success_url = reverse_lazy('accounts:profile')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Your password has been changed')
+
+        return response
+
