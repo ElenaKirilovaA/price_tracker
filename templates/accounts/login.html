@@ -2,13 +2,29 @@
 {% load static %}
 {% block body %}
 
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+{% endif %}
 <div class="icon-price-body"><img src="{% static 'img/trackydeal-logo.svg' %}" alt="logo"></div>
+    <div>    <h2>Log in</h2></div>
     <form method="post" enctype="multipart/form-data">
+
         {% csrf_token %}
         <div class="form-row"><input type="email" name="username" placeholder="Email"></div>
         <div class="form-row"><input type="password" name="password" placeholder="Password"></div>
         <button type="submit" class="btn"><strong>Login</strong></button>
+<div>
+    <p>Forgot your password?</p>
+    <a href="{% url 'accounts:password_reset' %}">Reset password</a></div>
     </form>
+
+
 
 
 {% endblock %}

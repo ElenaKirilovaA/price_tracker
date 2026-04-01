@@ -12,3 +12,35 @@
     background: #ffecec;
     border-left: 4px solid #e74c3c;
 }
+
+/**/
+
+/*.form-container {*/
+/*    max-width: 400px;*/
+/*    margin: auto;*/
+/*    text-align: center;*/
+/*}*/
+
+/*.form-group {*/
+/*    margin-bottom: 15px;*/
+/*}*/
+
+/*.btn-primary {*/
+/*    display: inline-flex;*/
+/*    align-items: center;*/
+/*    gap: 8px;*/
+/*}*/
+
+.success-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-primary {
+    margin-top: 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}

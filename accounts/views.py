@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
 from django.shortcuts import redirect, get_list_or_404, get_object_or_404
@@ -11,6 +11,7 @@ from accounts.forms import AppUserCreationForm, ProfileForm
 from accounts.models import Profile
 from alert.models import Alert, ArchiveAlert
 from common.mixins import AppUserQuerysetMixin, PageTitleMixin
+from price_tracker import settings
 from product.models import Product
 from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count
 
@@ -131,4 +132,19 @@ class AppUserChangePassword(PageTitleMixin, PasswordChangeView):
         messages.success(self.request, 'Your password has been changed')
 
         return response
+
+
+class AppUserPasswordReset(PageTitleMixin, PasswordResetView):
+    template_name = 'common/form_base.html'
+    email_template_name = 'accounts/password-template.txt'
+    subject_template_name = 'accounts/account-password-subject.txt'
+    from_email = settings.DEFAULT_FROM_EMAIL
+    success_url = reverse_lazy('accounts:login')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'We’ve sent you an email with instructions to reset your password.')
+
+        return response
+
 
