@@ -21,6 +21,7 @@ class ProductList(PageTitleMixin, ListView):
     template_name = 'products/product_list.html'
     ordering = '-created_at'
     page_title = 'Product List'
+    paginate_by = 6
 
 
 class AppUserProductList(LoginRequiredMixin, AppUserQuerysetMixin, ProductList):
