@@ -2,9 +2,6 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView
-from django.core.exceptions import PermissionDenied
-from django.http import HttpRequest
-from django.shortcuts import redirect, get_list_or_404, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, DeleteView
 from accounts.forms import AppUserCreationForm, ProfileForm
@@ -33,6 +30,7 @@ class AppUserCreationView(PageTitleMixin, CreateView):
         messages.success(self.request, f'Welcome {self.object.get_username()}.')
 
         return response
+
 
 class AppUserDashboardView(LoginRequiredMixin, PageTitleMixin, TemplateView):
     template_name = 'accounts/dashboard.html'

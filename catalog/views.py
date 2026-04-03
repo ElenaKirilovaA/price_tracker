@@ -152,7 +152,7 @@ def bulk_create_tags(request:HttpRequest) -> HttpResponse:
 
 @permission_required('catalog.delete_tag', raise_exception=True)
 def tag_display(request:HttpRequest) -> HttpResponse:
-    tags = Tag.objects.all().order_by('title')
+    tags = Tag.objects.order_by('title')
 
     context = {
         'page_title': 'Tags display',

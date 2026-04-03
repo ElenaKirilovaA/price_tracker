@@ -49,4 +49,3 @@ class PageTitleMixin:
         context = super().get_context_data(**kwargs)
         context['page_title'] = self.get_page_title()
         return context
-

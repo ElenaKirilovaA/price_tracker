@@ -28,6 +28,7 @@ class StoreCRUPPermissions(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return self.has_permission(request, view)
+
 class ListStoreView(APIView):
     permission_classes = [StoreCRUPPermissions]
     def get(self, request: Request) -> Response:
@@ -50,7 +51,6 @@ class DetailStoreView(generics.RetrieveUpdateDestroyAPIView):
 
 class StorePageView(UserPassesTestMixin, TemplateView):
     template_name = 'store/store_page.html'
-
 
     def test_func(self):
         user = self.request.user

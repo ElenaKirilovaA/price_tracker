@@ -27,6 +27,9 @@ load_dotenv(BASE_DIR / ".env")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError('SECRET_KEY is missing')
+
 DEBUG = os.getenv("DEBUG", "True").lower() in ("1", "true", "yes")
 # DEBUG = False
 
@@ -124,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Sofia'
 
 USE_I18N = True
 
@@ -165,9 +168,9 @@ AXES_USERNAME_FORM_FIELD = 'username'
 # AXES_VERBOSE = True
 
 
- # Celery
-CELERY_BROKER_URL = 'redis://default:EtI10K12LvlcF2IrZTuLLQQrrg5y9LX4@redis-19125.c56.east-us.azure.cloud.redislabs.com:19125/0' # Redis Cloud Your Redis URL
-CELERY_RESULT_BACKEND = 'redis://default:EtI10K12LvlcF2IrZTuLLQQrrg5y9LX4@redis-19125.c56.east-us.azure.cloud.redislabs.com:19125/0' # Redis Cloud
+# Celery
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
@@ -176,9 +179,9 @@ CELERY_TIMEZONE = 'Europe/Sofia'
 CELERY_BEAT_SCHEDULE = {
     "check-tracking-products-every-30-min": {
         "task": "product.tasks.check_price",
-        "schedule": crontab(minute="*/3"),
+        "schedule": crontab(minute="*/30"),
     }
 }
+
+# Scraping
 SCRAPER_TEST_MODE = False
-
-

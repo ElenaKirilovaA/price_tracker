@@ -1,6 +1,4 @@
 from django.db.models import Avg, F, Sum, Count, ExpressionWrapper, DecimalField
-
-
 from accounts.models import AppUser
 from alert.models import Alert, ArchiveAlert
 from catalog.models import Category, Tag

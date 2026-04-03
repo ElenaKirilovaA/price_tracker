@@ -1,27 +1,22 @@
-from celery import shared_task
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
-from django.http import HttpRequest, HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
-from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
-
 from alert.forms import AlertCreateForm, AlertEditForm, AlertDeleteForm
 from alert.models import Alert, ArchiveAlert
-from alert.tasks import manage_simulation_tracking, set_timeline_checks
 from django.core.paginator import Paginator
-
 from common.mixins import AppUserQuerysetMixin, PageTitleMixin
 
 
 # Create your views here.
 
-class AlertCreate(LoginRequiredMixin, CreateView):
+class AlertCreate(LoginRequiredMixin, PageTitleMixin, CreateView):
     model = Alert
     form_class = AlertCreateForm
     success_url = reverse_lazy('accounts:dashboard')
     template_name = 'common/form_base.html'
+    page_title = 'Create new track'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -29,31 +24,20 @@ class AlertCreate(LoginRequiredMixin, CreateView):
 
         return kwargs
 
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['page_title'] = 'Create new track'
-
-        return context
-
-
     def form_valid(self, form):
         form.instance.user = self.request.user
 
         return super().form_valid(form)
 
 
-class AlertEdit(LoginRequiredMixin, AppUserQuerysetMixin, UpdateView):
+class AlertEdit(LoginRequiredMixin, PageTitleMixin, AppUserQuerysetMixin, UpdateView):
     model = Alert
     form_class = AlertEditForm
     success_url = reverse_lazy('alert:alert_list')
     template_name = 'common/form_base.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['page_title'] = f'Update track for {self.object.product}'
-
-        return context
+    def get_page_title(self):
+        return f'Update track for {self.object.product}'
 
 
 class AlertDelete(LoginRequiredMixin, AppUserQuerysetMixin, PageTitleMixin, DeleteView):

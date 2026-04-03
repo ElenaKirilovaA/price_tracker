@@ -15,7 +15,6 @@ class AppUserCreationForm(UserCreationForm):
         widgets = {"email": forms.EmailInput(attrs={"autofocus": True})}
 
 
-
 class AppUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = UserModel

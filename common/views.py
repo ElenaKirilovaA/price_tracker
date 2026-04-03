@@ -14,7 +14,7 @@ def custom_403(request: HttpRequest, exception=None):
     return render(request, '403.html', status=403)
 
 def custom_429(request: HttpRequest, exception=None):
-    return render(request, '429.html', status=429)
+    return render(request, '429.html', status=429)  #TODO middleware security
 
 def custom_500(request: HttpRequest):
     return render(request, '500.html', status=500)

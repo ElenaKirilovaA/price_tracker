@@ -8,7 +8,6 @@ from common.currency import symbol_to_currency
 from abc import ABC, abstractmethod
 
 
-
 def get_fake_data():
     price_random = random.randint(10, 150)
     price = Decimal(str(price_random))
@@ -19,7 +18,7 @@ class BaseScraper(ABC):
     headers = {'User-Agent': 'Mozilla/5.0'}
 
     def get_soup(self, url: str) -> BeautifulSoup:
-        res = requests.get(url, headers=self.headers)
+        res = requests.get(url, headers=self.headers, timeout=8)
         return BeautifulSoup(res.text, 'html.parser')
 
     def scrape(self, url: str) -> dict:  # when create product from form

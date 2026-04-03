@@ -6,7 +6,6 @@ from alert.service import sending_mail, archive_alert, set_timeline_checks
 @shared_task
 def manage_simulation_tracking(alert_id: int) -> None:
     alert = Alert.objects.get(id=alert_id)
-
     sending_mail(alert)
     alert.is_active = False
     alert.save()

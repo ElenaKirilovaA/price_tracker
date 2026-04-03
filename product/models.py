@@ -2,11 +2,9 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.template.defaultfilters import slugify
-
 from common.choices import CurrencyChoices
 from common.mixins import BaseInfoTitle, CreatedAtMixin, BaseInfoDescription
 from decimal import Decimal
-
 from store.models import Store
 
 # Create your models here.
