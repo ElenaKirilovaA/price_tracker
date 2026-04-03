@@ -5,7 +5,7 @@
 <section class="moderator-summary">
 
     <h2>Dashboard</h2>
-    <p class="muted">Welcome, {{ request.user.get_full_name }}!</p>
+    <p class="muted">Welcome, {{ request.user.get_full_name|default:request.user.email }}!</p>
 
     <!-- PRODUCTS -->
     <div class="table-wrapper">

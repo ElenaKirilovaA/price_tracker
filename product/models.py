@@ -72,3 +72,12 @@ class Product(BaseInfoTitle, BaseInfoDescription, CreatedAtMixin):
 
     def __str__(self):
         return f"{self.title} - {self.current_price} {self.currency}"
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['url', 'store', 'title'],
+                name='product_unique_constraint',
+                violation_error_message='Our application already has this product from the selected store'
+            )
+        ]

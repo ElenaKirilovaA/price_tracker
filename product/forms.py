@@ -46,6 +46,9 @@ class ProductCreateForm(ProductBasicForm):
                 self.add_error('url', 'URL not from the selected store')
             elif not re.search(pattern, url):
                 self.add_error('url', 'URL does not show a single product. Select one product only')
+            qs = Product.objects.filter(url=url, store=store)
+            if qs.exists():
+                self.add_error('url', 'Our application already has this product from the selected store')
 
         return cleaned_data
 
@@ -61,8 +64,15 @@ class ProductCreateForm(ProductBasicForm):
                 product.current_price = info.get('price')
                 product.currency = info.get('currency')
 
+
         if commit:
             product.save()
+            tags = self.cleaned_data.get('tag')
+
+            if tags:
+                product.tag.set(tags)
+
+            self.save_m2m()
 
         return product
 
