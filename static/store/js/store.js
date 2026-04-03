@@ -1,18 +1,6 @@
 const BASE_URL = '/store/api/';
 let currentId = null;
-
-// Try to read CSRF from a meta tag, fallback to cookie if not present
-// function getCookie(name) {
-//     const value = `; ${document.cookie}`;
-//     const parts = value.split(`; ${name}=`);
-//     if (parts.length === 2) return parts.pop().split(';').shift();
-//     return null;
-// }
-//
-// const csrfMeta = document.querySelector('meta[name="csrf-token"]');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-
 const titleInputEl = document.getElementById('title');
 const URLInputEl = document.getElementById('url');
 const addBtnEl = document.getElementById('add-btn');
@@ -60,8 +48,8 @@ async function handleLoadBtn() {
         changeBtnEl.textContent = 'Change';
 
         const deleteBtnEl = document.createElement('button');
-        deleteBtnEl.classList.add('btn');
-        deleteBtnEl.classList.add('btn-danger');
+        deleteBtnEl.type = 'button'; // 👈 ТОВА Е FIX-ЪТ
+        deleteBtnEl.classList.add('btn', 'btn-danger');
         deleteBtnEl.textContent = 'Delete';
 
         pUrlEl.appendChild(spanUrlEl);
@@ -91,12 +79,22 @@ async function handleLoadBtn() {
 
             currentId = obj.id;
         }
+        async function handleDeleteBtn() {
+            const isConfirmed = confirm(`Are you sure you want to delete ${obj.title}`);
 
-         async function handleDeleteBtn() {
-            await fetch(`${BASE_URL}${obj.id}/`, {
+            if (!isConfirmed){
+                return;
+            }
+
+            const response = await fetch(`${BASE_URL}${obj.id}/`, {
                 method: 'DELETE',
                 headers: {'X-CSRFToken': csrfToken}
             });
+
+            if (!response.ok) {
+                alert('Error deleting item');
+             return;
+            }
 
             await handleLoadBtn();
         }
