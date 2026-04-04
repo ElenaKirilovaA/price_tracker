@@ -161,7 +161,6 @@ celery -A price_tracker beat -l info
 ## Future improvements
 - Price charts visualization
 - Docker containerization
-- Caching with Redis
 - UI/UX improvements
 
 ---
