@@ -1,4 +1,4 @@
-# Tracky Deal (Simulation-Based Price Tracking System)
+# Tracky Deal (Price Tracking System)
 
 A Django web application for product price tracking and alert triggering.
 
@@ -168,16 +168,16 @@ celery -A price_tracker beat -l info
 ## Screenshots
 
 ### Home Page
-![Home Page](screenshots/home.png)
+![Home Page](screenshots/home_page.png)
 
-### Create Track
-![Add Track](screenshots/create_track.png)
+### Add Product From Selected Store
+![Add Track](screenshots/add_product.png)
 
-### Simulation Track After Price Edit
-![Products](screenshots/simulation.png)
+### AppUser Dashboard
+![Products](screenshots/dashboard_user.png)
 
-### Archived Track Info
-![Archived Track info](screenshots/track_history.png)
+### Archived Track Info With Price Timeline
+![Archived Track info](screenshots/track_timeline.png)
 
 
 ## Author

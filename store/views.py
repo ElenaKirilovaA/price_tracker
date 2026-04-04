@@ -6,6 +6,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from common.mixins import PageTitleMixin
 from store.models import Store
 from store.serializers import StoreSerializer
 
@@ -49,8 +50,9 @@ class DetailStoreView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [StoreCRUPPermissions]
 
 
-class StorePageView(UserPassesTestMixin, TemplateView):
+class StorePageView(UserPassesTestMixin, PageTitleMixin, TemplateView):
     template_name = 'store/store_page.html'
+    page_title = 'Store management'
 
     def test_func(self):
         user = self.request.user
