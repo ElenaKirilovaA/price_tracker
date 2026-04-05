@@ -167,6 +167,8 @@ AXES_USERNAME_FORM_FIELD = 'username'
 CSRF_TRUSTED_ORIGINS = [
     "https://tracky-deal-grgzcxc2ccd0b9dv.italynorth-01.azurewebsites.net",
 ]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 
 # Celery
