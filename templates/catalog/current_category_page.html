@@ -5,8 +5,8 @@
 <section class="header-content">
     <div id="pre-circle">
         <h1>{{ category.title }}</h1>
-        <p>All current products in this category</p>
-
+        <h4>{{ category.description }}</h4>
+    <br>
         {% if last_deal is not None %}
             <p>
                 Last successful deal:
@@ -20,6 +20,7 @@
                     {% endif %}
                 </strong>
             </p>
+            <br>
             <a href="{% url 'alert:create' %}" class="btn">Start tracking a product</a>
         {% else %}
             <p>No successful deals yet. Start tracking products to unlock savings.</p>
@@ -28,6 +29,8 @@
     </div>
 
 </section>
+        <h3>All current products in this category:</h3>
+
 <section class="card-container">
 
     {% for product in products %}

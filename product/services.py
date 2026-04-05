@@ -3,15 +3,18 @@ import random
 from collections import deque
 import requests
 from bs4 import BeautifulSoup
-from django.conf import settings
 from common.currency import symbol_to_currency
 from abc import ABC, abstractmethod
 
 
-def get_fake_data():
+def get_mock_data() -> Decimal:
+    """
+    The aim of this functon is to test celery functionality.
+    :return: dict with mocked data for SCRAPER_TEST_MODE only.
+    """
     price_random = random.randint(10, 150)
     price = Decimal(str(price_random))
-    return {'price': price}
+    return price
 
 
 class BaseScraper(ABC):
@@ -36,8 +39,6 @@ class BaseScraper(ABC):
         return self.get_price(soup)
 
     def get_price(self, soup: BeautifulSoup) -> dict:
-        if settings.SCRAPER_TEST_MODE:
-            return get_fake_data()
 
         raw_text = self.get_price_text(soup)
         if not raw_text:
@@ -82,7 +83,7 @@ class KateoStoreScraper(BaseScraper):
 
         return price_tag.get_text(strip=True) if price_tag else None
 
-    def get_title(self, soup) -> dict:
+    def get_title(self, soup):
         title_tag = soup.find('h1')
 
         return {'title': title_tag.get_text(strip=True)[:100]} if title_tag else {}

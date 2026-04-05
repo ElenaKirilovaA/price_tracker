@@ -22,11 +22,14 @@
                 <span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #ff6b6b;">price_check</span>
                 Triggered: {% price_with_currency alert.triggered_price alert.product_currency %}
             </p>
-            <p>Category: {{ alert.category_title }}</p>
+            <p>
+                <span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #0f2a44;">category</span>
+                 Category: {{ alert.category_title }}
+            </p>
 
             <p>
                 <span class="material-icons" style="vertical-align: middle; font-size: 18px; color: #0f2a44;">check_circle</span>
-                Checks: {{ checks }}
+                Price changed: {{ checks }} times
             </p>
             <hr>
             <p>

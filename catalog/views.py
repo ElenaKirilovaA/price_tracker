@@ -92,7 +92,7 @@ class EditCategory(UserPassesTestMixin, PageTitleMixin, UpdateView):
         return user.has_perm('catalog.change_category') or user.is_staff
 
 
-class DeleteCategory(UserPassesTestMixin, PageTitleMixin, DetailView):
+class DeleteCategory(UserPassesTestMixin, PageTitleMixin, DeleteView):
     model = Category
     form_class = CategoryDeleteForm
     success_url = reverse_lazy('catalog:catalog-overview')

@@ -31,7 +31,7 @@ if not SECRET_KEY:
     raise ValueError('SECRET_KEY is missing')
 
 DEBUG = os.getenv("DEBUG", "True").lower() in ("1", "true", "yes")
-# DEBUG = False
+# DEBUG = True
 
 ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
@@ -140,6 +140,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -179,9 +180,9 @@ CELERY_TIMEZONE = 'Europe/Sofia'
 CELERY_BEAT_SCHEDULE = {
     "check-tracking-products-every-30-min": {
         "task": "product.tasks.check_price",
-        "schedule": crontab(minute="*/30"),
+        "schedule": crontab(minute="*/3"),
     }
 }
 
 # Scraping
-SCRAPER_TEST_MODE = False
+SCRAPER_TEST_MODE = True
