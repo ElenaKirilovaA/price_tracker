@@ -163,7 +163,10 @@ AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = timedelta(hours=1)
 AXES_LOCKOUT_PARAMETERS = ['username']
 AXES_USERNAME_FORM_FIELD = 'username'
-# AXES_VERBOSE = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://tracky-deal-grgzcxc2ccd0b9dv.italynorth-01.azurewebsites.net",
+]
 
 
 # Celery
