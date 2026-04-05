@@ -176,13 +176,14 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Sofia'
-
+CELERY_BROKER_POOL_LIMIT = 5
+CELERY_WORKER_CONCURRENCY = 2
 CELERY_BEAT_SCHEDULE = {
-    "check-tracking-products-every-30-min": {
+    "check-tracking-products-every-60-min": {
         "task": "product.tasks.check_price",
-        "schedule": crontab(minute="*/3"),
+        "schedule": crontab(minute="*/60"),
     }
 }
 
 # Scraping
-SCRAPER_TEST_MODE = True
+SCRAPER_TEST_MODE = False
