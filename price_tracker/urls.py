@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.urls import path, include
 from common.views import custom_404, custom_403, custom_429, custom_500
 from price_tracker.settings import MEDIA_URL
-
+from django.http import HttpResponse
 
 
 
@@ -42,3 +42,12 @@ handler500 = custom_500
 
 if settings.DEBUG:
     urlpatterns += static(MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+
+def health(request):
+    return HttpResponse("OK")
+
+urlpatterns += [
+    path('health/', health),
+]
