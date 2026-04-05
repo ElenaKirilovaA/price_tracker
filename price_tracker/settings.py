@@ -30,8 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 if not SECRET_KEY:
     raise ValueError('SECRET_KEY is missing')
 
-DEBUG = os.getenv("DEBUG", "True").lower() in ("1", "true", "yes")
-# DEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
