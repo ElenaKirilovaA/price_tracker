@@ -73,4 +73,6 @@ jobs:
         with:
           app-name: 'trackydeal'
           slot-name: 'Production'
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
           
