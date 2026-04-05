@@ -122,6 +122,7 @@ pip install -r requirements.txt
 4. Create .env file in the root of the project and copy from .env_copy and fill in with your own values
 ```bash
 SECRET_KEY=your.secret_key
+DEBUG=
 DB_NAME=your.db_name
 DB_USER=your.db_user
 DB_PASSWORD=your.db_password
