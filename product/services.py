@@ -124,7 +124,7 @@ class BookToScrapeScraper(BaseScraper):
 
 def get_pattern(store: str) -> str:
     pattern = {
-        'Kateo': r'https:\/\/kateo\.bg\/products\/[a-z0-9-]+\/?\?variant=\d{14}',
+        'Kateo': r'https:\/\/kateo\.bg\/products\/[^?]+(?:\?variant=\d+)?\/?\??',
         'Books to Scrape': r"^https://books\.toscrape\.com/catalogue/[a-z][a-z0-9-]*_\d{3,}/index\.html$",
     }
 
