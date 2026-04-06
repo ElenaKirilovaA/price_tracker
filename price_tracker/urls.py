@@ -18,8 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from common.views import custom_404, custom_403, custom_429, custom_500
-from price_tracker.settings import MEDIA_URL
+from common.views import custom_404, custom_403, custom_500
 from django.http import HttpResponse
 
 
@@ -37,12 +36,7 @@ urlpatterns = [
 ]
 handler404 = custom_404
 handler403 = custom_403
-handler429 = custom_429
 handler500 = custom_500
-
-if settings.DEBUG:
-    urlpatterns += static(MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 
 
 def health(request):

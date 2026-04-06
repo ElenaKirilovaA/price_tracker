@@ -1,4 +1,4 @@
-
+from cloudinary.models import CloudinaryField
 from django.db import models
 from common.mixins import CreatedAtMixin, BaseInfoTitle, BaseInfoDescription
 
@@ -7,11 +7,7 @@ from common.mixins import CreatedAtMixin, BaseInfoTitle, BaseInfoDescription
 
 
 class Category(CreatedAtMixin, BaseInfoTitle, BaseInfoDescription):
-    card_image = models.ImageField(
-        upload_to='post_images/',
-        blank=True,
-        null=True,
-    )
+    card_image = CloudinaryField('image')
 
     def __str__(self):
         return self.title
