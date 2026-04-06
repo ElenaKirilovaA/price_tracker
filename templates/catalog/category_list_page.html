@@ -33,7 +33,7 @@
             <h2>{{ category.title|truncatechars:56|truncatewords:9 }}</h2>
 
             {% if category.card_image %}
-                <img src="{{ category.card_image.url }}" alt="{{ category.title }}" width="65" height="65">
+                <img src="{{ category.card_image.build_url }}" alt="{{ category.title }}" width="65" height="65">
             {% else %}
                 <img src="{% static 'img/alt_picture.png' %}" class="card-icon" alt="No image">
             {% endif %}

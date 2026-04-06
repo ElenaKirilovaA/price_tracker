@@ -7,7 +7,11 @@ from common.mixins import CreatedAtMixin, BaseInfoTitle, BaseInfoDescription
 
 
 class Category(CreatedAtMixin, BaseInfoTitle, BaseInfoDescription):
-    card_image = CloudinaryField('image')
+    card_image = CloudinaryField(
+        'image',
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return self.title

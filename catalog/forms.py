@@ -1,9 +1,12 @@
+from cloudinary.forms import CloudinaryFileField
 from django import forms
 from django.forms.formsets import formset_factory
 from catalog.models import Category
 
 
 class CategoryBasicForm(forms.ModelForm):
+    card_image = CloudinaryFileField(required=False)
+
     class Meta:
         model = Category
         exclude = ['created_at']
