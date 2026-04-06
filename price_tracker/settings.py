@@ -181,9 +181,9 @@ CELERY_TIMEZONE = 'Europe/Sofia'
 CELERY_BROKER_POOL_LIMIT = 5
 CELERY_WORKER_CONCURRENCY = 2
 CELERY_BEAT_SCHEDULE = {
-    "check-tracking-products-every-60-min": {
+    "check-tracking-products-every-30-min": {
         "task": "product.tasks.check_price",
-        "schedule": crontab(minute="*/60"),
+        "schedule": crontab(minute="*/30"),
     }
 }
 
