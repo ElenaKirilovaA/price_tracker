@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'axes',
     'cloudinary',
     'cloudinary_storage',
+
 ]
 
 MIDDLEWARE = [
