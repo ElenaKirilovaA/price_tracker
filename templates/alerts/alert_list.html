@@ -20,7 +20,7 @@
                 <a href="{% url 'product:single_product' alert.product.slug %}" rel="noopener noreferrer" class="hvr">🔗 Product's tracking detail </a>
 
                 <hr>
-                {% if request.user == product.user %}
+                {% if request.user == alert.user %}
                 <a href="{% url 'alert:edit' alert.id %}" class="btn"> Edit</a>
                 <a href="{% url 'alert:delete' alert.id %}" class="btn btn-danger">Delete</a>
                 {% endif %}
