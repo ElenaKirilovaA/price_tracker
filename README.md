@@ -8,8 +8,8 @@ A Django web application for product price tracking and alert triggering.
 
 A Django-based web application that allows users to track product prices from online stores and receive notifications when prices drop below a desired target price
 
-Live Demo
-https//...
+Live Demo:
+https://tracky-deal-grgzcxc2ccd0b9dv.italynorth-01.azurewebsites.net
 ---
 
 ## Core Features

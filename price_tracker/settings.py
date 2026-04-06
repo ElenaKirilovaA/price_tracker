@@ -12,10 +12,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import os
-
 from celery.schedules import crontab
 from dotenv import load_dotenv
-
 import alert
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,16 +28,16 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 if not SECRET_KEY:
     raise ValueError('SECRET_KEY is missing')
 
-DEBUG = os.environ.get("DEBUG")
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-# ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '')
 
 if isinstance(ALLOWED_HOSTS, str):
     ALLOWED_HOSTS = [h.strip() for h in ALLOWED_HOSTS.split(',') if h.strip()]
 
 if not ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ['*']  # emergency fallback
+    ALLOWED_HOSTS = ['*']
+
 # Application definition
 
 INSTALLED_APPS = [
