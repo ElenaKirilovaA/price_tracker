@@ -32,7 +32,7 @@ if not SECRET_KEY:
 
 DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS')
 
 # Application definition
 
