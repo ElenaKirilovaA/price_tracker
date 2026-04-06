@@ -32,8 +32,14 @@ if not SECRET_KEY:
 
 DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
+# ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '')
 
+if isinstance(ALLOWED_HOSTS, str):
+    ALLOWED_HOSTS = [h.strip() for h in ALLOWED_HOSTS.split(',') if h.strip()]
+
+if not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ['*']  # emergency fallback
 # Application definition
 
 INSTALLED_APPS = [
