@@ -54,7 +54,7 @@ https://tracky-deal-grgzcxc2ccd0b9dv.italynorth-01.azurewebsites.net
    - All active alerts for that product are evaluated.
    - If `current_price <= target_price`:
      - The alert is archived.
-     - A email notification is generated.
+     - An email notification is generated.
 4. The track is archived.
 
 ---
@@ -73,7 +73,6 @@ https://tracky-deal-grgzcxc2ccd0b9dv.italynorth-01.azurewebsites.net
 ## Future improvement:
 - Price charts visualization
 - Docker containerization
-- Caching with Redis
 - UI/UX improvements
 ---
 ## Security
@@ -84,14 +83,32 @@ https://tracky-deal-grgzcxc2ccd0b9dv.italynorth-01.azurewebsites.net
 	•	Environment-based configuration (.env)
 	•	No sensitive data stored in code
 ## Architecture Overview
-	•	Django MVC pattern
+	•	Django patterns
 	•	Service layer (business logic separation)
 	•	Celery for async background processing
 	•	Scraper abstraction (Open/Closed principle)
 	•	PostgreSQL relational database
 	•	Redis for task queue
 
+## 👥 User Roles & Permissions
+
+The application includes predefined user roles, created automatically via data migrations during the initial database setup. Different home pages and access links in the application.
+
+### Available Roles
+
+- Moderator  
+  Users with elevated permissions to manage categories, products, tags and stores.
+
+- AppUser-manager  
+  Users with access to additional administrative views, including user monitoring data, deleting profiles and monitoring past tracks.
+
+- Admin  
+  Users with access for everything. 
+
+---
+
 ## Demo Access
+
 You can test the app using:
 
     User:
@@ -133,6 +150,9 @@ EMAIL_HOST_PASSWORD=your.email_hotst_password
 ALLOWED_HOSTS=your.allowed_hosts
 CELERY_BROKER_URL=your.celery_broker # Redis Cloud Your Redis URL
 CELERY_RESULT_BACKEND=your.celery_backend # Redis Cloud
+CLOUDINARY_NAME=your.claudinary_name
+CLOUDINARY_API_KEY=your.claudinary_api_key
+CLOUDINARY_API_SECRET=your.claudinary_secret_key
 ```
 5. Apply migrations. User groups are created automatically via data migrations
 ```bash
